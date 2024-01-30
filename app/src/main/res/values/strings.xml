@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Lunimary</string>
+    <string name="publish">发布</string>
+    <string name="input_title">请输入标题</string>
+    <string name="preview">Preview</string>
+    <string name="input_body">请输入正文</string>
+
+    <string name="format_bold">****</string>
+    <string name="format_italic">**</string>
+    <string name="format_strikethrough">~~~~</string>
+    <string name="format_quote">></string>
+
+    <string name="format_h1">#</string>
+    <string name="format_h2">##</string>
+    <string name="format_h3">###</string>
+    <string name="format_h4">####</string>
+    <string name="edit">Edit</string>
+    <string name="study_markdown">支持Markdown语法，前往学习Markdown?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+</resources>
