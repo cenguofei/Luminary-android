@@ -1,13 +1,22 @@
 package com.example.lunimary.test
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -16,7 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.design.LightAndDarkPreview
+import com.example.lunimary.ui.login.UserViewModel
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 val markdownContent = """  
@@ -28,15 +39,36 @@ val markdownContent = """
 """.trimIndent()
 
 //Minimal example
-@Preview(showBackground = true)
 @Composable
-fun MinimalExampleContent() {
-    MarkdownText(markdown = markdownContent)
-}
+//fun TokenTest() {
+//    val viewModel: UserViewModel = viewModel()
+//    val onLogin = viewModel.onLogin.observeAsState()
+//    val user = viewModel.user.observeAsState()
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Center
+//    ) {
+//        TextButton(onClick = {
+//            viewModel.login("cgf", "123")
+//        }) {
+//            Text(text = "Login")
+//        }
+//
+//        TextButton(onClick = {
+//            viewModel.getUser(1)
+//        }) {
+//            Text(text = "get user")
+//        }
+//        Text(text = onLogin.value.toString())
+//        Spacer(modifier = Modifier.height(2.dp).background(Color.Black))
+//        Text(text = user.value.toString())
+//    }
+//}
 
 //Complex example
 @Preview(showBackground = true)
-@Composable
 fun ComplexExampleContent() {
     MarkdownText(
         modifier = Modifier.padding(8.dp),

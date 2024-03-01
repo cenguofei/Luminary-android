@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.example.lunimary.R
-import com.example.lunimary.util.log
+import com.example.lunimary.util.logv
 import github.leavesczy.matisse.DefaultMediaFilter
 import github.leavesczy.matisse.Matisse
 import github.leavesczy.matisse.MatisseContract
@@ -37,7 +37,7 @@ fun SelectPictures() {
                 val path = mediaResource.path
                 val name = mediaResource.name
                 val mimeType = mediaResource.mimeType
-                "selected image{uri=$uri, path=$path, name=$name, mimeType=$mimeType}".log("select_picture")
+                "selected image{uri=$uri, path=$path, name=$name, mimeType=$mimeType}".logv("select_picture")
             }
         }
 
