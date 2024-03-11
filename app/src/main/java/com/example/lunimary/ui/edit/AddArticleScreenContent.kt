@@ -12,37 +12,51 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.R
-import com.example.lunimary.design.LunimaryGradientBackground
+import com.example.lunimary.design.CheckLoginState
+import com.example.lunimary.design.LunimaryDialog
 import com.example.lunimary.design.LunimaryToolbar
-import com.example.lunimary.design.LightAndDarkPreview
-import com.example.lunimary.design.theme.LunimaryTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EditScreen(
+fun AddArticleScreenContent(
     onBack: () -> Unit,
-    onPublish: () -> Unit
+    onPublish: () -> Unit,
+    editViewModel: EditViewModel,
+    coroutineScope: CoroutineScope,
+    onNavToWeb: () -> Unit
 ) {
+    CheckLoginState()
     val pagers = listOf("Edit", "Preview")
     val pagerState = rememberPagerState { pagers.size }
-    val editViewModel: EditViewModel = viewModel()
     val coroutine = rememberCoroutineScope()
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .statusBarsPadding()) {
+    val showWarnDialog = remember { mutableStateOf(false) }
+    LunimaryDialog(
+        text = stringResource(id = R.string.title_or_content_cannot_empty),
+        openDialog = showWarnDialog
+    )
+    Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
         Column {
             LunimaryToolbar(
                 onBack = onBack,
                 end = {
-                    TextButton(onClick = onPublish) {
+                    TextButton(
+                        onClick = {
+                            if(editViewModel.canPublish()) {
+                                onPublish()
+                            } else {
+                                showWarnDialog.value = true
+                            }
+                        }
+                    ) {
                         Text(
                             text = stringResource(id = R.string.publish),
                             color = MaterialTheme.colorScheme.primary,
@@ -66,7 +80,9 @@ fun EditScreen(
                         coroutine.launch {
                             pagerState.scrollToPage(PREVIEW_PAGE)
                         }
-                    }
+                    },
+                    coroutineScope = coroutineScope,
+                    onNavToWeb = onNavToWeb
                 )
             } else {
                 PreviewPage(
@@ -84,16 +100,3 @@ fun EditScreen(
 
 private const val EDIT_PAGE = 0
 private const val PREVIEW_PAGE = 1
-
-@LightAndDarkPreview
-@Composable
-fun EditScreenPreview() {
-    LunimaryTheme {
-        LunimaryGradientBackground {
-            EditScreen(
-                onBack = {},
-                onPublish = {}
-            )
-        }
-    }
-}

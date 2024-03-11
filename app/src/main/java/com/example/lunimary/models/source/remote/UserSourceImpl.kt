@@ -1,6 +1,8 @@
-package com.example.lunimary.models.source
+package com.example.lunimary.models.source.remote
 
-import com.example.lunimary.base.BaseResponse
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.example.lunimary.models.LoginInfo
 import com.example.lunimary.models.ktor.httpClient
 import com.example.lunimary.models.ktor.securityGet
 import com.example.lunimary.models.ktor.securityPost
@@ -8,10 +10,10 @@ import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
 import com.example.lunimary.storage.MMKVKeys
 import com.example.lunimary.storage.TokenInfo
+import com.example.lunimary.storage.loadLocalToken
 import com.example.lunimary.storage.saveSession
 import com.example.lunimary.storage.saveTokens
 import com.example.lunimary.util.checkIsLoginPath
-import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.getUserPath
 import com.example.lunimary.util.logd
@@ -21,7 +23,10 @@ import com.example.lunimary.util.registerPath
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.header
+import io.ktor.http.appendPathSegments
 import io.ktor.http.parameters
+import java.util.Base64
 
 class UserSourceImpl(private val client: HttpClient = httpClient) : UserSource {
     override suspend fun login(username: String, password: String): UserResponse {
@@ -48,11 +53,14 @@ class UserSourceImpl(private val client: HttpClient = httpClient) : UserSource {
         return response.body<UserResponse>().init(response)
     }
 
-    override suspend fun checkIsLogin(): DataResponse<Boolean> {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun checkIsLogin(): DataResponse<LoginInfo> {
         return client.securityPost(
-            urlString = checkIsLoginPath,
-            needAuth = false
-        ).let { it.body<DataResponse<Boolean>>().init(it) }
+            urlString = checkIsLoginPath
+        ) {
+            val encodeToken = Base64.getEncoder().encodeToString("${loadLocalToken()?.accessToken}".toByteArray())
+            header("lunimary_token", "${loadLocalToken()?.accessToken}")
+        }.let { it.body<DataResponse<LoginInfo>>().init(it) }
     }
 
     override suspend fun logout(): DataResponse<Unit> {
@@ -74,7 +82,7 @@ class UserSourceImpl(private val client: HttpClient = httpClient) : UserSource {
     override suspend fun queryUser(id: Long): UserResponse {
         val response = client.securityGet(urlString = getUserPath) {
             url {
-                parameters.append("id", id.toString())
+                appendPathSegments(id.toString())
             }
         }
         return response.body<UserResponse>().init(response)

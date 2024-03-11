@@ -1,5 +1,7 @@
 package com.example.lunimary.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -19,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -26,13 +29,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
+import com.example.lunimary.LocalNavNavController
 import com.example.lunimary.R
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.SnackbarHostStateHolder
+import com.example.lunimary.models.User
+import com.example.lunimary.ui.edit.addArticleScreen
 import com.example.lunimary.ui.home.topLevelScreens
 import com.example.lunimary.ui.login.loginScreen
+import com.example.lunimary.ui.login.registerScreen
+import com.example.lunimary.ui.search.searchScreen
 import com.example.lunimary.ui.settings.settingsScreen
+import com.example.lunimary.ui.user.draft.draftsScreen
+import com.example.lunimary.ui.webview.webViewScreen
+import com.example.lunimary.util.UserState
 import com.example.lunimary.util.logd
+import kotlinx.coroutines.launch
 
 @Composable
 fun LunimaryApp(
@@ -71,7 +83,10 @@ fun LunimaryApp(
                     ),
                 ),
         ) {
-            CompositionLocalProvider(LocalSnackbarHostState provides SnackbarHostStateHolder(snackbarHostState)) {
+            CompositionLocalProvider(
+                LocalSnackbarHostState provides SnackbarHostStateHolder(snackbarHostState),
+                LocalNavNavController provides appState.navController
+            ) {
                 LunimaryNavHost(
                     appState = appState,
                     startScreen = startScreen, onShowSnackbar = { message, action ->
@@ -87,6 +102,7 @@ fun LunimaryApp(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 private fun LunimaryNavHost(
     modifier: Modifier = Modifier,
@@ -96,6 +112,13 @@ private fun LunimaryNavHost(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val navController = appState.navController
+    val userState = UserState.currentUserState.observeAsState()
+    val coroutine = rememberCoroutineScope()
+    if (userState.value == User.NONE && UserState.updated) {
+        coroutine.launch {
+            onShowSnackbar("你当前为非登录状态！", null)
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -105,5 +128,10 @@ private fun LunimaryNavHost(
         topLevelScreens(appState = appState)
         loginScreen(appState = appState, coroutineScope = coroutineScope)
         settingsScreen(appState = appState, coroutineScope = coroutineScope)
+        registerScreen(appState = appState, coroutineScope = coroutineScope)
+        addArticleScreen(appState = appState, coroutineScope = coroutineScope)
+        draftsScreen(appState = appState)
+        searchScreen(appState = appState)
+        webViewScreen(appState = appState)
     }
 }

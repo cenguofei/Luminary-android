@@ -1,10 +1,8 @@
 package com.example.lunimary.ui
 
 import android.util.Log
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
@@ -16,19 +14,21 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.navigation.navOptions
+import com.example.lunimary.design.ChineseMarkdownWeb
+import com.example.lunimary.models.Article
 import com.example.lunimary.network.NetworkMonitor
 import com.example.lunimary.network.NetworkMonitorImpl
 import com.example.lunimary.ui.login.UserViewModel
-import com.example.lunimary.util.logd
+import com.example.lunimary.ui.webview.UrlCache
 import com.google.accompanist.systemuicontroller.SystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun rememberAppState(
     networkMonitor: NetworkMonitor = NetworkMonitorImpl(LocalContext.current),
@@ -99,25 +99,90 @@ class LunimaryAppState(
         navController.popBackStack()
     }
 
-    fun navToLogin() {
-        navController.navigate(Screens.Login.route)
-    }
+    /**
+     * @param backType
+     * false -> system default
+     * true -> our defined
+     */
+    fun navToLogin(
+        backType: Boolean = false
+    ) { navController.navToLogin(backType) }
 
-    fun navToHome() {
-        navController.navigate(
-            TopLevelDestination.Home.route,
-            navOptions = navOptions {
-                popUpTo(TopLevelDestination.Home.route) {
-                    inclusive = true
-                }
-                launchSingleTop = true
-            }
-        )
-    }
+    fun navToHome() { navController.navToHome() }
+
+    fun navToMessage() { navController.navToMessage() }
+
+    fun navToUser() { navController.navToUser() }
 
     fun navToSettings() {
         navController.navigate(Screens.Settings.route)
     }
+
+    fun navToRegister() {
+        navController.navigate(Screens.Register.route)
+    }
+
+    fun navToEdit(draftArticle: Article? = null) {
+        var article = draftArticle
+        if (draftArticle == null) {
+            article = Article(id = -10000)
+        }
+        val articleJson = Json.encodeToString(article)
+        navController.navigate("$ADD_ARTICLE_ROOT?article=$articleJson")
+    }
+
+    fun navToDraft() {
+        navController.navigate(Screens.Drafts.route)
+    }
+
+    fun navToWeb() {
+        val key = System.currentTimeMillis()
+        UrlCache.putUrl(key, ChineseMarkdownWeb)
+        navController.navigate("${WEB_VIEW_ROOT}/$key")
+    }
+}
+
+fun NavController.navToLogin(backType: Boolean = false) {
+    navigate("$LOGIN_ROOT/$backType")
+}
+
+fun NavController.navToHome() {
+    val route = HOME_ROUTE
+    navigate(
+        route = route,
+        navOptions = navOptions {
+            popUpTo(route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    )
+}
+
+fun NavController.navToMessage() {
+    val route = MESSAGE_ROUTE
+    navigate(
+        route = route,
+        navOptions = navOptions {
+            popUpTo(route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    )
+}
+
+fun NavController.navToUser() {
+    val route = USER_ROUTE
+    navigate(
+        route = route,
+        navOptions = navOptions {
+            popUpTo(route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    )
 }
 
 @Composable

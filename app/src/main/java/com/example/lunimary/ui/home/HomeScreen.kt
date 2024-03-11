@@ -27,15 +27,6 @@ fun HomeScreen(
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
     val userState = UserState.currentUserState.observeAsState()
-    if (userState.value != User.NONE) {
-        LaunchedEffect(
-            key1 = Unit,
-            block = {
-                appState.userViewModel.checkIsLogin()
-            }
-        )
-    }
-
     Column(
         modifier = modifier.fillMaxSize()
     ) {

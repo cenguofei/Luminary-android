@@ -17,27 +17,26 @@ import com.example.lunimary.design.theme.Orange40
 import com.example.lunimary.design.theme.Purple40
 import com.example.lunimary.design.theme.Red40
 import com.example.lunimary.design.theme.Teal40
+import com.example.lunimary.models.source.local.Tag
 
-val tagColors: List<Color> @Composable get() = listOf(
-    MaterialTheme.colorScheme.primary,
+val tagColors: List<Color> get() = listOf(
     Blue40, DarkGreen40, Green40,
     Orange40, Purple40, Red40, Teal40
 )
 @Composable
 fun Tag(
     modifier: Modifier = Modifier,
-    color: Color = tagColors.random(),
-    name: String
+    tag: Tag
 ) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(8),
-        color = color,
+        shape = RoundedCornerShape(50),
+        color = Color(tag.color),
         contentColor = Color.White
     ) {
         Text(
-            text = name,
-            modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp),
+            text = tag.name,
+            modifier = Modifier.padding(vertical = 5.dp, horizontal = 8.dp),
             style = MaterialTheme.typography.labelSmall
         )
     }

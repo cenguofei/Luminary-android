@@ -1,6 +1,8 @@
 package com.example.lunimary.storage
 
 object MMKVKeys {
+    const val TAGS: String = "tags"
+
     const val TOKEN_INFO = "token_info"
 
     const val LUMINARY_SESSION = "LUMINARY_SESSION"

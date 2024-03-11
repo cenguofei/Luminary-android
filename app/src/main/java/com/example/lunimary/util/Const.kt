@@ -36,6 +36,13 @@ inline val createArticlePath: String get() = "$articlesRootPath/create"
 inline val getArticleByIdPath: String get() = "$articlesRootPath/{id}"
 inline val updateArticleByIdPath: String get() = "$articlesRootPath/update"
 inline val deleteArticleByIdPath: String get() = "$articlesRootPath/{id}"
+inline val likesOfUserPath: String get() = "$likeRootPath/likes_num"
+inline val publicArticlesOfUserPath: String get() = "$articlesRootPath/user/public"
+inline val privacyArticlesOfUserPath: String get() = "$articlesRootPath/user/privacy"
+inline val getAllArticlesOfUserCollectedPath: String get() = "$articlesRootPath/user_collected"
+inline val getAllArticlesOfUserLikedPath: String get() = "$articlesRootPath/user_liked"
+
+
 //Like
 inline val likeRootPath: String get() = "/likes"
 inline val createLikePath: String get() = "$likeRootPath/create"
@@ -45,7 +52,7 @@ inline val deleteLikePath: String get() = "$likeRootPath/{id}"
 //Collect
 inline val collectRootPath: String get() = "/collects"
 inline val createCollectPath: String get() = "$collectRootPath/create"
-inline val getAllCollectsOfUserPath: String get() = "$collectRootPath/user/{id}"
+
 inline val getAllCollectsOfArticlePath: String get() = "$collectRootPath/article/{id}"
 inline val deleteCollectPath: String get() = "$collectRootPath/{id}"
 //Comment
@@ -58,11 +65,11 @@ inline val deleteCommentPath: String get() = "$commentRootPath/{id}"
 inline val friendRootPath: String get() = "/friends"
 inline val followPath: String get() = "$friendRootPath/follow"
 inline val unfollowPath: String get() = "$friendRootPath/unfollow/{whoId}"
-inline val myFollowingsPath: String get() = "$friendRootPath/following/{userId}"
-inline val myFollowersPath: String get() = "$friendRootPath/followers/{userId}"
+inline val myFollowingsPath: String get() = "$friendRootPath/following"
+inline val myFollowersPath: String get() = "$friendRootPath/followers"
 //Token
 inline val refreshToken: String get() = "/token/refresh"
 
 //Online Status
 inline val isForegroundStr: String get() = "isForeground"
-inline val onlineStatusPath: String get() = "/online_status/{$isForegroundStr}"
+inline val onlineStatusPath: String get() = "/online_status"

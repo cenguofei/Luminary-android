@@ -47,11 +47,11 @@ fun RecommendPage(
     )
     val pages by recommendViewModel.pageArticles.observeAsState()
     LunimaryScreen(
-        shimmer = pages.isLoading(),
-        error = pages.isError(),
-        errorMsg = pages.getErrorMsg(),
-        empty = pages.isSuccess() && pages.asSuccess().notNull.data.isEmpty(),
-        coroutine = coroutineScope
+        shimmer = pages is NetworkResult.Loading,
+        empty = pages is NetworkResult.Empty,
+        error = pages is NetworkResult.Error,
+        errorMsg = (pages as? NetworkResult.Error)?.msg,
+        coroutine = coroutineScope,
     ) {
         LazyColumn {
             val data = pages.asSuccess()?.data

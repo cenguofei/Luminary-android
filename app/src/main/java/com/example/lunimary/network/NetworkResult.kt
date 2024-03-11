@@ -5,14 +5,16 @@ import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 
 sealed class NetworkResult<T>(
-    val msg: String = empty,
+    val msg: String? = empty,
     val data: T? = null
 ) {
     class Loading<T>: NetworkResult<T>()
 
-    class Success<T>(data: T? = null): NetworkResult<T>(data = data)
+    class Success<T>(data: T? = null, msg: String? = empty): NetworkResult<T>(data = data, msg = msg)
 
     class Error<T>(msg: String = empty): NetworkResult<T>(msg = msg)
+
+    class Empty<T>(msg: String = empty): NetworkResult<T>(msg = msg)
 
     class None<T>: NetworkResult<T>()
 }
@@ -43,3 +45,4 @@ fun <T> NetworkResult<T>?.toSnackbarData(): SnackbarData? {
         this!!.asError()?.msg?.let { SnackbarData(it) }
     } else null
 }
+

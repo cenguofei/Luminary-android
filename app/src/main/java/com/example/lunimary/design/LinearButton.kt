@@ -19,17 +19,16 @@ import com.example.lunimary.design.theme.LunimaryTheme
 fun LinearButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    colors: List<Color> = listOf(
+        MaterialTheme.colorScheme.primary,
+        MaterialTheme.colorScheme.secondary
+    ),
     text: String
 ) {
     Box(
         modifier = modifier
             .background(
-                brush = Brush.linearGradient(
-                    listOf(
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.secondary
-                    )
-                ),
+                brush = Brush.linearGradient(colors),
                 shape = RoundedCornerShape(11.dp)
             )
             .clickable(onClick = onClick),

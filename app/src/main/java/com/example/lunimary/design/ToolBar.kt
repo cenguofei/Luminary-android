@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -27,33 +29,39 @@ import com.example.lunimary.design.theme.LunimaryTheme
 fun LunimaryToolbar(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
-    between: @Composable RowScope.() -> Unit = {},
-    end: @Composable BoxScope.() -> Unit = {}
+    between: @Composable RowScope.() -> Unit = { Spacer(modifier = Modifier.width(1.dp)) },
+    end: @Composable BoxScope.() -> Unit = { Spacer(modifier = Modifier.width(1.dp)) },
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().height(55.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(55.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(
-            modifier = Modifier.padding(start = 12.dp),
-            onClick = onBack
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-        }
-
-        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-            Row(content = between)
-
-            Box(
-                modifier = Modifier.padding(end = 12.dp),
-                contentAlignment = Alignment.Center,
-                content = end
-            )
+        Box(modifier = Modifier.fillMaxWidth()) {
+            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
+                IconButton(
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .align(Alignment.TopStart),
+                    onClick = onBack
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                Row(content = between, modifier = Modifier.align(Alignment.Center))
+                Box(
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .align(Alignment.TopEnd),
+                    contentAlignment = Alignment.Center,
+                    content = end
+                )
+            }
         }
     }
 }
@@ -69,8 +77,9 @@ fun ToolbarPreview() {
                     Text(text = "Lunimary Blog", style = MaterialTheme.typography.headlineMedium)
                 }
             ) {
-                Icon(imageVector = Icons.Default.MoreVert
-                    , contentDescription = null)
+                Icon(
+                    imageVector = Icons.Default.MoreVert, contentDescription = null
+                )
             }
         }
     }

@@ -1,6 +1,7 @@
-package com.example.lunimary.models.source
+package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.base.BaseRepository
+import com.example.lunimary.models.LoginInfo
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,7 +15,7 @@ class UserRepository(
     override suspend fun login(username: String, password: String): UserResponse =
         withContext(dispatcher) { userSource.login(username, password) }
 
-    override suspend fun checkIsLogin(): DataResponse<Boolean> =
+    override suspend fun checkIsLogin(): DataResponse<LoginInfo> =
         withContext(dispatcher) { userSource.checkIsLogin() }
 
     override suspend fun logout(): DataResponse<Unit> =

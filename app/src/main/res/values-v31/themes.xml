@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AppTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_center</item>-->
+<!--        <item name="android:windowSplashScreenIconBackgroundColor">@color/purple_300</item>-->
+<!--        <item name="android:windowSplashScreenBrandingImage">@drawable/bland</item>-->
+        <item name="postSplashScreenTheme">@style/Theme.Lunimary</item>
+    </style>
+</resources>

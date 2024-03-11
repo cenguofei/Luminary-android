@@ -34,3 +34,20 @@ fun String.encodeString(
     val mmkv = if (mmapID != null) MMKV.mmkvWithID(mmapID) else MMKV.defaultMMKV()
     mmkv.encode(key, this)
 }
+
+fun Set<String>.encodeSet(
+    key: String,
+    mmapID: String? = null
+) {
+    val mmkv = if (mmapID != null) MMKV.mmkvWithID(mmapID) else MMKV.defaultMMKV()
+    mmkv.encode(key, this)
+}
+
+fun decodeSet(
+    key: String,
+    mmapID: String? = null
+): Set<String> {
+    val mmkv = if (mmapID != null) MMKV.mmkvWithID(mmapID) else MMKV.defaultMMKV()
+    val set = mmkv.decodeStringSet(key)
+    return set ?: emptySet()
+}

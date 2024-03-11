@@ -1,6 +1,6 @@
 package com.example.lunimary.ui.home
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,42 +17,57 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.lunimary.R
 import com.example.lunimary.design.Tag
+import com.example.lunimary.design.tagColors
 import com.example.lunimary.models.Article
+
+data class ArticleItemContainerColor(
+    val visitedColor: Color,
+    val normalColor: Color
+) {
+    companion object {
+        val Default: ArticleItemContainerColor
+            @Composable get() = ArticleItemContainerColor(
+                visitedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                normalColor = MaterialTheme.colorScheme.surface
+            )
+    }
+}
 
 @Composable
 fun ArticleItem(
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit,
+    article: Article,
     visited: Boolean = false,
-    article: Article
+    containerColor: ArticleItemContainerColor = ArticleItemContainerColor.Default
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
         onClick = onItemClick,
-        color = when {
-            visited -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-            else -> MaterialTheme.colorScheme.surface
-        }
+        color = if (visited) containerColor.visitedColor else containerColor.normalColor
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
             Spacer(modifier = Modifier.height(8.dp))
             Title(text = article.title, modifier = Modifier)
             Spacer(modifier = Modifier.height(4.dp))
-            Row(modifier = Modifier
-                .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+            ) {
                 Content(content = article.body, modifier = Modifier.weight(2f))
-                ArticlePicture(pic = article.pictures.firstOrNull(), modifier = Modifier.weight(1f))
+                ArticlePicture(pic = article.cover, modifier = Modifier.weight(1f))
             }
             Spacer(modifier = Modifier.height(4.dp))
             Labels(article.tags.toList())
@@ -107,9 +122,9 @@ fun Labels(
     modifier: Modifier = Modifier
 ) {
     if (tags.isEmpty()) return
-    LazyRow(modifier = modifier) {
+    LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         itemsIndexed(tags) { _, item ->
-            Tag(name = item)
+            Tag(tag = com.example.lunimary.models.source.local.Tag(name = item, color = tagColors.random().toArgb()))
         }
     }
 }

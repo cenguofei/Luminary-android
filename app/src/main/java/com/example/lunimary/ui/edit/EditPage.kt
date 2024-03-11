@@ -18,8 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,8 +40,9 @@ import com.example.lunimary.design.ChineseMarkdownWeb
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.LightAndDarkPreview
-import com.example.lunimary.design.lunimaryWebView
+import com.example.lunimary.design.LunimaryWebView
 import com.example.lunimary.design.theme.LunimaryTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 
@@ -47,12 +51,25 @@ import kotlinx.coroutines.delay
 @Composable
 fun EditPage(
     viewModel: EditViewModel,
-    onPreviewClick: () -> Unit
+    onPreviewClick: () -> Unit,
+    coroutineScope: CoroutineScope,
+    onNavToWeb: () -> Unit
 ) {
     val context = LocalContext.current
-    val bodyView =
-        LayoutInflater.from(context).inflate(R.layout.body_edit_text, null)
-    val bodyEditText = bodyView.findViewById<EditText>(R.id.body_markdown_edit)
+    val bodyView = remember { LayoutInflater.from(context).inflate(R.layout.body_edit_text, null) }
+    val bodyEditText = remember { bodyView.findViewById<EditText>(R.id.body_markdown_edit) }
+    val titleView = remember { LayoutInflater.from(context).inflate(R.layout.title_edit_text, null) }
+    val titleEditView = remember { titleView.findViewById<EditText>(R.id.title_edit) }
+    LaunchedEffect(
+        key1 = viewModel.articleDataState.value,
+        block = {
+            if (viewModel.isFillByArticle) {
+                titleEditView.setText(viewModel.articleDataState.value.title)
+                bodyEditText.setText(viewModel.articleDataState.value.body)
+            }
+        }
+    )
+
     Column {
         LazyColumn(modifier = Modifier.weight(1f)) {
             item {
@@ -62,9 +79,7 @@ fun EditPage(
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     factory = {
-                        val titleView =
-                            LayoutInflater.from(context).inflate(R.layout.edit_text, null)
-                        titleView.findViewById<EditText>(R.id.title_edit).apply {
+                        titleEditView.apply {
                             setTextColor(titleColor)
                             setHintTextColor(titleColor)
                             requestFocus()
@@ -103,8 +118,7 @@ fun EditPage(
         Column(modifier = Modifier
             .fillMaxWidth()
             .imePadding()) {
-            ShowStudyMarkdown()
-
+            ShowStudyMarkdown(onNavToWeb = onNavToWeb)
             val images = formatImages
             val keyboardController = LocalSoftwareKeyboardController.current
             LazyRow {
@@ -142,25 +156,27 @@ fun EditPage(
 }
 
 @Composable
-private fun ShowStudyMarkdown() {
-    var shouldShow by rememberSaveable { mutableStateOf(true) }
-    LaunchedEffect(key1 = shouldShow) {
-        if (shouldShow) {
+private fun ShowStudyMarkdown(
+    onNavToWeb: () -> Unit
+) {
+    var shouldShowLearnMDTips by rememberSaveable { mutableStateOf(true) }
+    LaunchedEffect(key1 = shouldShowLearnMDTips) {
+        if (shouldShowLearnMDTips) {
             coroutineScope {
                 delay(5000)
-                shouldShow = false
+                shouldShowLearnMDTips = false
             }
         }
     }
-    if (shouldShow) {
+    if (shouldShowLearnMDTips) {
         Snackbar(
             modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 8.dp),
             action = {
                 TextButton(
                     modifier = Modifier.padding(horizontal = 4.dp),
                     onClick = {
-                        shouldShow = false
-                        lunimaryWebView(uri = ChineseMarkdownWeb)
+                        shouldShowLearnMDTips = false
+                        onNavToWeb()
                     }
                 ) {
                     Text(text = stringResource(id = R.string.ok))
@@ -169,7 +185,7 @@ private fun ShowStudyMarkdown() {
             dismissAction = {
                 TextButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    onClick = { shouldShow = false }
+                    onClick = { shouldShowLearnMDTips = false }
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
@@ -186,7 +202,12 @@ private fun ShowStudyMarkdown() {
 fun EditPagePreview() {
     LunimaryTheme {
         LunimaryGradientBackground {
-            EditPage(viewModel = viewModel(), onPreviewClick = {})
+            EditPage(
+                viewModel = viewModel(),
+                onPreviewClick = {},
+                coroutineScope = rememberCoroutineScope(),
+                onNavToWeb = {}
+            )
         }
     }
 }

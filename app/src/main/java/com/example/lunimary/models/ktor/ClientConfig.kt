@@ -35,46 +35,43 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import okhttp3.Protocol
 import okhttp3.Response
+import java.util.concurrent.TimeUnit
+
+const val HOST = "192.168.31.237"
 
 val httpClient = HttpClient(OkHttp) {
     //configure the engine
     engine {
         config {
+            connectTimeout(1L, TimeUnit.MINUTES)
+            readTimeout(1L, TimeUnit.MINUTES)
             followRedirects(true)
         }
-        /*addInterceptor { chain ->
-            val request = chain.request()
-            if (request.headers["need_session"] != null) {
-                val newBuilder = request.newBuilder()
-                newBuilder.removeHeader("need_session")
-                newBuilder.header(
-                    MMKVKeys.LUMINARY_SESSION,
-                    decodeString(MMKVKeys.LUMINARY_SESSION, currentUser.username) ?: empty
-                )
-                chain.proceed(newBuilder.build())
-            } else {
-                chain.proceed(request)
-            }
-        }*/
         addInterceptor { chain ->
             val request = chain.request()
             val response = chain.proceed(request)
             "request headers:${request.headers}".logd()
-            if (response.code == HttpStatusCode.Unauthorized.value && request.headers[checkIsLoginHeader] == null) {
-                "Unauthorized: response=$response".logd("token")
+            val isRefreshToken = request.headers["refresh_token"]
+            if (response.code == HttpStatusCode.Unauthorized.value
+                && isRefreshToken == null) {
+                "intercept Unauthorized: response=$response".logd("token")
                 runBlocking(context = Dispatchers.IO) {
                     val deffer = async { refreshToken() }
                     val tokens = deffer.await()
                     "refresh token newTokens=$tokens".logd("token")
 
                     if (tokens == null) {
-                        UserState.updateLoginState(false)
+                        UserState.updateLoginState(false, "clientConfig")
                         return@runBlocking Response.Builder()
                             .apply {
+                                request(request)
+                                protocol(Protocol.HTTP_1_1)
                                 code(HttpStatusCode.Conflict.value)
                                 message("error occur, refresh token failed.")
                                 header(HttpConst.NEED_LOGIN.first, HttpConst.NEED_LOGIN.second)
+                                body(response.body)
                             }
                             .build()
                     }
@@ -106,7 +103,7 @@ val httpClient = HttpClient(OkHttp) {
     defaultRequest {
         url {
             protocol = URLProtocol.HTTP
-            host = "192.168.31.237"
+            host = HOST
             port = 8080
         }
     }
@@ -206,7 +203,12 @@ fun main() {
                                 append("refresh_token", oldTokens?.refreshToken ?: "")
                             }
                         ) { markAsRefreshTokenRequest() }.body()
-                        bearerTokenStorage.add(BearerTokens(refreshTokenInfo.accessToken, oldTokens?.refreshToken!!))
+                        bearerTokenStorage.add(
+                            BearerTokens(
+                                refreshTokenInfo.accessToken,
+                                oldTokens?.refreshToken!!
+                            )
+                        )
                         bearerTokenStorage.last()
                     }
                     sendWithoutRequest { request ->

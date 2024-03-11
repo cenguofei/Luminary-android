@@ -1,4 +1,4 @@
-package com.example.lunimary.models.source
+package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.ktor.addJson
@@ -11,15 +11,15 @@ import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.util.articlesRootPath
 import com.example.lunimary.util.createArticlePath
-import com.example.lunimary.util.deleteArticleByIdPath
-import com.example.lunimary.util.getArticleByIdPath
+import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.pageArticlesPath
+import com.example.lunimary.util.privacyArticlesOfUserPath
+import com.example.lunimary.util.publicArticlesOfUserPath
 import com.example.lunimary.util.updateArticleByIdPath
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
-import io.ktor.http.path
 
 class ArticleSourceImpl(private val client: HttpClient = httpClient) : ArticleSource {
     override suspend fun getArticleById(id: Long): DataResponse<Article> {
@@ -63,5 +63,21 @@ class ArticleSourceImpl(private val client: HttpClient = httpClient) : ArticleSo
         return client.get(urlString = pageArticlesPath) {
             addPagesParam(curPage, perPageCount)
         }.let { it.body<PageResponse<Article>>().init(it) }
+    }
+
+    override suspend fun publicArticles(userId: Long): DataResponse<List<Article>> {
+        return client.get(urlString = publicArticlesOfUserPath) {
+            url {
+                appendPathSegments(currentUser.id.toString())
+            }
+        }.let { it.body<DataResponse<List<Article>>>().init(it) }
+    }
+
+    override suspend fun privacyArticles(userId: Long): DataResponse<List<Article>> {
+        return client.get(urlString = privacyArticlesOfUserPath) {
+            url {
+                appendPathSegments(currentUser.id.toString())
+            }
+        }.let { it.body<DataResponse<List<Article>>>().init(it) }
     }
 }

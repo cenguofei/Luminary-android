@@ -17,6 +17,7 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,6 +50,7 @@ suspend fun refreshToken(): BearerTokens? {
         ) {
             bearerAuth(loadLocalToken()?.refreshToken ?: empty)
             setSession()
+            header("refresh_token", "true")
         }
         if (rawResponse.status.failed()) {
             return@withContext null

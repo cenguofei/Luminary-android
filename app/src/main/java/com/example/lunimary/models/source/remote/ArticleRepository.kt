@@ -1,4 +1,4 @@
-package com.example.lunimary.models.source
+package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.responses.DataResponse
@@ -32,4 +32,10 @@ class ArticleRepository(
         perPageCount: Int
     ): PageResponse<Article> =
         withContext(dispatcher) { articleSource.recommendedArticles(curPage, perPageCount) }
+
+    override suspend fun publicArticles(userId: Long): DataResponse<List<Article>> =
+        withContext(dispatcher) { articleSource.publicArticles(userId) }
+
+    override suspend fun privacyArticles(userId: Long): DataResponse<List<Article>> =
+        withContext(dispatcher) { articleSource.privacyArticles(userId) }
 }

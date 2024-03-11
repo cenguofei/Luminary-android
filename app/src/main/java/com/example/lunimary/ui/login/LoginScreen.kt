@@ -1,5 +1,6 @@
 package com.example.lunimary.ui.login
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -15,7 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.lunimary.R
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryScreen
@@ -24,17 +27,39 @@ import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
+import com.example.lunimary.util.currentUser
+import com.example.lunimary.util.notLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.loginScreen(appState: LunimaryAppState, coroutineScope: CoroutineScope) {
-    composable(Screens.Login.route) {
+    composable(
+        Screens.Login.route,
+        arguments = listOf(
+            navArgument("fromNeedLogin") {
+                defaultValue = true
+                type = NavType.BoolType
+            }
+        )
+    ) { navBackEntry ->
+        val fromNeedLogin = navBackEntry.arguments?.getBoolean("fromNeedLogin") ?: false
+        BackHandler {
+            if (fromNeedLogin) {
+                appState.navToHome()
+            } else {
+                appState.popBackStack()
+            }
+        }
         LoginScreen(
             onBack = {
-                appState.popBackStack()
+                if (fromNeedLogin) {
+                    appState.navToHome()
+                } else {
+                    appState.popBackStack()
+                }
             },
-            onRegisterClick = { username, password ->
-
+            onRegisterClick = {
+                appState.navToRegister()
             },
             coroutineScope = coroutineScope,
             userViewModel = appState.userViewModel,
@@ -48,7 +73,7 @@ fun NavGraphBuilder.loginScreen(appState: LunimaryAppState, coroutineScope: Coro
 @Composable
 fun LoginScreen(
     onBack: () -> Unit,
-    onRegisterClick: (username: String, password: String) -> Unit,
+    onRegisterClick: () -> Unit,
     coroutineScope: CoroutineScope,
     userViewModel: UserViewModel,
     appState: LunimaryAppState,
@@ -84,9 +109,7 @@ fun LoginScreen(
             LunimaryToolbar(
                 onBack = onBack,
                 end = {
-                    TextButton(onClick = {
-                        onRegisterClick(username.value, password.value)
-                    }) {
+                    TextButton(onClick = { onRegisterClick() }) {
                         Text(
                             text = stringResource(id = R.string.register),
                             color = MaterialTheme.colorScheme.primary
@@ -94,13 +117,15 @@ fun LoginScreen(
                     }
                 }
             )
-            LoginScreenContent(
+            LoginOrRegisterScreenContent(
                 username = username,
                 password = password,
                 coroutineScope = coroutineScope,
-                onLoginClick = { username, password ->
+                done = { username, password ->
                     userViewModel.login(username, password)
-                }
+                },
+                type = stringResource(id = R.string.password_login),
+                buttonText = stringResource(id = R.string.login)
             )
         }
     }

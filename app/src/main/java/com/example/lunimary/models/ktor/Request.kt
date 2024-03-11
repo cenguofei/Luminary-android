@@ -1,5 +1,6 @@
 package com.example.lunimary.models.ktor
 
+import com.example.lunimary.util.currentUser
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
@@ -11,6 +12,7 @@ import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
+import io.ktor.http.appendPathSegments
 import io.ktor.http.contentType
 import java.nio.file.Files.delete
 
@@ -80,6 +82,15 @@ fun HttpRequestBuilder.addPagesParam(curPage: Int, perPageCount: Int) {
     url {
         parameters.append("curPage", "$curPage")
         parameters.append("perPageCount", "$perPageCount")
+    }
+}
+
+fun HttpRequestBuilder.addUserIdPath(
+    userId: Long? = null
+) {
+    url {
+        val id = userId ?: currentUser.id
+        appendPathSegments(id.toString())
     }
 }
 

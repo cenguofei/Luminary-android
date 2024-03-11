@@ -1,13 +1,24 @@
 package com.example.lunimary.models
 
+import android.os.Build
+import android.os.Parcelable
+import androidx.annotation.RequiresApi
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.empty
+import kotlinx.android.parcel.Parcelize
+import java.time.format.DateTimeFormatter
 
+@Entity
 @kotlinx.serialization.Serializable
+@Parcelize
 data class Article(
-    val id: Long = Long.Default,
+    @PrimaryKey(autoGenerate = true) val id: Long = Long.Default,
 
-    val userId: Long = Long.Default,
+    @ColumnInfo(name = "user_id") val userId: Long = Long.Default,
 
     val username: String = empty,
 
@@ -20,14 +31,9 @@ data class Article(
     val body: String = empty, // content
 
     /**
-     * format of publishTime
-     */
-    val niceDate: String = empty,
-
-    /**
      * 文章可见范围
      */
-    val visibleMode: VisibleMode = VisibleMode.PUBLIC,
+    @ColumnInfo(name = "visible_mode") val visibleMode: VisibleMode = VisibleMode.PUBLIC,
 
     val tags: Array<String> = emptyArray(),
 
@@ -40,10 +46,15 @@ data class Article(
     /**
      * 浏览数量
      */
-    val viewsNum: Int = Int.Default,
+    @ColumnInfo(name = "views_num") val viewsNum: Int = Int.Default,
 
-    val pictures: Array<String> = emptyArray()
-)  : java.io.Serializable {
+    val cover: String = empty,
+
+    val timestamp: Long = System.currentTimeMillis()
+)  : java.io.Serializable, Parcelable {
+
+    @Ignore constructor() : this(id = Long.Default)
+
     /**
      * 文章发布了多少天
      */
@@ -51,6 +62,10 @@ data class Article(
         return Int.Default
     }
 
+    /**
+     * format of publishTime
+     */
+    val niceDate: String get() = empty
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -64,13 +79,14 @@ data class Article(
         if (title != other.title) return false
         if (link != other.link) return false
         if (body != other.body) return false
-        if (niceDate != other.niceDate) return false
         if (visibleMode != other.visibleMode) return false
         if (!tags.contentEquals(other.tags)) return false
         if (likes != other.likes) return false
         if (collections != other.collections) return false
         if (comments != other.comments) return false
         if (viewsNum != other.viewsNum) return false
+        if (cover != other.cover) return false
+        if (timestamp != other.timestamp) return false
 
         return true
     }
@@ -83,16 +99,20 @@ data class Article(
         result = 31 * result + title.hashCode()
         result = 31 * result + link.hashCode()
         result = 31 * result + body.hashCode()
-        result = 31 * result + niceDate.hashCode()
         result = 31 * result + visibleMode.hashCode()
         result = 31 * result + tags.contentHashCode()
         result = 31 * result + likes
         result = 31 * result + collections
         result = 31 * result + comments
         result = 31 * result + viewsNum
+        result = 31 * result + cover.hashCode()
+        result = 31 * result + timestamp.hashCode()
         return result
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+val formatterToSeconds: DateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")
 
 
 enum class VisibleMode {
@@ -107,7 +127,6 @@ val testArticle = Article(
     author = "Chen Guofei",
     title = "Self study KTor development LuminaryBlog backend",
     body = "Note: Databases that support a path context root will have this value appended to the generated SQL path expression by default, so it is not necessary to include it in the provided argument String. In the above example, if MySQL is being used, the provided path arguments should be .name and .language respectively.",
-    niceDate = "2019-11-15",
     visibleMode = VisibleMode.PUBLIC,
     tags = arrayOf("Kotlin", "Compose", "Android", "Ktor"),
     collections = 99,

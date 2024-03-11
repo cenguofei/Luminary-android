@@ -1,4 +1,4 @@
-package com.example.lunimary.models.source
+package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.responses.DataResponse
@@ -16,4 +16,12 @@ interface ArticleSource {
     suspend fun allArticles(curPage: Int, perPageCount: Int) : PageResponse<Article>
 
     suspend fun recommendedArticles(curPage: Int, perPageCount: Int) : PageResponse<Article>
+
+    suspend fun publicArticles(
+        userId: Long
+    ): DataResponse<List<Article>>
+
+    suspend fun privacyArticles(
+        userId: Long
+    ): DataResponse<List<Article>>
 }

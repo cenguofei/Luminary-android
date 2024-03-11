@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id "org.jetbrains.kotlin.kapt"
 }
 
 android {
@@ -94,6 +95,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
+    implementation("androidx.compose.animation:animation:1.6.3")
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
     def accompanist = "0.33.2-alpha"
     implementation "com.google.accompanist:accompanist-systemuicontroller:${accompanist}"
@@ -126,4 +129,11 @@ dependencies {
 
     def lottieVersion = "6.3.0"
     implementation "com.airbnb.android:lottie-compose:$lottieVersion"
+
+    def room_version = "2.5.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    implementation 'io.github.kevinnzou:compose-webview:0.33.4'
 }

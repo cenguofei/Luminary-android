@@ -6,7 +6,8 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.responses.Page
-import com.example.lunimary.models.source.ArticleRepository
+import com.example.lunimary.models.responses.isEmpty
+import com.example.lunimary.models.source.remote.ArticleRepository
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.util.logd
 
@@ -20,10 +21,14 @@ class RecommendViewModel : BaseViewModel() {
         request(
             block = {
                 _pageArticles.postValue(NetworkResult.Loading())
-                articleRepository.recommendedArticles(0, 12)
+                articleRepository.recommendedArticles(0, 30)
             },
-            onSuccess = {
-                _pageArticles.postValue(NetworkResult.Success(it))
+            onSuccess = { data, _ ->
+                if (data == null || data.isEmpty()) {
+                    _pageArticles.postValue(NetworkResult.Empty())
+                } else {
+                    _pageArticles.postValue(NetworkResult.Success(data))
+                }
             },
             onFailed = {
                 _pageArticles.postValue(NetworkResult.Error(it))
@@ -37,7 +42,7 @@ class RecommendViewModel : BaseViewModel() {
             block = {
                 articleRepository.getArticleById(58)
             },
-            onSuccess = {
+            onSuccess = { data, msg ->
 
             }
         )

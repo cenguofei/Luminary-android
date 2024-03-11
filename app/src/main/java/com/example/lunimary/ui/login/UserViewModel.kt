@@ -3,35 +3,31 @@ package com.example.lunimary.ui.login
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.responses.UserData
-import com.example.lunimary.models.source.UserRepository
-import com.example.lunimary.models.source.UserSource
+import com.example.lunimary.models.source.remote.UserRepository
+import com.example.lunimary.models.source.remote.UserSource
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.storage.removeSession
 import com.example.lunimary.storage.removeToken
 import com.example.lunimary.util.UserState
-import com.example.lunimary.util.logd
 import com.example.lunimary.util.unknownErrorMsg
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 class UserViewModel : BaseViewModel() {
     private val userSource: UserSource = UserRepository()
 
-    private val _loginState: MutableLiveData<NetworkResult<UserData>> = MutableLiveData(NetworkResult.None())
+    private val _loginState: MutableLiveData<NetworkResult<UserData>> =
+        MutableLiveData(NetworkResult.None())
     val loginState: LiveData<NetworkResult<UserData>> get() = _loginState
 
     private val _hasShowLogout: MutableState<Boolean> = mutableStateOf(false)
     val hasShowLogout: State<Boolean> get() = _hasShowLogout
 
-    private val _logoutState: MutableLiveData<NetworkResult<Unit>> = MutableLiveData(NetworkResult.None())
+    private val _logoutState: MutableLiveData<NetworkResult<Unit>> =
+        MutableLiveData(NetworkResult.None())
     val logoutState: LiveData<NetworkResult<Unit>> get() = _logoutState
 
     fun login(
@@ -43,10 +39,10 @@ class UserViewModel : BaseViewModel() {
                 _loginState.postValue(NetworkResult.Loading())
                 userSource.login(username, password)
             },
-            onSuccess = {
-                if (it?.user != null) {
-                    _loginState.postValue(NetworkResult.Success(it))
-                    UserState.updateUser(it.user)
+            onSuccess = { data, _ ->
+                if (data?.user != null) {
+                    _loginState.postValue(NetworkResult.Success(data))
+                    UserState.updateUser(data.user)
                 } else {
                     _loginState.postValue(NetworkResult.Error(unknownErrorMsg))
                 }
@@ -60,7 +56,8 @@ class UserViewModel : BaseViewModel() {
     fun getUser(id: Long) {
         request(
             block = { userSource.queryUser(id) },
-            onSuccess = {
+            onSuccess = { data, msg ->
+
             }
         )
     }
@@ -70,8 +67,9 @@ class UserViewModel : BaseViewModel() {
             block = {
                 userSource.checkIsLogin()
             },
-            onSuccess = {
-                UserState.updateLoginState(it)
+            onSuccess = { data, msg ->
+                UserState.updateLoginState(data?.isLogin, "userviewmodel")
+                UserState.message = msg
             }
         )
     }
@@ -83,7 +81,7 @@ class UserViewModel : BaseViewModel() {
                 _logoutState.postValue(NetworkResult.Loading())
                 userSource.logout()
             },
-            onSuccess = {
+            onSuccess = { _, _ ->
                 removeSession()
                 removeToken()
                 UserState.clearUser()
@@ -95,11 +93,23 @@ class UserViewModel : BaseViewModel() {
         )
     }
 
+    private val _registerState: MutableLiveData<NetworkResult<UserData>> =
+        MutableLiveData(NetworkResult.None())
+    val registerState: LiveData<NetworkResult<UserData>> get() = _registerState
+
     fun register(username: String, password: String) {
         request(
-            block = { userSource.register(username, password) },
-            onSuccess = {
-
+            block = {
+                _registerState.postValue(NetworkResult.Loading())
+                userSource.register(username, password)
+            },
+            onSuccess = { data, msg ->
+                data?.let { userData ->
+                    _registerState.postValue(NetworkResult.Success(userData, msg))
+                }
+            },
+            onFailed = {
+                _registerState.postValue(NetworkResult.Error(it))
             }
         )
     }

@@ -1,6 +1,7 @@
-package com.example.lunimary.models.source
+package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.base.BaseResponse
+import com.example.lunimary.models.LoginInfo
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
 
@@ -16,7 +17,7 @@ interface UserSource {
     /**
      * 检查是否有登录状态
      */
-    suspend fun checkIsLogin() : DataResponse<Boolean>
+    suspend fun checkIsLogin() : DataResponse<LoginInfo>
 
     /**
      * 退出登录

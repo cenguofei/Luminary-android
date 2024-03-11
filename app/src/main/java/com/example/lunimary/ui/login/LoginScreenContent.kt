@@ -22,16 +22,17 @@ import com.example.lunimary.R
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryDialog
-import com.example.lunimary.util.logd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreenContent(
+fun LoginOrRegisterScreenContent(
     username: MutableState<String>,
     password: MutableState<String>,
     coroutineScope: CoroutineScope,
-    onLoginClick: (username: String, password: String) -> Unit
+    type: String,
+    buttonText: String,
+    done: (username: String, password: String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -41,7 +42,7 @@ fun LoginScreenContent(
     ) {
         Spacer(modifier = Modifier.height(30.dp))
         Text(
-            text = stringResource(id = R.string.password_login),
+            text = type,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -54,7 +55,7 @@ fun LoginScreenContent(
         Spacer(modifier = Modifier.height(35.dp))
         val openDialog = remember { mutableStateOf(false) }
         LunimaryDialog(
-            text = stringResource(id = R.string.agree_privacy_before_login),
+            text = stringResource(id = R.string.agree_privacy_before_login_or_register),
             openDialog = openDialog
         )
         val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
@@ -76,12 +77,12 @@ fun LoginScreenContent(
                     return@LinearButton
                 }
                 if (agreement.value) {
-                    onLoginClick(username.value, password.value)
+                    done(username.value, password.value)
                 } else {
                     openDialog.value = true
                 }
             },
-            text = stringResource(id = R.string.login)
+            text = buttonText
         )
         Spacer(modifier = Modifier.height(10.dp))
         PrivacyProtocol(

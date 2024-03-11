@@ -20,17 +20,17 @@ enum class TopLevelDestination(
     Home(
         icon = Icons.Default.Cottage,
         iconTextId = R.string.home,
-        route = "home"
+        route = "$TOP_ROOT/{topScreen}"
     ),
     Message(
         icon = Icons.Default.Chat,
         iconTextId = R.string.message,
-        route = "message"
+        route = "$TOP_ROOT/{topScreen}"
     ),
     User(
         icon = Icons.Default.Person,
         iconTextId = R.string.mine,
-        route = "user"
+        route = "$TOP_ROOT/{topScreen}"
     );
 
     @Composable
@@ -42,3 +42,13 @@ enum class TopLevelDestination(
         }
     }
 }
+
+const val TOP_ROOT = "screens_root"
+const val HOME_ROOT = "home"
+const val MESSAGE_ROOT = "message"
+const val USER_ROOT = "user"
+
+const val HOME_ROUTE = "$TOP_ROOT/$HOME_ROOT"
+const val MESSAGE_ROUTE = "$TOP_ROOT/$MESSAGE_ROOT"
+const val USER_ROUTE = "$TOP_ROOT/$USER_ROOT"
+

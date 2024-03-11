@@ -15,6 +15,7 @@ data class User(
     val sex: Sex = Sex.Sealed,
     @SerialName("head_url")
     val headUrl: String = "123.png",
+    val background: String = "123.png",
     val password: String = "",
     val role: Role = Role.User,
     val status: UserStatus = UserStatus.Normal

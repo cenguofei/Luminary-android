@@ -33,16 +33,20 @@ fun EditText.handleFormat(
     index: Int,
     context: Context
 ) {
-    val format = context.getString(formatRes[index])
-    if (index <= 2) {
-        val newText = text.append(format)
-        text = newText
-        setSelection(newText.length - format.length / 2)
-    } else {
-        val selectionStart = selectionStart
-        val layout = layout
-        val lineNumber = layout.getLineForOffset(selectionStart)
-        val lineStart = layout.getLineStart(lineNumber)
-        editableText.insert(lineStart, format.plus(" "))
+    runCatching {
+        val format = context.getString(formatRes[index])
+        if (index <= 2) {
+            val newText = text.append(format)
+            text = newText
+            setSelection(newText.length - format.length / 2)
+        } else {
+            val selectionStart = selectionStart
+            val layout = layout
+            val lineNumber = layout.getLineForOffset(selectionStart)
+            val lineStart = layout.getLineStart(lineNumber)
+            editableText.insert(lineStart, format.plus(" "))
+        }
+    }.onFailure {
+        it.printStackTrace()
     }
 }
