@@ -34,3 +34,5 @@ data class Page<T>(
 fun <T> Page<T>?.isNotEmpty(): Boolean = this != null && lists.isNotEmpty()
 
 fun <T> Page<T>?.isEmpty(): Boolean = !isNotEmpty()
+
+const val DEFAULT_PER_PAGE_COUNT = 6

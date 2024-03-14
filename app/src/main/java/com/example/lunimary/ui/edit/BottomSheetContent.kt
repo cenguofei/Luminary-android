@@ -56,7 +56,7 @@ fun BottomSheetContent(
                 ChooseVisibleMode(editViewModel = editViewModel)
             }
             item {
-                ArticleCover(editViewModel = editViewModel)
+                ArticleCover(editViewModel = editViewModel, coroutineScope = coroutineScope)
             }
         }
         BottomButtons(

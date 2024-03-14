@@ -5,22 +5,22 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -30,28 +30,103 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieAnimatable
-import com.airbnb.lottie.compose.rememberLottieComposition
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.LocalNavNavController
 import com.example.lunimary.R
 import com.example.lunimary.models.User
-import com.example.lunimary.network.NetworkResult
+import com.example.lunimary.network.isCurrentlyConnected
 import com.example.lunimary.ui.navToLogin
 import com.example.lunimary.util.UserState
 import com.example.lunimary.util.empty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
+@Composable
+fun <T : Any> LunimaryPagingScreen(
+    modifier: Modifier = Modifier,
+    error: Boolean = false,
+    errorMsg: String? = null,
+    empty: Boolean = false,
+    emptyMsg: String? = null,
+    networkError: Boolean = false,
+    searchEmpty: Boolean = false,
+    noMessage: Boolean = false,
+    shimmer: Boolean = false,
+    snackbarData: SnackbarData? = null,
+    openLoadingWheelDialog: Boolean = false,
+    coroutine: CoroutineScope = rememberCoroutineScope(),
+    color: Color = Color.Transparent,
+    checkLoginState: Boolean = false,
+    items: LazyPagingItems<T>,
+    itemContent: @Composable (T) -> Unit
+) {
+    val loadState = items.loadState
+    val showError = error || items.loadState.refresh is LoadState.Error
+    val showErrorMsg = errorMsg?.let {
+        if (loadState.refresh is LoadState.Error) {
+            (loadState.refresh as LoadState.Error).error.message
+        } else if (loadState.append is LoadState.Error) {
+            (loadState.append as LoadState.Error).error.message
+        } else null
+    }?.let { "$it， 点击重试" } ?: stringResource(id = R.string.load_error_and_retry)
+    val showShimmer = shimmer || loadState.refresh is LoadState.Loading
+    val showEmpty =
+        empty || searchEmpty || (loadState.refresh is LoadState.NotLoading && items.isEmpty())
+    LunimaryScreen(
+        modifier = modifier,
+        error = showError && items.isEmpty(), // 没有数据并且出错才展示空页面
+        errorMsg = showErrorMsg,
+        onErrorClick = { items.refresh() },
+        empty = showEmpty,
+        emptyMsg = emptyMsg,
+        networkError = networkError && items.isEmpty(),
+        searchEmpty = showEmpty,
+        noMessage = noMessage,
+        shimmer = showShimmer,
+        snackbarData = snackbarData,
+        openLoadingWheelDialog = openLoadingWheelDialog,
+        coroutine = coroutine,
+        color = color,
+        checkLoginState = checkLoginState
+    ) {
+        val hasNetwork = LocalContext.current.isCurrentlyConnected()
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(items.itemCount) {
+                items[it]?.let { item -> itemContent(item) }
+            }
+            if (loadState.append is LoadState.NotLoading) {
+                if ((loadState.append as LoadState.NotLoading).endOfPaginationReached) {
+                    //没有更多
+                    item { Footer(desc = stringResource(id = R.string.loading_no_more)) }
+                }
+            } else if (!hasNetwork && items.isNotEmpty()) {
+                //没有网，但是前面请求的数据还在
+                item { Footer(desc = stringResource(id = R.string.load_error_for_no_net)) }
+            } else if (loadState.append is LoadState.Loading) {
+                //底部加载
+                item { Footer(desc = stringResource(id = R.string.loading)) }
+            } else if (items.loadState.append is LoadState.Error) {
+                //底部错误，点击重试
+                item {
+                    Footer(
+                        desc = stringResource(id = R.string.load_error_and_retry),
+                        enabled = true,
+                        onClick = { items.retry() }
+                    )
+                }
+            }
+        }
+    }
+}
 
 /**
  * @param error 错误页的插图
@@ -66,6 +141,7 @@ fun LunimaryScreen(
     modifier: Modifier = Modifier,
     error: Boolean = false,
     errorMsg: String? = null,
+    onErrorClick: () -> Unit = {},
     empty: Boolean = false,
     emptyMsg: String? = null,
     networkError: Boolean = false,
@@ -109,6 +185,14 @@ fun LunimaryScreen(
     ) {
         val boxModifier = Modifier.align(Alignment.Center)
         when {
+            networkError -> {
+                ShowReasonForNoContent(
+                    id = R.drawable.network_error,
+                    description = stringResource(id = R.string.not_connected),
+                    modifier = boxModifier
+                )
+            }
+
             shimmer -> {
                 ShimmerList()
             }
@@ -129,19 +213,13 @@ fun LunimaryScreen(
                 )
             }
 
-            networkError -> {
-                ShowReasonForNoContent(
-                    id = R.drawable.network_error,
-                    description = stringResource(id = R.string.not_connected),
-                    modifier = boxModifier
-                )
-            }
-
             error -> {
                 ShowReasonForNoContent(
                     description = errorMsg ?: stringResource(id = R.string.error_occur_msg),
                     id = R.drawable.empty,
-                    modifier = boxModifier
+                    modifier = boxModifier,
+                    enabled = true,
+                    onClick = onErrorClick
                 )
             }
 
@@ -175,9 +253,17 @@ fun CheckLoginState() {
 private fun ShowReasonForNoContent(
     modifier: Modifier = Modifier,
     description: String = empty,
-    @DrawableRes id: Int
+    @DrawableRes id: Int,
+    onClick: () -> Unit ={},
+    enabled: Boolean = false
 ) {
-    Box(modifier = modifier.size(height = 250.dp, width = 200.dp)) {
+    Box(modifier = modifier
+        .size(height = 250.dp, width = 200.dp)
+        .clickable(
+            role = Role.Button,
+            onClick = onClick,
+            enabled = enabled
+        )) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -216,7 +302,6 @@ private fun surfaceColorAtElevation(color: Color, elevation: Dp): Color {
 }
 
 
-data class SnackbarData(
-    val msg: String,
-    val actionLabel: String? = null
-)
+fun <T : Any> LazyPagingItems<T>.isEmpty() = itemCount == 0
+
+fun <T : Any> LazyPagingItems<T>.isNotEmpty() = !isEmpty()

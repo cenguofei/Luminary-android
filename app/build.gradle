@@ -104,7 +104,7 @@ dependencies {
     def markdown = "0.4.1"
     implementation "com.github.jeziellago:compose-markdown:${markdown}"
 
-    def compose_matisse = "1.1.4"
+    def compose_matisse = "2.0.0"
     implementation("io.github.leavesczy:matisse:${compose_matisse}")
 
     def coilVersion = "2.5.0"
@@ -136,4 +136,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     implementation 'io.github.kevinnzou:compose-webview:0.33.4'
+
+    def paging_version = "3.2.1"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-compose:3.3.0-alpha04"
 }

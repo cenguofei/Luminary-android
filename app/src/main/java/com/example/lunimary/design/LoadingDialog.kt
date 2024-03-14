@@ -3,6 +3,7 @@ package com.example.lunimary.design
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -28,15 +29,20 @@ fun LoadingDialog(
                 modifier = Modifier.size(height = 100.dp, width = 100.dp),
                 shape = RoundedCornerShape(12),
             ) {
-                Column(modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         LoadingWheel()
-                    }
-                    if (description != null) {
-                        Text(text = description, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        if (description != null) {
+                            Text(
+                                text = description,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.align(Alignment.BottomCenter).padding(top = 4.dp)
+                            )
+                        }
                     }
                 }
             }

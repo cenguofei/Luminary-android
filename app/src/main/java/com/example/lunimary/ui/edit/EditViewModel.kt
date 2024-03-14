@@ -1,5 +1,6 @@
 package com.example.lunimary.ui.edit
 
+import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -11,11 +12,13 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.design.tagColors
 import com.example.lunimary.models.Article
+import com.example.lunimary.models.UploadData
 import com.example.lunimary.models.VisibleMode
 import com.example.lunimary.models.source.local.LocalArticleRepository
 import com.example.lunimary.models.source.local.LocalTagRepository
 import com.example.lunimary.models.source.local.Tag
 import com.example.lunimary.models.source.remote.AddArticleRepository
+import com.example.lunimary.models.source.remote.FileRepository
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.empty
@@ -25,6 +28,7 @@ import kotlinx.coroutines.launch
 class EditViewModel : BaseViewModel() {
     private val addArticleRepository = AddArticleRepository()
     private val tagRepository = LocalTagRepository()
+    private val fileRepository = FileRepository()
 
     private val _articleDataState: MutableState<ArticleData> = mutableStateOf(ArticleData())
     val articleDataState: State<ArticleData> get() = _articleDataState
@@ -229,9 +233,38 @@ class EditViewModel : BaseViewModel() {
         }
     }
 
+    private val _uri = mutableStateOf(Uri.EMPTY)
+    val uri: State<Uri> get() = _uri
+
+    fun updateUri(uri: Uri) {
+        _uri.value = uri
+    }
+
+    private val _uploadCoverState: MutableState<NetworkResult<UploadData>> = mutableStateOf(NetworkResult.None())
+    val uploadCoverState: State<NetworkResult<UploadData>> get() = _uploadCoverState
+    fun uploadFile(path: String, filename: String) {
+        fly(FLY_UPLOAD_FILE) {
+            request(
+                block = {
+                    _uploadCoverState.value = NetworkResult.Loading()
+                    fileRepository.uploadFile(path, filename)
+                },
+                onSuccess = { data, msg ->
+                    _cover.value = data?.first() ?: empty
+                    _uploadCoverState.value = NetworkResult.Success(data = data, msg = msg)
+                },
+                onFailed = {
+                    _uploadCoverState.value = NetworkResult.Error(it)
+                },
+                onFinish = { land(FLY_UPLOAD_FILE) }
+            )
+        }
+    }
+
     init {
         getHistoryTags()
     }
 }
 
 const val FLY_ADD_ARTICLE = "fly_add_article"
+const val FLY_UPLOAD_FILE = "fly_upload_file"

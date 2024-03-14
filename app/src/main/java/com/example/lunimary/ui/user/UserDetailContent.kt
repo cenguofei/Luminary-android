@@ -61,7 +61,7 @@ fun UserInformation(user: User) {
             shape = RoundedCornerShape(50)
         ) {
             AsyncImage(
-                model = user.headUrl,
+                model = user.realHeadUrl(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

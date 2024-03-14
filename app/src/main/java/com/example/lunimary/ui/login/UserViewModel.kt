@@ -5,16 +5,23 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.responses.UserData
 import com.example.lunimary.models.source.remote.UserRepository
 import com.example.lunimary.models.source.remote.UserSource
 import com.example.lunimary.network.NetworkResult
+import com.example.lunimary.storage.refreshToken
 import com.example.lunimary.storage.removeSession
 import com.example.lunimary.storage.removeToken
 import com.example.lunimary.util.UserState
+import com.example.lunimary.util.logd
 import com.example.lunimary.util.unknownErrorMsg
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class UserViewModel : BaseViewModel() {
     private val userSource: UserSource = UserRepository()
@@ -29,6 +36,29 @@ class UserViewModel : BaseViewModel() {
     private val _logoutState: MutableLiveData<NetworkResult<Unit>> =
         MutableLiveData(NetworkResult.None())
     val logoutState: LiveData<NetworkResult<Unit>> get() = _logoutState
+
+
+    fun checkLogin(
+        isLogin: () -> Unit = {},
+        logout: () -> Unit = {}
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val deferred = async { userSource.checkIsLogin() }
+            val response = deferred.await()
+            "检查登录状态：response=${response.data.toString() + response.code + response.msg}".logd()
+            if (response.data?.isLogin == true) {
+                isLogin()
+            } else {
+                val deffer = async { refreshToken() }
+                val tokens = deffer.await()
+                if (tokens == null) {
+                    logout()
+                } else {
+                    isLogin()
+                }
+            }
+        }
+    }
 
     fun login(
         username: String,
@@ -58,18 +88,6 @@ class UserViewModel : BaseViewModel() {
             block = { userSource.queryUser(id) },
             onSuccess = { data, msg ->
 
-            }
-        )
-    }
-
-    fun checkIsLogin() {
-        request(
-            block = {
-                userSource.checkIsLogin()
-            },
-            onSuccess = { data, msg ->
-                UserState.updateLoginState(data?.isLogin, "userviewmodel")
-                UserState.message = msg
             }
         )
     }

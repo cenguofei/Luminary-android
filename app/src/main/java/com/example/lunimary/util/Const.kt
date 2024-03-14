@@ -73,3 +73,6 @@ inline val refreshToken: String get() = "/token/refresh"
 //Online Status
 inline val isForegroundStr: String get() = "isForeground"
 inline val onlineStatusPath: String get() = "/online_status"
+
+inline val fileDownloadPath: String get() = "/file/download"
+inline val fileUploadPath: String get() = "/file/upload"

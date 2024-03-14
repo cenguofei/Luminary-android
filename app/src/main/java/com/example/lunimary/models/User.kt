@@ -1,7 +1,10 @@
 package com.example.lunimary.models
 
 import android.os.Parcelable
+import com.example.lunimary.models.ktor.HOST
+import com.example.lunimary.models.ktor.PORT
 import com.example.lunimary.util.currentUser
+import com.example.lunimary.util.fileDownloadPath
 import kotlinx.android.parcel.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -20,6 +23,8 @@ data class User(
     val role: Role = Role.User,
     val status: UserStatus = UserStatus.Normal
 ) : java.io.Serializable, Parcelable {
+
+    fun realHeadUrl(): String = fileBaseUrl + headUrl
     companion object {
         val NONE = User(username = "luminary-default-user")
     }

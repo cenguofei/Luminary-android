@@ -48,9 +48,8 @@ suspend fun refreshToken(): BearerTokens? {
         val rawResponse = httpClient.get(
             urlString = refreshToken
         ) {
-            bearerAuth(loadLocalToken()?.refreshToken ?: empty)
+            header("lunimary_token", "${loadLocalToken()?.refreshToken}")
             setSession()
-            header("refresh_token", "true")
         }
         if (rawResponse.status.failed()) {
             return@withContext null

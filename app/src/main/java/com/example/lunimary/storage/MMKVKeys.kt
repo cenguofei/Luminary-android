@@ -12,4 +12,6 @@ object MMKVKeys {
     const val REFRESH_TOKEN = "refresh_token"
 
     const val LAST_LOGIN_USER = "last_login_user"
+
+    const val FIRST_USE_APP = "first_use_the_app"
 }

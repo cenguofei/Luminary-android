@@ -1,9 +1,11 @@
 package com.example.lunimary
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -30,6 +32,7 @@ import com.example.lunimary.util.UserState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,10 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val userViewModel: UserViewModel = viewModel()
+            userViewModel.checkLogin(
+                isLogin = { UserState.updateLoginState(true, "onActivityResumed") },
+                logout = { UserState.updateLoginState(false, "onActivityResumed") }
+            )
             val systemUiController = rememberSystemUiController()
             val appState = rememberAppState(
                 systemUiController = systemUiController,

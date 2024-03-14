@@ -80,7 +80,7 @@ fun HttpRequestBuilder.addJson(obj: Any): HttpRequestBuilder {
 
 fun HttpRequestBuilder.addPagesParam(curPage: Int, perPageCount: Int) {
     url {
-        parameters.append("curPage", "$curPage")
+        parameters.append("wishPage", "$curPage")
         parameters.append("perPageCount", "$perPageCount")
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import coil.compose.AsyncImage
 import com.example.lunimary.design.Tag
 import com.example.lunimary.design.tagColors
 import com.example.lunimary.models.Article
+import com.example.lunimary.models.fileBaseUrl
 
 data class ArticleItemContainerColor(
     val visitedColor: Color,
@@ -66,8 +68,8 @@ fun ArticleItem(
                 modifier = Modifier
                     .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
-                Content(content = article.body, modifier = Modifier.weight(2f))
-                ArticlePicture(pic = article.cover, modifier = Modifier.weight(1f))
+                Content(content = article.body, modifier = Modifier.weight(0.6f))
+                ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
             }
             Spacer(modifier = Modifier.height(4.dp))
             Labels(article.tags.toList())
@@ -135,9 +137,9 @@ fun ArticlePicture(
     pic: String?
 ) {
     if (pic == null) return
-    Surface(modifier = modifier.height(90.dp)) {
+    Surface(modifier = modifier.height(90.dp), shape = RoundedCornerShape(8)) {
         AsyncImage(
-            model = pic,
+            model = fileBaseUrl + pic,
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop

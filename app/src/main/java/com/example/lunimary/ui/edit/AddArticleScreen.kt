@@ -61,7 +61,7 @@ fun NavGraphBuilder.addArticleScreen(
         val editViewModel: EditViewModel = viewModel()
         val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
         val saveMessage = stringResource(id = R.string.auto_save_as_draft)
-        val updateMessage = stringResource(id = R.string.has_auto_update_draft)
+        val updateMessage = stringResource(id = R.string.updated_draft)
         val saveDraft = {
             if (editViewModel.isFillByArticle) {
                 if (editViewModel.draftChanged()) {

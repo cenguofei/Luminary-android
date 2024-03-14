@@ -1,11 +1,6 @@
 package com.example.lunimary.models.ktor
 
-import com.example.lunimary.checkIsLoginHeader
 import com.example.lunimary.storage.TokenInfo
-import com.example.lunimary.storage.refreshToken
-import com.example.lunimary.util.HttpConst
-import com.example.lunimary.util.UserState
-import com.example.lunimary.util.logd
 import com.example.lunimary.util.loge
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -40,51 +35,17 @@ import okhttp3.Response
 import java.util.concurrent.TimeUnit
 
 const val HOST = "192.168.31.237"
+const val PORT = 8080
 
 val httpClient = HttpClient(OkHttp) {
-    //configure the engine
     engine {
         config {
-            connectTimeout(1L, TimeUnit.MINUTES)
-            readTimeout(1L, TimeUnit.MINUTES)
+            connectTimeout(10L, TimeUnit.SECONDS)
+            readTimeout(10L, TimeUnit.SECONDS)
             followRedirects(true)
         }
-        addInterceptor { chain ->
-            val request = chain.request()
-            val response = chain.proceed(request)
-            "request headers:${request.headers}".logd()
-            val isRefreshToken = request.headers["refresh_token"]
-            if (response.code == HttpStatusCode.Unauthorized.value
-                && isRefreshToken == null) {
-                "intercept Unauthorized: response=$response".logd("token")
-                runBlocking(context = Dispatchers.IO) {
-                    val deffer = async { refreshToken() }
-                    val tokens = deffer.await()
-                    "refresh token newTokens=$tokens".logd("token")
-
-                    if (tokens == null) {
-                        UserState.updateLoginState(false, "clientConfig")
-                        return@runBlocking Response.Builder()
-                            .apply {
-                                request(request)
-                                protocol(Protocol.HTTP_1_1)
-                                code(HttpStatusCode.Conflict.value)
-                                message("error occur, refresh token failed.")
-                                header(HttpConst.NEED_LOGIN.first, HttpConst.NEED_LOGIN.second)
-                                body(response.body)
-                            }
-                            .build()
-                    }
-                    "refresh token success.".logd("token")
-                    val newRequest = request.newBuilder()
-                    newRequest.header(HttpHeaders.Authorization, "Bearer ${tokens.accessToken}")
-                    chain.proceed(newRequest.build())
-                }
-            } else {
-                response
-            }
-        }
-        //addInterceptor(interceptor)
+        addInterceptor(AuthInterceptor())
+        addInterceptor(NetworkInterceptor())
         //addNetworkInterceptor(interceptor)
         //preconfigured = okHttpClientInstance
     }
@@ -104,7 +65,7 @@ val httpClient = HttpClient(OkHttp) {
         url {
             protocol = URLProtocol.HTTP
             host = HOST
-            port = 8080
+            port = PORT
         }
     }
 
@@ -159,16 +120,6 @@ val httpClient = HttpClient(OkHttp) {
         originalCall
     }
 }
-
-//TODO
-fun closeClient() {
-    httpClient.close()
-
-    httpClient.use {
-
-    }
-}
-
 fun main() {
     runBlocking {
         // Step 1: Get an authorization code

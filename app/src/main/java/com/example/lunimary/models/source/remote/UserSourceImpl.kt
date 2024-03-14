@@ -56,9 +56,9 @@ class UserSourceImpl(private val client: HttpClient = httpClient) : UserSource {
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun checkIsLogin(): DataResponse<LoginInfo> {
         return client.securityPost(
-            urlString = checkIsLoginPath
+            urlString = checkIsLoginPath,
+            needAuth = false
         ) {
-            val encodeToken = Base64.getEncoder().encodeToString("${loadLocalToken()?.accessToken}".toByteArray())
             header("lunimary_token", "${loadLocalToken()?.accessToken}")
         }.let { it.body<DataResponse<LoginInfo>>().init(it) }
     }

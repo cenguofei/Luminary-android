@@ -69,6 +69,11 @@
     <string name="article_cover_suggestion">*建议尺寸： 1303*734px 封面图仅展示在信息流中</string>
     <string name="add">添加</string>
     <string name="auto_save_as_draft">已为您自动保存为草稿</string>
+    <string name="updated_draft">已更新草稿</string>
     <string name="draft">草稿</string>
-    <string name="has_auto_update_draft">已更新草稿</string>
+    <string name="loading">加载中...</string>
+    <string name="load_error_and_retry">加载错误，点击重试</string>
+    <string name="load_error_for_no_net">加载错误，请确保您已联网</string>
+    <string name="loading_no_more">没有更多数据了</string>
+    <string name="uploading">上传中...</string>
 </resources>

@@ -2,11 +2,16 @@ package com.example.lunimary
 
 import android.app.Activity
 import android.app.Application
+import android.os.Build
 import android.os.Bundle
+import coil.Coil
+import coil.ImageLoader
 import com.example.lunimary.models.ktor.httpClient
 import com.example.lunimary.models.ktor.securityPost
 import com.example.lunimary.models.source.remote.UserRepository
+import com.example.lunimary.storage.MMKVKeys
 import com.example.lunimary.util.UserState
+import com.example.lunimary.util.boolean
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.logv
 import com.example.lunimary.util.notLogin
@@ -21,12 +26,21 @@ import kotlinx.coroutines.launch
 import java.util.LinkedList
 
 class LuminaryApplication : Application() {
-    private val activityLifecycleCallbacks = ActivityLifeCycleCallbacks()
+    private lateinit var activityLifecycleCallbacks: ActivityLifecycleCallbacks
     override fun onCreate() {
         super.onCreate()
         MMKV.initialize(this).logv("mmkv")
+        activityLifecycleCallbacks = ActivityLifeCycleCallbacks()
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
         APP_CONTEXT = this
+        initCoil()
+    }
+
+
+    private fun initCoil() {
+        val imageLoader = ImageLoader.Builder(context = this)
+            .build()
+        Coil.setImageLoader(imageLoader)
     }
 
     companion object {
@@ -39,6 +53,7 @@ class LuminaryApplication : Application() {
 class ActivityLifeCycleCallbacks : Application.ActivityLifecycleCallbacks {
     private val activityStack = LinkedList<Activity>()
     private var reported = false
+    private var firstUseTheApp by boolean(key = MMKVKeys.FIRST_USE_APP)
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
     }
@@ -52,12 +67,6 @@ class ActivityLifeCycleCallbacks : Application.ActivityLifecycleCallbacks {
             reported = true
             reportOnlineStatus(true)
         }
-        checkLogin(
-            coroutineScope,
-            userRepository,
-            isLogin = { UserState.updateLoginState(true, "onActivityResumed") },
-            logout = { UserState.updateLoginState(false, "onActivityResumed") }
-        )
     }
 
     override fun onActivityPaused(activity: Activity) {
@@ -82,49 +91,32 @@ class ActivityLifeCycleCallbacks : Application.ActivityLifecycleCallbacks {
 
     private var isFirst = true
     private fun reportOnlineStatus(isForeground: Boolean = false) {
-        if (isFirst) {
-            checkLogin(
-                coroutineScope,
-                userRepository,
-                isLogin = {
-                    httpClient.securityPost(urlString = onlineStatusPath) {
-                        url {
-                            appendPathSegments("$isForeground")
-                        }
-                    }
-                }
-            )
-            isFirst = false
-        } else {
-            if (!notLogin()) {
-                coroutineScope.launch {
-                    httpClient.securityPost(urlString = onlineStatusPath) {
-                        url {
-                            appendPathSegments("$isForeground")
-                        }
-                    }
-                }
-            }
-        }
+//        if (isFirst) {
+//            checkLogin(
+//                coroutineScope,
+//                userRepository,
+//                isLogin = {
+//                    httpClient.securityPost(urlString = onlineStatusPath) {
+//                        url {
+//                            appendPathSegments("$isForeground")
+//                        }
+//                    }
+//                }
+//            )
+//            isFirst = false
+//        } else {
+//            if (!notLogin()) {
+//                coroutineScope.launch {
+//                    httpClient.securityPost(urlString = onlineStatusPath) {
+//                        url {
+//                            appendPathSegments("$isForeground")
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }
 
-private fun checkLogin(
-    coroutineScope: CoroutineScope,
-    userRepository: UserRepository,
-    isLogin: suspend () -> Unit = {},
-    logout: suspend () -> Unit = {}
-) {
-    coroutineScope.launch(Dispatchers.IO) {
-        val deferred = async { userRepository.checkIsLogin() }
-        val response = deferred.await()
-        "检查登录状态：response=${response.data.toString() + response.code + response.msg}".logd()
-        if (response.data?.isLogin == true) {
-            isLogin()
-        } else {
-            logout()
-        }
-    }
-}
 
 const val checkIsLoginHeader = "checkIsLogin"

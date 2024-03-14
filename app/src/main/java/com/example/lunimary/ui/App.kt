@@ -46,6 +46,7 @@ import com.example.lunimary.util.UserState
 import com.example.lunimary.util.logd
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun LunimaryApp(
     appState: LunimaryAppState,
@@ -60,7 +61,7 @@ fun LunimaryApp(
         if (isOffline) {
             snackbarHostState.showSnackbar(
                 message = notConnectedMessage,
-                duration = SnackbarDuration.Indefinite,
+                duration = SnackbarDuration.Long,
             )
             "notConnectedMessage=$notConnectedMessage".logd()
         }
