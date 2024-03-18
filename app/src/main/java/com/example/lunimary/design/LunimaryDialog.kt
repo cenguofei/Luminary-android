@@ -1,6 +1,7 @@
 package com.example.lunimary.design
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -45,53 +46,51 @@ fun LunimaryDialog(
 ) {
     if (openDialog.value) {
         Dialog(
-            onDismissRequest = {
-                openDialog.value = false
-                onDismissRequest()
-            },
+            onDismissRequest = { openDialog.value = false ; onDismissRequest() },
             properties = properties
         ) {
             Surface(
                 modifier = Modifier.size(height = height, width = width),
                 shape = RoundedCornerShape(12),
             ) {
-                LunimaryBackground {
-                    Box(
-                        contentAlignment = Alignment.Center,
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    Column(
                         modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Column(modifier = Modifier) {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = text,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.align(Alignment.End)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = text,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            TextButton(
+                                onClick = {
+                                    openDialog.value = false
+                                    onCancelClick?.let { it() }
+                                }
                             ) {
-                                TextButton(
-                                    onClick = {
-                                        openDialog.value = false
-                                        onCancelClick?.let { it() }
-                                    }
-                                ) {
-                                    Text(text = stringResource(id = R.string.cancel))
-                                }
-                                Spacer(modifier = Modifier.width(25.dp))
-                                TextButton(
-                                    onClick = {
-                                        openDialog.value = false
-                                        onConfirmClick?.let { it() }
-                                    }
-                                ) {
-                                    Text(text = stringResource(id = R.string.ok))
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(text = stringResource(id = R.string.cancel))
                             }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            TextButton(
+                                onClick = {
+                                    openDialog.value = false
+                                    onConfirmClick?.let { it() }
+                                }
+                            ) {
+                                Text(text = stringResource(id = R.string.ok))
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }

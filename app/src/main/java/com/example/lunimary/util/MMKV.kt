@@ -8,11 +8,11 @@ import kotlin.reflect.KProperty
 /**
  * Created by TanJiaJun on 2020-01-11.
  */
-private inline fun <T> delegate(
+inline fun <T> delegate(
     key: String? = null,
     defaultValue: T,
     mmapID: String? = null,
-    crossinline getter: MMKV.(key: String, value: T) -> T,
+    crossinline getter: MMKV.(key: String, defaultValue: T) -> T,
     crossinline setter: MMKV.(key: String, value: T) -> Boolean
 ): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
     val mmkv = if (mmapID != null) MMKV.mmkvWithID(mmapID) else MMKV.defaultMMKV()

@@ -12,6 +12,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.lunimary.R
+import com.example.lunimary.base.DarkThemeSetting
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
@@ -41,7 +43,8 @@ fun NavGraphBuilder.settingsScreen(appState: LunimaryAppState, coroutineScope: C
     composable(route = Screens.Settings.route) {
         SettingsScreen(
             appState = appState,
-            coroutineScope = coroutineScope
+            coroutineScope = coroutineScope,
+            darkThemeSettingState = appState.darkThemeSettingState
         )
     }
 }
@@ -50,16 +53,18 @@ fun NavGraphBuilder.settingsScreen(appState: LunimaryAppState, coroutineScope: C
 fun SettingsScreen(
     appState: LunimaryAppState,
     coroutineScope: CoroutineScope,
+    darkThemeSettingState: State<DarkThemeSetting>,
 ) {
     val logoutState by appState.userViewModel.logoutState.observeAsState()
     val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
     val showLoadingWheel = remember { mutableStateOf(false) }
 
-    when(logoutState) {
+    when (logoutState) {
         is NetworkResult.Loading -> {
             showLoadingWheel.value = true
         }
-        is NetworkResult.None -> { }
+
+        is NetworkResult.None -> {}
         is NetworkResult.Success -> {
             showLoadingWheel.value = false
             if (!appState.userViewModel.hasShowLogout.value) {
@@ -74,6 +79,7 @@ fun SettingsScreen(
             }
             LaunchedEffect(key1 = Unit, block = { appState.navToHome() })
         }
+
         is NetworkResult.Error -> {
             showLoadingWheel.value = false
             if (logoutState.isError()) {
@@ -90,41 +96,45 @@ fun SettingsScreen(
                 }
             }
         }
+
         else -> {
 
         }
     }
 
     LoadingDialog(show = showLoadingWheel.value)
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .statusBarsPadding()) {
-        Column(modifier = Modifier
+    Column(
+        modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)) {
-            LunimaryToolbar(
-                onBack = { appState.popBackStack() },
-                between = {
-                    Text(
-                        text = stringResource(id = R.string.settings),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            )
-            SettingsItems(modifier = Modifier.weight(1f))
-            if (currentUser != User.NONE) {
-                LinearButton(
-                    onClick = {
-                        appState.userViewModel.logout()
-                    },
-                    text = stringResource(id = R.string.logout),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
+            .statusBarsPadding()
+    ) {
+        LunimaryToolbar(
+            onBack = { appState.popBackStack() },
+            between = {
+                Text(
+                    text = stringResource(id = R.string.settings),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            Spacer(modifier = Modifier.height(60.dp))
+        )
+        SettingsItems(
+            modifier = Modifier.weight(1f),
+            darkThemeSettingState = darkThemeSettingState,
+            onThemeSettingChange = appState::onThemeSettingChange
+        )
+        if (currentUser != User.NONE) {
+            LinearButton(
+                onClick = {
+                    appState.userViewModel.logout()
+                },
+                text = stringResource(id = R.string.logout),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(45.dp)
+            )
         }
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }

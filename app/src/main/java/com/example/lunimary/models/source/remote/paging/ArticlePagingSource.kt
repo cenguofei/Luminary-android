@@ -4,8 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.responses.DEFAULT_PER_PAGE_COUNT
-import com.example.lunimary.models.source.remote.ArticleRepository
-import io.ktor.client.plugins.ResponseException
+import com.example.lunimary.models.source.remote.repository.ArticleRepository
 
 class ArticlePagingSource(
     private val repository: ArticleRepository = ArticleRepository()

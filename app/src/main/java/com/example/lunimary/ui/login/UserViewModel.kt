@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.responses.UserData
-import com.example.lunimary.models.source.remote.UserRepository
+import com.example.lunimary.models.source.remote.repository.UserRepository
 import com.example.lunimary.models.source.remote.UserSource
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.storage.refreshToken
@@ -18,7 +18,6 @@ import com.example.lunimary.storage.removeToken
 import com.example.lunimary.util.UserState
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.unknownErrorMsg
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -79,15 +78,6 @@ class UserViewModel : BaseViewModel() {
             },
             onFailed = {
                 _loginState.postValue(NetworkResult.Error(it))
-            }
-        )
-    }
-
-    fun getUser(id: Long) {
-        request(
-            block = { userSource.queryUser(id) },
-            onSuccess = { data, msg ->
-
             }
         )
     }

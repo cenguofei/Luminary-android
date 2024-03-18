@@ -1,7 +1,9 @@
 package com.example.lunimary.models.ktor
 
+import com.example.lunimary.base.BaseResponse
 import com.example.lunimary.util.currentUser
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -11,10 +13,8 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
-import io.ktor.http.URLProtocol
 import io.ktor.http.appendPathSegments
 import io.ktor.http.contentType
-import java.nio.file.Files.delete
 
 suspend inline fun HttpClient.securityGet(
     urlString: String,
@@ -72,7 +72,7 @@ suspend inline fun HttpClient.securityPut(
     )
 )
 
-fun HttpRequestBuilder.addJson(obj: Any): HttpRequestBuilder {
+fun HttpRequestBuilder.setJsonBody(obj: Any): HttpRequestBuilder {
     contentType(ContentType.Application.Json)
     setBody(obj)
     return this
@@ -94,6 +94,10 @@ fun HttpRequestBuilder.addUserIdPath(
     }
 }
 
+fun HttpRequestBuilder.addPathParam(value: Any) {
+    url { appendPathSegments(value.toString()) }
+}
+
 fun addSecurityFactors(
     urlString: String,
     needSession: Boolean = true,
@@ -104,3 +108,8 @@ fun addSecurityFactors(
     if (needSession) { setSession() }
     if (needAuth) { setBearAuth() }
 }.apply(block)
+
+
+suspend inline fun <T, reified R: BaseResponse<T>> HttpResponse.init(): R {
+    return body<R>().init(this)
+}

@@ -4,9 +4,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.ripple.rememberRipple
@@ -38,7 +41,7 @@ fun DraftItem(
     canOperate: Boolean = false,
     articles: List<Article>,
     index: Int = 0,
-    onClick: () -> Unit,
+    onClick: (Article) -> Unit,
     onItemSelected: (DraftItemOperations) -> Unit = {}
 ) {
     if (articles.isEmpty()) return
@@ -47,12 +50,15 @@ fun DraftItem(
         ArticleItem(onItemClick = onClick, article =article)
         if (showDraftLabel) {
             Surface(
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 28.dp)
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 16.dp, bottom = 4.dp),
+                shape = RoundedCornerShape(25)
             ) {
                 Text(
                     text = stringResource(id = R.string.draft) + " ${articles.size}",
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
@@ -60,26 +66,33 @@ fun DraftItem(
 
         if (canOperate) {
             val (showDropdownMenu, setIsOpen) = remember { mutableStateOf(false) }
-            IconButton(
-                onClick = { setIsOpen(!showDropdownMenu) },
-                modifier = Modifier.align(Alignment.BottomEnd)
+            Box(
+                contentAlignment = Alignment.TopEnd,
+                modifier = Modifier.align(Alignment.TopEnd)
             ) {
-                Icon(
-                    imageVector = Icons.Default.MoreHoriz,
-                    contentDescription = null
+                IconButton(
+                    onClick = { setIsOpen(!showDropdownMenu) },
+                    modifier = Modifier.padding(end = 8.dp, top = 4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MoreHoriz,
+                        contentDescription = null
+                    )
+                }
+                CascadeMenu(
+                    isOpen = showDropdownMenu,
+                    menu = cascadeMenu {
+                        item(id = DraftItemOperations.Remove, title = "删除") {
+                            icon(Icons.Default.Delete)
+                        }
+                    },
+                    onItemSelected = {
+                        setIsOpen(false)
+                        onItemSelected(it as DraftItemOperations)
+                    },
+                    onDismiss = { setIsOpen(false) }
                 )
             }
-            CascadeMenu(
-                isOpen = showDropdownMenu,
-                menu = cascadeMenu {
-                    item(id = DraftItemOperations.Remove, title = "删除") {
-                        icon(Icons.Default.Remove)
-                    }
-                },
-                onItemSelected = onItemSelected,
-                onDismiss = { setIsOpen(false) },
-                offset = DpOffset(8.dp, 4.dp),
-            )
         }
     }
 }

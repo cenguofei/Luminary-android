@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.lunimary.R
+import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.models.User
 
 @Composable
@@ -38,8 +39,10 @@ fun UserDetailContent(
         UserInformation(user)
         Spacer(modifier = Modifier.height(12.dp))
         Surface(
-            modifier = Modifier.weight(1f).fillMaxSize(),
-            shape = RoundedCornerShape(topStartPercent = 16, topEndPercent = 16),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize(),
+            shape = RoundedCornerShape(topStartPercent = 8, topEndPercent = 8),
         ) {
             RoundedCornerContent(
                 uiState = uiState,
@@ -56,20 +59,7 @@ fun UserInformation(user: User) {
         modifier = Modifier.padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Surface(
-            modifier = Modifier.size(80.dp),
-            shape = RoundedCornerShape(50)
-        ) {
-            AsyncImage(
-                model = user.realHeadUrl(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(50)),
-                placeholder = painterResource(id = R.drawable.head),
-            )
-        }
+        UserHeadImage(model = user.realHeadUrl())
         Spacer(modifier = Modifier.width(12.dp))
         Column {
             Text(

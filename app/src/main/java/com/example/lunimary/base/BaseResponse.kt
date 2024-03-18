@@ -17,7 +17,7 @@ open class BaseResponse<T> {
 
     var msg: String = empty
 
-    var data: T? = null
+    open var data: T? = null
         set(value) {
             if (field == null) {
                 field = value

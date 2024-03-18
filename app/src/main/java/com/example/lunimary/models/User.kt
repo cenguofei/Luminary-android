@@ -25,6 +25,8 @@ data class User(
 ) : java.io.Serializable, Parcelable {
 
     fun realHeadUrl(): String = fileBaseUrl + headUrl
+
+    fun realBackgroundUrl(): String = fileBaseUrl + background
     companion object {
         val NONE = User(username = "luminary-default-user")
     }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -65,7 +66,7 @@ fun AddArticleScreenContent(
                     }
                 }
             )
-            Divider(modifier = Modifier.fillMaxWidth(), color = Color.Gray.copy(alpha = 0.5f))
+            HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = Color.Gray.copy(alpha = 0.5f))
         }
 
         HorizontalPager(

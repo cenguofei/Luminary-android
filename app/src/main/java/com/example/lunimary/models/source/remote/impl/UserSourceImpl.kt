@@ -1,13 +1,15 @@
-package com.example.lunimary.models.source.remote
+package com.example.lunimary.models.source.remote.impl
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.lunimary.models.LoginInfo
 import com.example.lunimary.models.ktor.httpClient
+import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.securityGet
 import com.example.lunimary.models.ktor.securityPost
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
+import com.example.lunimary.models.source.remote.UserSource
 import com.example.lunimary.storage.MMKVKeys
 import com.example.lunimary.storage.TokenInfo
 import com.example.lunimary.storage.loadLocalToken
@@ -26,9 +28,8 @@ import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.header
 import io.ktor.http.appendPathSegments
 import io.ktor.http.parameters
-import java.util.Base64
 
-class UserSourceImpl(private val client: HttpClient = httpClient) : UserSource {
+class UserSourceImpl: BaseSourceImpl by BaseSourceImpl(),  UserSource {
     override suspend fun login(username: String, password: String): UserResponse {
         val response = client.submitForm(
             url = loginPath,
@@ -60,13 +61,11 @@ class UserSourceImpl(private val client: HttpClient = httpClient) : UserSource {
             needAuth = false
         ) {
             header("lunimary_token", "${loadLocalToken()?.accessToken}")
-        }.let { it.body<DataResponse<LoginInfo>>().init(it) }
+        }.init()
     }
 
     override suspend fun logout(): DataResponse<Unit> {
-        return client.securityPost(logoutPath).let {
-            it.body<DataResponse<Unit>>().init(it)
-        }
+        return client.securityPost(logoutPath).init()
     }
 
     override suspend fun register(username: String, password: String): UserResponse {
@@ -76,15 +75,13 @@ class UserSourceImpl(private val client: HttpClient = httpClient) : UserSource {
                 append("username", username)
                 append("password", password)
             }
-        ).let { it.body<UserResponse>().init(it) }
+        ).init()
     }
 
     override suspend fun queryUser(id: Long): UserResponse {
         val response = client.securityGet(urlString = getUserPath) {
-            url {
-                appendPathSegments(id.toString())
-            }
+            url { appendPathSegments(id.toString()) }
         }
-        return response.body<UserResponse>().init(response)
+        return response.init()
     }
 }

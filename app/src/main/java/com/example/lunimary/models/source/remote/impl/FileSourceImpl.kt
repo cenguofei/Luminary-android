@@ -1,11 +1,13 @@
-package com.example.lunimary.models.source.remote
+package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.UPLOAD_TYPE_ARTICLE_COVER
 import com.example.lunimary.models.UploadData
 import com.example.lunimary.models.ktor.httpClient
+import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.setBearAuth
 import com.example.lunimary.models.ktor.setSession
 import com.example.lunimary.models.responses.DataResponse
+import com.example.lunimary.models.source.remote.FileSource
 import com.example.lunimary.util.fileUploadPath
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -13,12 +15,9 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.http.headers
 import java.io.File
 
-class FileSourceImpl(
-    private val client: HttpClient = httpClient
-) : FileSource {
+class FileSourceImpl : BaseSourceImpl by BaseSourceImpl(), FileSource {
     override suspend fun uploadFile(
         path: String,
         filename: String
@@ -41,6 +40,6 @@ class FileSourceImpl(
                 setBearAuth()
                 url { parameters.append("upload_type", UPLOAD_TYPE_ARTICLE_COVER.toString()) }
             }
-        ).let { it.body<DataResponse<UploadData>>().init(it) }
+        ).init()
     }
 }

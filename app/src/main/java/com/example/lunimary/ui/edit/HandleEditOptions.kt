@@ -14,7 +14,13 @@ import com.example.lunimary.R
 val editOptions: List<ImageVector>
     @Composable get() = listOf(
         Icons.Default.Image,
-        ImageVector.vectorResource(id = R.drawable.divider),
-        Icons.Default.AddLink, Icons.Default.Undo,
-        Icons.Default.Redo, Icons.Default.Settings
+        //ImageVector.vectorResource(id = R.drawable.divider),
+        Icons.Default.AddLink,
+        //Icons.Default.Undo,
+        //Icons.Default.Redo,
+        //Icons.Default.Settings
     )
+
+fun handleEditOptions(index: Int) {
+
+}

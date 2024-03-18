@@ -6,6 +6,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lunimary.models.Article
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -17,6 +18,7 @@ fun HomeContent(
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
     isOffline: StateFlow<Boolean>,
+    onItemClick: (Article) -> Unit,
 ) {
     val recommendViewModel: RecommendViewModel = viewModel()
     HorizontalPager(state = pagerState, modifier = modifier) {
@@ -25,7 +27,8 @@ fun HomeContent(
                 RecommendPage(
                     recommendViewModel = recommendViewModel,
                     coroutineScope = coroutineScope,
-                    isOffline = isOffline
+                    isOffline = isOffline,
+                    onItemClick = onItemClick
                 )
             }
             HomeCategories.Following -> {

@@ -6,9 +6,9 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
-import com.example.lunimary.models.source.remote.ArticleRepository
-import com.example.lunimary.models.source.remote.LikeRepository
-import com.example.lunimary.models.source.remote.UserDetailRepository
+import com.example.lunimary.models.source.remote.repository.ArticleRepository
+import com.example.lunimary.models.source.remote.repository.ArticlesOfUserLikeRepository
+import com.example.lunimary.models.source.remote.repository.UserDetailRepository
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.empty
@@ -16,7 +16,7 @@ import com.example.lunimary.util.empty
 class UserDetailViewModel : BaseViewModel() {
     private val repository = UserDetailRepository()
     private val articleRepository = ArticleRepository()
-    private val likeRepository = LikeRepository()
+    private val articlesOfUserLikeRepository = ArticlesOfUserLikeRepository()
 
     private val _uiState: MutableLiveData<UserUiState> = MutableLiveData(UserUiState())
     val uiState: LiveData<UserUiState> get() = _uiState
@@ -108,7 +108,7 @@ class UserDetailViewModel : BaseViewModel() {
             request(
                 block = {
                     _likesOfUser.postValue(NetworkResult.Loading())
-                    likeRepository.likesOfUser(currentUser.id)
+                    articlesOfUserLikeRepository.likesOfUser(currentUser.id)
                 },
                 onSuccess = { data, msg ->
                     if (data.isNullOrEmpty()) {

@@ -7,9 +7,11 @@ enum class Screens(val route: String) {
     AddArticle("$ADD_ARTICLE_ROOT?article={draftArticle}"),
     Search("search"),
     Drafts("drafts"),
-    WebView("$WEB_VIEW_ROOT/{urlId}")
+    WebView("$WEB_VIEW_ROOT/{urlId}"),
+    BrowseArticle("$BROWSE_ARTICLE_ROOT")
 }
 
 const val LOGIN_ROOT = "login"
 const val ADD_ARTICLE_ROOT = "add_article"
 const val WEB_VIEW_ROOT = "webView"
+const val BROWSE_ARTICLE_ROOT = "browse_article"

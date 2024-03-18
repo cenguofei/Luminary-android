@@ -75,3 +75,5 @@ internal val Teal80 = Color(0xFFA2CED9)
 internal val Teal90 = Color(0xFFBEEAF6)
 
 internal val Pink = Color(255,101,214)
+
+internal val InputContainerColor = Color(243, 244, 246)

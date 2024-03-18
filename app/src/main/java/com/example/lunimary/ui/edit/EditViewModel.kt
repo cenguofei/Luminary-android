@@ -17,8 +17,8 @@ import com.example.lunimary.models.VisibleMode
 import com.example.lunimary.models.source.local.LocalArticleRepository
 import com.example.lunimary.models.source.local.LocalTagRepository
 import com.example.lunimary.models.source.local.Tag
-import com.example.lunimary.models.source.remote.AddArticleRepository
-import com.example.lunimary.models.source.remote.FileRepository
+import com.example.lunimary.models.source.remote.repository.AddArticleRepository
+import com.example.lunimary.models.source.remote.repository.FileRepository
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.empty
@@ -117,7 +117,6 @@ class EditViewModel : BaseViewModel() {
     fun saveAsDraft() {
         val saveArticle = generateArticle()
         viewModelScope.launch {
-            "save:insertArticle".logd("live_test")
             articleRepository.insertArticle(saveArticle)
         }
     }
@@ -145,7 +144,10 @@ class EditViewModel : BaseViewModel() {
                 || !tags.value.all { t -> t.name in it.tags }
                 || visibleMode.value != it.visibleMode
                 || cover.value != it.cover
-    } ?: false).also { "draftChanged:$it, tags=${tags.value}, fillTags=${filledArticle?.tags.toString()}".logd("live_test") }
+    } ?: false).also {
+        "draftChanged:$it, tags=${tags.value}, fillTags=${filledArticle?.tags.toString()}"
+            .logd("live_test")
+    }
 
     fun addNewTag(tag: String) {
         if (tag.isBlank() || tag in tags.value.map { it.name }) {
@@ -208,7 +210,6 @@ class EditViewModel : BaseViewModel() {
 
     private var hasUpdate = false
     fun updateTagsAfterGetHistoryTags(liveData: List<Tag>?) {
-        "updateTagsAfterGetHistoryTags".logd("live_test")
         if (hasUpdate) return
         hasUpdate = true
         if (liveData != null) {
@@ -225,11 +226,7 @@ class EditViewModel : BaseViewModel() {
                     }
                 _tags.value = existTags + absentTags
                 "tags.value:${_tags.value}".logd("live_test")
-            } else {
-                "filledArticle==null".logd("live_test")
             }
-        } else {
-            "liveData.value==null".logd("live_test")
         }
     }
 

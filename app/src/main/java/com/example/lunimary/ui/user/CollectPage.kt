@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import com.example.lunimary.design.LunimaryScreen
+import com.example.lunimary.models.Article
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.ui.home.ArticleItem
 import com.example.lunimary.ui.home.ArticleItemContainerColor
@@ -15,7 +16,7 @@ import com.example.lunimary.ui.home.ArticleItemContainerColor
 fun CollectPage(
     userDetailViewModel: UserDetailViewModel,
     modifier: Modifier,
-    onItemClick: () -> Unit
+    onItemClick: (Article) -> Unit
 ) {
     LaunchedEffect(
         key1 = userDetailViewModel,

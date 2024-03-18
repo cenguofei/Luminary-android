@@ -61,7 +61,7 @@ fun DraftsScreen(
                 items(articles.size) {
                     DraftItem(
                         articles = drafts.value ?: emptyList(),
-                        onClick = { onEdit(articles[it]) },
+                        onClick = { _ -> onEdit(articles[it]) },
                         onItemSelected = { operation ->
                             when(operation) {
                                 DraftItemOperations.Remove -> {
@@ -69,7 +69,8 @@ fun DraftsScreen(
                                 }
                             }
                         },
-                        index = it
+                        index = it,
+                        canOperate = true
                     )
                 }
             }

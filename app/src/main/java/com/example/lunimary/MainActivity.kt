@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lunimary.base.DarkThemeSetting
 import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.Role
@@ -51,16 +52,25 @@ class MainActivity : ComponentActivity() {
                 windowSizeClass = calculateWindowSizeClass(this),
                 userViewModel = userViewModel
             )
-            val darkTheme = isSystemInDarkTheme()
+            val darkTheme = DarkThemeConfig(themeSetting = appState.darkThemeSettingState.value)
             LaunchedEffect(systemUiController, darkTheme) {
                 systemUiController.systemBarsDarkContentEnabled = !darkTheme
                 systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = !darkTheme)
             }
-            LunimaryTheme {
+            LunimaryTheme(darkTheme = darkTheme,) {
                 LunimaryGradientBackground {
                     LunimaryApp(appState = appState, startScreen = TopLevelDestination.Home)
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DarkThemeConfig(themeSetting: DarkThemeSetting): Boolean {
+    return when(themeSetting) {
+        DarkThemeSetting.FollowSystem -> isSystemInDarkTheme()
+        DarkThemeSetting.DarkMode -> true
+        DarkThemeSetting.NightMode -> false
     }
 }

@@ -11,10 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,16 +49,18 @@ data class ArticleItemContainerColor(
 @Composable
 fun ArticleItem(
     modifier: Modifier = Modifier,
-    onItemClick: () -> Unit,
+    onItemClick: (Article) -> Unit,
     article: Article,
     visited: Boolean = false,
+    showOptionsIcon: Boolean = false,
+    onOptionsClick: () -> Unit = {},
     containerColor: ArticleItemContainerColor = ArticleItemContainerColor.Default
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
-        onClick = onItemClick,
+        onClick = { onItemClick(article) },
         color = if (visited) containerColor.visitedColor else containerColor.normalColor
     ) {
         Column(
@@ -62,7 +69,14 @@ fun ArticleItem(
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(8.dp))
-            Title(text = article.title, modifier = Modifier)
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Title(text = article.title, modifier = Modifier.weight(1f))
+                if (showOptionsIcon) {
+                    IconButton(onClick = onOptionsClick) {
+                        Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier
@@ -72,7 +86,8 @@ fun ArticleItem(
                 ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
             }
             Spacer(modifier = Modifier.height(4.dp))
-            Labels(article.tags.toList())
+            val tagWithColor = remember { article.tags.map { it to tagColors.random() } }
+            Labels(tagWithColor = tagWithColor)
             Spacer(modifier = Modifier.height(4.dp))
             AboutTheArticle(modifier = Modifier, article)
             Spacer(modifier = Modifier.height(8.dp))
@@ -120,13 +135,13 @@ private fun ArticleSingleAmount(
 
 @Composable
 fun Labels(
-    tags: List<String>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tagWithColor: List<Pair<String, Color>>
 ) {
-    if (tags.isEmpty()) return
+    if (tagWithColor.isEmpty()) return
     LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        itemsIndexed(tags) { _, item ->
-            Tag(tag = com.example.lunimary.models.source.local.Tag(name = item, color = tagColors.random().toArgb()))
+        itemsIndexed(tagWithColor) { _, item ->
+            Tag(tag = com.example.lunimary.models.source.local.Tag(name = item.first, color = item.second.toArgb()))
         }
     }
 }

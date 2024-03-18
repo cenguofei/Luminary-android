@@ -53,41 +53,30 @@ import kotlinx.coroutines.launch
 @Composable
 fun <T : Any> LunimaryPagingScreen(
     modifier: Modifier = Modifier,
-    error: Boolean = false,
-    errorMsg: String? = null,
-    empty: Boolean = false,
-    emptyMsg: String? = null,
     networkError: Boolean = false,
-    searchEmpty: Boolean = false,
     noMessage: Boolean = false,
-    shimmer: Boolean = false,
     snackbarData: SnackbarData? = null,
     openLoadingWheelDialog: Boolean = false,
     coroutine: CoroutineScope = rememberCoroutineScope(),
     color: Color = Color.Transparent,
     checkLoginState: Boolean = false,
     items: LazyPagingItems<T>,
+    key: ((index: Int) -> Any)? = null,
     itemContent: @Composable (T) -> Unit
 ) {
     val loadState = items.loadState
-    val showError = error || items.loadState.refresh is LoadState.Error
-    val showErrorMsg = errorMsg?.let {
-        if (loadState.refresh is LoadState.Error) {
-            (loadState.refresh as LoadState.Error).error.message
-        } else if (loadState.append is LoadState.Error) {
-            (loadState.append as LoadState.Error).error.message
-        } else null
-    }?.let { "$it， 点击重试" } ?: stringResource(id = R.string.load_error_and_retry)
-    val showShimmer = shimmer || loadState.refresh is LoadState.Loading
-    val showEmpty =
-        empty || searchEmpty || (loadState.refresh is LoadState.NotLoading && items.isEmpty())
+    val showError = items.loadState.refresh is LoadState.Error && items.isEmpty()
+    val showErrorMsg = if (loadState.refresh is LoadState.Error) {
+        (loadState.refresh as LoadState.Error).error.message
+    } else stringResource(id = R.string.load_error_and_retry)
+    val showShimmer = loadState.refresh is LoadState.Loading
+    val showEmpty = loadState.refresh is LoadState.NotLoading && items.isEmpty()
     LunimaryScreen(
         modifier = modifier,
-        error = showError && items.isEmpty(), // 没有数据并且出错才展示空页面
+        error = showError, // 没有数据并且出错才展示空页面
         errorMsg = showErrorMsg,
         onErrorClick = { items.refresh() },
         empty = showEmpty,
-        emptyMsg = emptyMsg,
         networkError = networkError && items.isEmpty(),
         searchEmpty = showEmpty,
         noMessage = noMessage,
@@ -100,28 +89,33 @@ fun <T : Any> LunimaryPagingScreen(
     ) {
         val hasNetwork = LocalContext.current.isCurrentlyConnected()
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(items.itemCount) {
+            items(items.itemCount, key = key) {
                 items[it]?.let { item -> itemContent(item) }
             }
-            if (loadState.append is LoadState.NotLoading) {
-                if ((loadState.append as LoadState.NotLoading).endOfPaginationReached) {
-                    //没有更多
-                    item { Footer(desc = stringResource(id = R.string.loading_no_more)) }
+            when {
+                loadState.append is LoadState.NotLoading -> {
+                    if ((loadState.append as LoadState.NotLoading).endOfPaginationReached) {
+                        //没有更多
+                        item { Footer(desc = stringResource(id = R.string.loading_no_more)) }
+                    }
                 }
-            } else if (!hasNetwork && items.isNotEmpty()) {
-                //没有网，但是前面请求的数据还在
-                item { Footer(desc = stringResource(id = R.string.load_error_for_no_net)) }
-            } else if (loadState.append is LoadState.Loading) {
-                //底部加载
-                item { Footer(desc = stringResource(id = R.string.loading)) }
-            } else if (items.loadState.append is LoadState.Error) {
-                //底部错误，点击重试
-                item {
-                    Footer(
-                        desc = stringResource(id = R.string.load_error_and_retry),
-                        enabled = true,
-                        onClick = { items.retry() }
-                    )
+                !hasNetwork && items.isNotEmpty() -> {
+                    //没有网，但是前面请求的数据还在
+                    item { Footer(desc = stringResource(id = R.string.load_error_for_no_net)) }
+                }
+                loadState.append is LoadState.Loading -> {
+                    //底部加载
+                    item { Footer(desc = stringResource(id = R.string.loading)) }
+                }
+                items.loadState.append is LoadState.Error -> {
+                    //底部错误，点击重试
+                    item {
+                        Footer(
+                            desc = stringResource(id = R.string.load_error_and_retry),
+                            enabled = true,
+                            onClick = { items.retry() }
+                        )
+                    }
                 }
             }
         }
@@ -254,16 +248,18 @@ private fun ShowReasonForNoContent(
     modifier: Modifier = Modifier,
     description: String = empty,
     @DrawableRes id: Int,
-    onClick: () -> Unit ={},
+    onClick: () -> Unit = {},
     enabled: Boolean = false
 ) {
-    Box(modifier = modifier
-        .size(height = 250.dp, width = 200.dp)
-        .clickable(
-            role = Role.Button,
-            onClick = onClick,
-            enabled = enabled
-        )) {
+    Box(
+        modifier = modifier
+            .size(height = 250.dp, width = 200.dp)
+            .clickable(
+                role = Role.Button,
+                onClick = onClick,
+                enabled = enabled
+            )
+    ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

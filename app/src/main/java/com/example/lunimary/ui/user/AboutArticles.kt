@@ -37,8 +37,10 @@ fun AboutArticles(
         tabs.forEachIndexed { index, tab ->
             TextButton(
                 onClick = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
+                    if (pagerState.currentPage != index) {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
                     }
                 }
             ) {

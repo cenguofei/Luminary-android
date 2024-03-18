@@ -18,14 +18,12 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.lunimary.R
-import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
+import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.myObserveAsState
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.Article
@@ -33,9 +31,10 @@ import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
+import com.example.lunimary.ui.common.ArticleNavArguments
+import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.addArticleScreen(
@@ -44,17 +43,8 @@ fun NavGraphBuilder.addArticleScreen(
 ) {
     composable(
         Screens.AddArticle.route,
-        arguments = listOf(
-            navArgument("draftArticle") {
-                defaultValue = null
-                nullable = true
-                type = NavType.StringType
-            }
-        )
-    ) { navBackStackEntry ->
-        val draftArticleStr = navBackStackEntry.arguments?.getString("draftArticle")
-        var draftArticle =
-            if (draftArticleStr == null) null else Json.decodeFromString<Article>(draftArticleStr)
+    ) {
+        var draftArticle = ArticleNavArguments[EDIT_DRAFT_ARTICLE_KEY]
         if ((draftArticle?.id ?: -1) < 0) {
             draftArticle = null
         }

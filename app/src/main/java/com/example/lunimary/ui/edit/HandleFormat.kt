@@ -50,3 +50,11 @@ fun EditText.handleFormat(
         it.printStackTrace()
     }
 }
+
+fun EditText.insertRow(row: String) {
+    runCatching {
+        text.insert(selectionStart, "\n$row\n")
+    }.onFailure {
+        it.printStackTrace()
+    }
+}

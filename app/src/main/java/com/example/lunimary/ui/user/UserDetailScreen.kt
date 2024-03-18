@@ -56,7 +56,7 @@ fun UserBackground(modifier: Modifier) {
             .height(250.dp)
     ) {
         AsyncImage(
-            model = currentUser.background,
+            model = currentUser.realBackgroundUrl(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

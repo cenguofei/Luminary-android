@@ -14,4 +14,8 @@ object MMKVKeys {
     const val LAST_LOGIN_USER = "last_login_user"
 
     const val FIRST_USE_APP = "first_use_the_app"
+
+    const val DARK_THEME_SETTING = "dark_theme_setting"
+
+    const val USER_HAS_SET_THEME = "user_has_set_theme"
 }

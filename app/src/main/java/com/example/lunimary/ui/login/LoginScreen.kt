@@ -27,8 +27,6 @@ import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
-import com.example.lunimary.util.currentUser
-import com.example.lunimary.util.notLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

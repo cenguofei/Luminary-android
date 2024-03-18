@@ -2,27 +2,16 @@ package com.example.lunimary
 
 import android.app.Activity
 import android.app.Application
-import android.os.Build
 import android.os.Bundle
 import coil.Coil
 import coil.ImageLoader
-import com.example.lunimary.models.ktor.httpClient
-import com.example.lunimary.models.ktor.securityPost
-import com.example.lunimary.models.source.remote.UserRepository
+import com.example.lunimary.models.source.remote.repository.UserRepository
 import com.example.lunimary.storage.MMKVKeys
-import com.example.lunimary.util.UserState
 import com.example.lunimary.util.boolean
-import com.example.lunimary.util.logd
 import com.example.lunimary.util.logv
-import com.example.lunimary.util.notLogin
-import com.example.lunimary.util.onlineStatusPath
 import com.tencent.mmkv.MMKV
-import io.ktor.http.appendPathSegments
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.util.LinkedList
 
 class LuminaryApplication : Application() {

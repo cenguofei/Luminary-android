@@ -76,4 +76,17 @@
     <string name="load_error_for_no_net">加载错误，请确保您已联网</string>
     <string name="loading_no_more">没有更多数据了</string>
     <string name="uploading">上传中...</string>
+    <string name="follow">关注</string>
+    <string name="edit_comment">写评论...</string>
+    <string name="unfollow">取关</string>
+    <string name="link_name">链接名称</string>
+    <string name="link_address">链接地址</string>
+    <string name="dark_mode">深色模式</string>
+    <string name="night_mode">日间模式</string>
+    <string name="follow_system">跟随系统</string>
+    <string name="already_set">已设置</string>
+    <string name="send_comment">快来发表评论吧...</string>
+    <string name="comment_length">" / 1000"</string>
+    <string name="send">发送</string>
+    <string name="load_comments_error">加载评论发生错误...请稍后再试</string>
 </resources>

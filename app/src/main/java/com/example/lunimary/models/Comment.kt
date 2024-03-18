@@ -26,4 +26,6 @@ data class Comment(
      * Comment time
      */
     val timestamp: Long = Long.Default
-)
+) {
+    val niceDate: String get() = dateTimeFormat.format(timestamp)
+}

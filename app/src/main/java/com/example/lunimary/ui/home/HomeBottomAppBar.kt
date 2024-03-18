@@ -31,7 +31,6 @@ fun HomeBottomAppBar(
             .fillMaxWidth()
             .height(bottomBarHeight)
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()

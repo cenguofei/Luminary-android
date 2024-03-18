@@ -10,7 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 
 @Composable
-fun <T> LiveData<T>.myObserveAsState(onChange: (T) -> Unit): State<T?> = myObserveAsState(value, onChange)
+fun <T> LiveData<T>.myObserveAsState(onChange: (T) -> Unit = {}): State<T?> = myObserveAsState(value, onChange)
 
 @Composable
 fun <R, T : R> LiveData<T>.myObserveAsState(initial: R, onChange: (T) -> Unit): State<R> {

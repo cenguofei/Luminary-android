@@ -1,6 +1,7 @@
 package com.example.lunimary.models
 
 import com.example.lunimary.util.Default
+import java.text.SimpleDateFormat
 
 @kotlinx.serialization.Serializable
 data class Like(
@@ -21,3 +22,11 @@ data class Like(
      */
     val timestamp: Long = Long.Default
 )
+
+fun main() {
+    val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd")
+
+
+    val niceDate: String = dateTimeFormat.format(System.currentTimeMillis())
+    println("niceDate=$niceDate")
+}

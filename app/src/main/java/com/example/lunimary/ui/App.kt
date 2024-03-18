@@ -34,6 +34,7 @@ import com.example.lunimary.R
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.SnackbarHostStateHolder
 import com.example.lunimary.models.User
+import com.example.lunimary.ui.browse.browseScreen
 import com.example.lunimary.ui.edit.addArticleScreen
 import com.example.lunimary.ui.home.topLevelScreens
 import com.example.lunimary.ui.login.loginScreen
@@ -134,5 +135,6 @@ private fun LunimaryNavHost(
         draftsScreen(appState = appState)
         searchScreen(appState = appState)
         webViewScreen(appState = appState)
+        browseScreen(appState = appState)
     }
 }
