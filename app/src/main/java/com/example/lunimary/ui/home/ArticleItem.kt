@@ -25,9 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.lunimary.R
 import com.example.lunimary.design.Tag
 import com.example.lunimary.design.tagColors
 import com.example.lunimary.models.Article
@@ -149,15 +152,17 @@ fun Labels(
 @Composable
 fun ArticlePicture(
     modifier: Modifier = Modifier,
+    height: Dp = 90.dp,
     pic: String?
 ) {
     if (pic == null) return
-    Surface(modifier = modifier.height(90.dp), shape = RoundedCornerShape(8)) {
+    Surface(modifier = modifier.height(height), shape = RoundedCornerShape(8)) {
         AsyncImage(
             model = fileBaseUrl + pic,
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(id = R.drawable.cover)
         )
     }
 }

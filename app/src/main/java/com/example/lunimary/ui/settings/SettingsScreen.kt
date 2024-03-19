@@ -67,17 +67,8 @@ fun SettingsScreen(
         is NetworkResult.None -> {}
         is NetworkResult.Success -> {
             showLoadingWheel.value = false
-            if (!appState.userViewModel.hasShowLogout.value) {
-                val message = stringResource(id = R.string.logout_success)
-                coroutineScope.launch {
-                    snackbarHostState?.showSnackbar(
-                        message = message,
-                        duration = SnackbarDuration.Short
-                    )
-                }
-                appState.userViewModel.setHasShowLogout(true)
-            }
-            LaunchedEffect(key1 = Unit, block = { appState.navToHome() })
+            appState.userViewModel.reset()
+            appState.navToHome()
         }
 
         is NetworkResult.Error -> {

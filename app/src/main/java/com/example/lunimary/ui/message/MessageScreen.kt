@@ -4,10 +4,15 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -16,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.R
+import com.example.lunimary.design.LBHorizontalDivider
 import com.example.lunimary.design.LunimaryScreen
 import kotlinx.coroutines.launch
 
@@ -27,48 +34,45 @@ fun MessageScreen(
 ) {
     val tabs = messagePages
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier = modifier) {
+    val messageViewModel: MessageViewModel = viewModel()
+    Column(modifier = modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
         ) {
-            Text(
-                text = stringResource(id = R.string.message),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-        ScrollableTabRow(
-            selectedTabIndex = pagerState.currentPage,
-            containerColor = Color.Transparent,
-            divider = { },
-            edgePadding = 0.dp
-        ) {
-            tabs.forEachIndexed { index, tab ->
-                TextButton(
-                    onClick = {
-                        if (pagerState.currentPage != index) {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
+            TabRow(
+                selectedTabIndex = pagerState.currentPage,
+                containerColor = Color.Transparent,
+                divider = { },
+            ) {
+                tabs.forEachIndexed { index, tab ->
+                    TextButton(
+                        onClick = {
+                            if (pagerState.currentPage != index) {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
                             }
                         }
+                    ) {
+                        Text(
+                            text = tab.pageName,
+                            color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurface
+                        )
                     }
-                ) {
-                    Text(
-                        text = tab.pageName,
-                        color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurface
-                    )
                 }
             }
         }
+        LBHorizontalDivider()
         LunimaryScreen(
             modifier = Modifier
         ) {
             MessagePagers(
                 pagerState = pagerState,
-                tabs = tabs
+                tabs = tabs,
+                messageViewModel = messageViewModel
             )
         }
     }

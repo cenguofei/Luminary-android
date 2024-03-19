@@ -43,6 +43,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.LocalNavNavController
 import com.example.lunimary.R
 import com.example.lunimary.models.User
+import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.isCurrentlyConnected
 import com.example.lunimary.ui.navToLogin
 import com.example.lunimary.util.UserState
@@ -232,6 +233,37 @@ fun LunimaryScreen(
             }
         }
     }
+}
+
+@Composable
+fun <T> LunimaryScreen(
+    modifier: Modifier = Modifier,
+    networkResult: NetworkResult<T>,
+    onErrorClick: () -> Unit = {},
+    networkError: Boolean = false,
+    searchEmpty: Boolean = false,
+    openLoadingWheelDialog: Boolean = false,
+    coroutine: CoroutineScope = rememberCoroutineScope(),
+    color: Color = Color.Transparent,
+    checkLoginState: Boolean = false,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    LunimaryScreen(
+        modifier = modifier,
+        error = networkResult is NetworkResult.Error,
+        errorMsg = (networkResult as? NetworkResult.Error)?.msg,
+        onErrorClick = onErrorClick,
+        empty = networkResult is NetworkResult.Empty,
+        emptyMsg = (networkResult as? NetworkResult.Empty)?.msg,
+        networkError = networkError,
+        searchEmpty = searchEmpty,
+        shimmer = networkResult is NetworkResult.Loading,
+        openLoadingWheelDialog = openLoadingWheelDialog,
+        coroutine = coroutine,
+        color = color,
+        checkLoginState = checkLoginState,
+        content = content
+    )
 }
 
 @Composable

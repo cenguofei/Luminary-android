@@ -26,7 +26,7 @@ open class BaseViewModel : ViewModel() {
 
 fun <T> BaseViewModel.request(
     block: suspend () -> BaseResponse<T>,
-    onSuccess: (data:T?, msg: String?) -> Unit,
+    onSuccess: (data:T?, msg: String?) -> Unit = { _, _ -> },
     onFailed: (msg: String) -> Unit = {},
     onFinish: () -> Unit = {}
 ): Job {

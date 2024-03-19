@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.base.DarkThemeSetting
 import com.example.lunimary.base.SettingMMKV.darkThemeSetting
+import com.example.lunimary.design.LBHorizontalDivider
 
 @Composable
 fun SettingsItems(
@@ -120,11 +121,6 @@ fun SettingsItems(
             }
         }
     }
-}
-
-@Composable
-fun LBHorizontalDivider() {
-    HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
 }
 
 @Preview
