@@ -18,12 +18,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.util.currentUser
 
 @Composable
 fun UserDetailScreen(
     onOpenMenu: () -> Unit,
     onDraftClick: () -> Unit,
+    appState: LunimaryAppState,
 ) {
     val user = currentUser
     val userDetailViewModel: UserDetailViewModel = viewModel()
@@ -43,7 +45,8 @@ fun UserDetailScreen(
             modifier = Modifier,
             user = user,
             userDetailViewModel = userDetailViewModel,
-            onDraftClick = onDraftClick
+            onDraftClick = onDraftClick,
+            appState = appState
         )
     }
 }

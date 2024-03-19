@@ -29,9 +29,6 @@ class UserViewModel : BaseViewModel() {
         MutableLiveData(NetworkResult.None())
     val loginState: LiveData<NetworkResult<UserData>> get() = _loginState
 
-    private val _hasShowLogout: MutableState<Boolean> = mutableStateOf(false)
-    val hasShowLogout: State<Boolean> get() = _hasShowLogout
-
     private val _logoutState: MutableLiveData<NetworkResult<Unit>> =
         MutableLiveData(NetworkResult.None())
     val logoutState: LiveData<NetworkResult<Unit>> get() = _logoutState
@@ -122,9 +119,7 @@ class UserViewModel : BaseViewModel() {
         )
     }
 
-    fun setHasShowLogout(hasShow: Boolean) {
-        if (hasShowLogout.value != hasShow) {
-            _hasShowLogout.value = hasShow
-        }
+    fun reset() {
+        _logoutState.postValue(NetworkResult.None())
     }
 }

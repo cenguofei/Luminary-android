@@ -13,7 +13,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.lunimary.models.Article
 import com.example.lunimary.ui.HOME_ROOT
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.MESSAGE_ROOT
@@ -96,7 +95,8 @@ fun TopLevelScreens(appState: LunimaryAppState, destination: TopLevelDestination
                         onOpenMenu = {
                             appState.navToSettings()
                         },
-                        onDraftClick = { appState.navToDraft() }
+                        onDraftClick = { appState.navToDraft() },
+                        appState = appState
                     )
                 }
             }
