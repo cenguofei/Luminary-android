@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.theme.Blue40
-import com.example.lunimary.design.theme.Blue80
 import com.example.lunimary.design.theme.DarkGreen40
 import com.example.lunimary.design.theme.Green40
 import com.example.lunimary.design.theme.Orange40

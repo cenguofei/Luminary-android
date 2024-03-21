@@ -11,25 +11,23 @@ import androidx.compose.material.icons.filled.Contrast
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.NavigateNext
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.lunimary.R
-import com.example.lunimary.design.LunimaryBackground
-import com.example.lunimary.design.theme.LunimaryTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.lunimary.R
 import com.example.lunimary.base.DarkThemeSetting
 import com.example.lunimary.base.SettingMMKV.darkThemeSetting
 import com.example.lunimary.design.LBHorizontalDivider
+import com.example.lunimary.design.LunimaryBackground
+import com.example.lunimary.design.theme.LunimaryTheme
 
 @Composable
 fun SettingsItems(

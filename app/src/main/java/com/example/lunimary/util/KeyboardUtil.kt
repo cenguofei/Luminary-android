@@ -2,7 +2,6 @@ package com.example.lunimary.util
 
 import android.app.Activity
 import android.os.Build
-import android.view.View
 import android.view.WindowInsets
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable

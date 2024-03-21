@@ -1,7 +1,6 @@
 package com.example.lunimary.storage
 
 import com.example.lunimary.models.User
-import com.example.lunimary.models.checkUserNotNone
 import com.example.lunimary.models.ktor.httpClient
 import com.example.lunimary.models.ktor.setSession
 import com.example.lunimary.models.responses.DataResponse
@@ -15,12 +14,9 @@ import com.example.lunimary.util.refreshToken
 import com.tencent.mmkv.MMKV
 import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 fun loadLocalToken(): BearerTokens? {

@@ -1,7 +1,6 @@
 package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.User
-import com.example.lunimary.models.ktor.httpClient
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.UserDetailSource
@@ -9,8 +8,6 @@ import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.likesOfUserPath
 import com.example.lunimary.util.myFollowersPath
 import com.example.lunimary.util.myFollowingsPath
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 

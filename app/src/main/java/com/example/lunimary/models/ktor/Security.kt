@@ -4,14 +4,10 @@ import com.example.lunimary.models.User
 import com.example.lunimary.storage.MMKVKeys
 import com.example.lunimary.storage.loadLocalToken
 import com.example.lunimary.storage.loadSession
-import com.example.lunimary.util.UserState
 import com.example.lunimary.util.currentUser
-import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
-import com.example.lunimary.util.notNull
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.headers
-import io.ktor.http.HeadersBuilder
 import io.ktor.http.HttpMessageBuilder
 
 fun HttpMessageBuilder.setSession() {

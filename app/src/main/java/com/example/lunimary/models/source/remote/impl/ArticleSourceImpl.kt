@@ -1,12 +1,12 @@
 package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.Article
-import com.example.lunimary.models.ktor.setJsonBody
 import com.example.lunimary.models.ktor.addPagesParam
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.securityDelete
 import com.example.lunimary.models.ktor.securityPost
 import com.example.lunimary.models.ktor.securityPut
+import com.example.lunimary.models.ktor.setJsonBody
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.models.source.remote.ArticleSource
@@ -17,7 +17,6 @@ import com.example.lunimary.util.pageArticlesPath
 import com.example.lunimary.util.privacyArticlesOfUserPath
 import com.example.lunimary.util.publicArticlesOfUserPath
 import com.example.lunimary.util.updateArticleByIdPath
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 

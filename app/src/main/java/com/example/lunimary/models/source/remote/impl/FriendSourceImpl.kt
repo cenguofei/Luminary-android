@@ -1,22 +1,17 @@
 package com.example.lunimary.models.source.remote.impl
 
-import com.example.lunimary.base.BaseResponse
 import com.example.lunimary.models.ExistingFriendship
 import com.example.lunimary.models.Friend
 import com.example.lunimary.models.ktor.addPathParam
-import com.example.lunimary.models.ktor.addUserIdPath
 import com.example.lunimary.models.ktor.init
-import com.example.lunimary.models.ktor.setJsonBody
 import com.example.lunimary.models.ktor.securityPost
+import com.example.lunimary.models.ktor.setJsonBody
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.FriendSource
 import com.example.lunimary.util.existingFriendshipPath
 import com.example.lunimary.util.followPath
 import com.example.lunimary.util.unfollowPath
-import io.ktor.client.call.body
-import io.ktor.client.request.get
 import io.ktor.client.request.post
-import io.ktor.client.statement.HttpResponse
 
 class FriendSourceImpl : BaseSourceImpl by BaseSourceImpl(), FriendSource {
     override suspend fun follow(meId: Long, whoId: Long): DataResponse<Unit> {

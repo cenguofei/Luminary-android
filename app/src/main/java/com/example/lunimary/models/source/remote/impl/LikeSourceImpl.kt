@@ -2,7 +2,6 @@ package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.Like
 import com.example.lunimary.models.ktor.init
-import com.example.lunimary.models.ktor.securityGet
 import com.example.lunimary.models.ktor.securityPost
 import com.example.lunimary.models.ktor.setJsonBody
 import com.example.lunimary.models.responses.DataResponse
@@ -10,7 +9,6 @@ import com.example.lunimary.models.source.remote.LikeSource
 import com.example.lunimary.util.cancelLikePath
 import com.example.lunimary.util.createLikePath
 import com.example.lunimary.util.existsLikePath
-import io.ktor.client.request.get
 import io.ktor.client.request.post
 
 class LikeSourceImpl : BaseSourceImpl by BaseSourceImpl(), LikeSource {

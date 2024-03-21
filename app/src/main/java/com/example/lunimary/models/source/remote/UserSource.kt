@@ -1,6 +1,5 @@
 package com.example.lunimary.models.source.remote
 
-import com.example.lunimary.base.BaseResponse
 import com.example.lunimary.models.LoginInfo
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse

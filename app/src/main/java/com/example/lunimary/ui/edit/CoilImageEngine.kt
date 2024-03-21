@@ -1,6 +1,5 @@
 package com.example.lunimary.ui.edit
 
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth

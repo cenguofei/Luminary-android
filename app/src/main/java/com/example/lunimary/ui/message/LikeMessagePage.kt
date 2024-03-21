@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.LunimaryScreen
-import com.example.lunimary.models.LikeMessage
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.isCurrentlyConnected
 

@@ -1,9 +1,6 @@
 package com.example.lunimary.models
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Parcelable
-import androidx.annotation.RequiresApi
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -12,13 +9,6 @@ import com.example.lunimary.base.niceDateToDay
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.empty
 import kotlinx.android.parcel.Parcelize
-import kotlinx.parcelize.IgnoredOnParcel
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 @Entity
 @kotlinx.serialization.Serializable

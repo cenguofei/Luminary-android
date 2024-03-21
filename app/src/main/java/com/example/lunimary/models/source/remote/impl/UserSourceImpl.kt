@@ -3,7 +3,6 @@ package com.example.lunimary.models.source.remote.impl
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.lunimary.models.LoginInfo
-import com.example.lunimary.models.ktor.httpClient
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.securityGet
 import com.example.lunimary.models.ktor.securityPost
@@ -22,7 +21,6 @@ import com.example.lunimary.util.logd
 import com.example.lunimary.util.loginPath
 import com.example.lunimary.util.logoutPath
 import com.example.lunimary.util.registerPath
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.header

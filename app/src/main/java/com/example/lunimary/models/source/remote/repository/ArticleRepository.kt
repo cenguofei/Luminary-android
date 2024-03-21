@@ -6,9 +6,6 @@ import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.models.source.remote.ArticleSource
 import com.example.lunimary.models.source.remote.impl.ArticleSourceImpl
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class ArticleRepository : BaseRepository by BaseRepository(), ArticleSource {
     private val articleSource: ArticleSource = ArticleSourceImpl()

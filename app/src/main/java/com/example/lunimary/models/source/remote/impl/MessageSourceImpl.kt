@@ -1,7 +1,6 @@
 package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.LikeMessageResponse
-import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.UserFriend
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.securityGet

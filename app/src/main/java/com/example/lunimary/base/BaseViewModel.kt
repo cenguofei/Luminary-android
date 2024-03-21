@@ -7,7 +7,6 @@ import com.example.lunimary.util.loge
 import io.ktor.util.collections.ConcurrentSet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.concurrent.ConcurrentHashMap
 
 open class BaseViewModel : ViewModel() {
     private val processingMap = ConcurrentSet<String>()

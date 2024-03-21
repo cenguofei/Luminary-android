@@ -6,9 +6,6 @@ import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
 import com.example.lunimary.models.source.remote.UserSource
 import com.example.lunimary.models.source.remote.impl.UserSourceImpl
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class UserRepository : BaseRepository by BaseRepository(), UserSource {
     private val userSource: UserSource = UserSourceImpl()

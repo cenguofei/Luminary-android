@@ -6,10 +6,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.empty
-import io.ktor.util.reflect.Type
 
 @Entity
 data class Tag(

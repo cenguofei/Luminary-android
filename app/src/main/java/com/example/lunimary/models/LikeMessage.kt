@@ -1,9 +1,7 @@
 package com.example.lunimary.models
 
-import android.annotation.SuppressLint
 import com.example.lunimary.base.niceDateToSecond
 import com.example.lunimary.models.responses.DataResponse
-import java.text.SimpleDateFormat
 
 @kotlinx.serialization.Serializable
 data class LikeMessage(

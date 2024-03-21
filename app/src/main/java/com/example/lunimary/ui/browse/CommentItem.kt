@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.sp
 import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.models.Comment
 import com.example.lunimary.models.User
-import com.example.lunimary.models.responses.CombinedMessage
 
 @Composable
 fun CommentItem(

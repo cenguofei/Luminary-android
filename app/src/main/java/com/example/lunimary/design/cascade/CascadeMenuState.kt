@@ -1,6 +1,8 @@
 package com.example.lunimary.design.cascade
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 class CascadeMenuState<T : Any>(currentMenuItem: CascadeMenuItem<T>) {
     private var _currentMenu by mutableStateOf(currentMenuItem)

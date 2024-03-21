@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.lunimary.R
 import com.example.lunimary.design.LoadingDialog
@@ -34,7 +33,6 @@ import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.models.fileBaseUrl
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.asError
-import com.example.lunimary.ui.common.FileViewModel
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine
 import github.leavesczy.matisse.Matisse

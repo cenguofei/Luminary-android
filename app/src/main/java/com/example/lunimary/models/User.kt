@@ -1,10 +1,7 @@
 package com.example.lunimary.models
 
 import android.os.Parcelable
-import com.example.lunimary.models.ktor.HOST
-import com.example.lunimary.models.ktor.PORT
 import com.example.lunimary.util.currentUser
-import com.example.lunimary.util.fileDownloadPath
 import kotlinx.android.parcel.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

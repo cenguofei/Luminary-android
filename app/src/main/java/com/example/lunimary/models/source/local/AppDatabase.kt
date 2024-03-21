@@ -1,8 +1,6 @@
 package com.example.lunimary.models.source.local
 
 import android.content.Context
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -10,7 +8,6 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.example.lunimary.LuminaryApplication.Companion.applicationContext
 import com.example.lunimary.models.Article
-import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

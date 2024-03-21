@@ -1,10 +1,7 @@
 package com.example.lunimary.util
 
 import android.content.Context
-import androidx.annotation.IdRes
 import androidx.annotation.StringRes
-import com.example.lunimary.base.BaseResponse
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
 

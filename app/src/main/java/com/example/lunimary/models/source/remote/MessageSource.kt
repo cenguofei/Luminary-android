@@ -1,7 +1,6 @@
 package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.models.LikeMessageResponse
-import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.UserFriend
 import com.example.lunimary.models.responses.CombinedCommentMessage
 import com.example.lunimary.models.responses.DataResponse

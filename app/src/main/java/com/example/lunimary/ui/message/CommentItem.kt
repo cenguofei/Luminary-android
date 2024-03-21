@@ -19,14 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.lunimary.R
-import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.UserHeadImage
-import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.Comment
 import com.example.lunimary.models.User

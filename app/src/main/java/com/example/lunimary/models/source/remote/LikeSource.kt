@@ -1,7 +1,5 @@
 package com.example.lunimary.models.source.remote
 
-import android.provider.ContactsContract.Data
-import com.example.lunimary.models.Like
 import com.example.lunimary.models.responses.DataResponse
 
 interface LikeSource {
