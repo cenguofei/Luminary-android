@@ -84,7 +84,11 @@ fun TopLevelScreens(appState: LunimaryAppState, destination: TopLevelDestination
             }
 
             TopLevelDestination.Message -> {
-                MessageScreen(modifier = paddingModifier)
+                if (notLogin()) {
+                    appState.navToLogin(true)
+                } else {
+                    MessageScreen(modifier = paddingModifier)
+                }
             }
 
             TopLevelDestination.User -> {

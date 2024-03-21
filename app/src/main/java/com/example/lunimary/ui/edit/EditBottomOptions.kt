@@ -66,7 +66,7 @@ fun EditBottomOptions(
             LinearButton(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .padding(end = 8.dp),
+                    .padding(end = 16.dp, bottom = 16.dp),
                 onClick = {
                     keyboardController?.hide()
                     onPreviewClick()

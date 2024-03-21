@@ -1,5 +1,6 @@
 package com.example.lunimary.ui.webview
 
+import com.example.lunimary.ui.common.DEFAULT_WEB_URL
 import com.example.lunimary.util.empty
 import io.ktor.util.collections.ConcurrentMap
 
@@ -14,6 +15,4 @@ object UrlCache {
     }
 
     fun getUrl(key: Long): String = urlMap[key] ?: DEFAULT_WEB_URL
-
-    private const val DEFAULT_WEB_URL = "http://localhost:8080/index"
 }

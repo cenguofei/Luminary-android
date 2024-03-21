@@ -78,9 +78,9 @@ class UserSourceImpl: BaseSourceImpl by BaseSourceImpl(),  UserSource {
         ).init()
     }
 
-    override suspend fun queryUser(id: Long): UserResponse {
+    override suspend fun queryUser(userId: Long): UserResponse {
         val response = client.securityGet(urlString = getUserPath) {
-            url { appendPathSegments(id.toString()) }
+            url { appendPathSegments(userId.toString()) }
         }
         return response.init()
     }

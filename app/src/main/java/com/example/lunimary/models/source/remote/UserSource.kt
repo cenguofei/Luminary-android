@@ -35,5 +35,5 @@ interface UserSource {
     /**
      * 查询用户信息
      */
-    suspend fun queryUser(id: Long) : UserResponse
+    suspend fun queryUser(userId: Long) : UserResponse
 }

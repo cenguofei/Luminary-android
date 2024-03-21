@@ -24,6 +24,6 @@ class UserRepository : BaseRepository by BaseRepository(), UserSource {
     override suspend fun register(username: String, password: String): UserResponse =
         withDispatcher { userSource.register(username, password) }
 
-    override suspend fun queryUser(id: Long): UserResponse =
-        withDispatcher { userSource.queryUser(id) }
+    override suspend fun queryUser(userId: Long): UserResponse =
+        withDispatcher { userSource.queryUser(userId) }
 }

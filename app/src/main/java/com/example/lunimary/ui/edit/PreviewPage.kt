@@ -52,7 +52,7 @@ fun PreviewPage(viewModel: EditViewModel, onEditClick: () -> Unit) {
         LinearButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 8.dp, bottom = 8.dp),
+                .padding(end = 16.dp, bottom = 16.dp),
             onClick = onEditClick,
             text = stringResource(id = R.string.edit)
         )

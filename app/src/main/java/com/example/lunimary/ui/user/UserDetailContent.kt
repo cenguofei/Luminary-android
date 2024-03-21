@@ -44,7 +44,8 @@ fun UserDetailContent(
             RoundedCornerContent(
                 uiState = uiState,
                 userDetailViewModel = userDetailViewModel,
-                onDraftClick = onDraftClick
+                onDraftClick = onDraftClick,
+                onItemClick = { appState.navToBrowse(it) }
             )
         }
     }

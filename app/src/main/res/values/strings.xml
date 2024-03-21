@@ -89,4 +89,5 @@
     <string name="comment_length">" / 1000"</string>
     <string name="send">发送</string>
     <string name="load_comments_error">加载评论发生错误...请稍后再试</string>
+    <string name="has_follow_you">关注了你</string>
 </resources>

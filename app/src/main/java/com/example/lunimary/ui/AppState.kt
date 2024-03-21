@@ -26,6 +26,9 @@ import com.example.lunimary.network.NetworkMonitorImpl
 import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
 import com.example.lunimary.ui.common.BROWSE_ARTICLE_KEY
+import com.example.lunimary.ui.common.DEFAULT_WEB_URL
+import com.example.lunimary.ui.common.UrlNavArguments
+import com.example.lunimary.ui.common.WEB_VIEW_URL_KEY
 import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.ui.webview.UrlCache
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -143,14 +146,14 @@ class LunimaryAppState(
 
     fun navToDraft() { navController.navigate(Screens.Drafts.route) }
 
-    fun navToWeb() { navController.navToWeb() }
+    fun navToWeb(url: String? = null) { navController.navToWeb(url) }
 
     fun navToBrowse(article: Article) { navController.navToBrowse(article) }
 }
 
 private fun NavController.navToBrowse(article: Article) {
     ArticleNavArguments[BROWSE_ARTICLE_KEY] = article
-    navigate("$BROWSE_ARTICLE_ROOT")
+    navigate(BROWSE_ARTICLE_ROOT)
 }
 
 fun NavController.navToLogin(backType: Boolean = false) {
@@ -202,13 +205,12 @@ private fun NavController.navToEdit(draftArticle: Article?) {
         article = Article(id = -10000)
     }
     ArticleNavArguments[EDIT_DRAFT_ARTICLE_KEY] = article!!
-    navigate("$ADD_ARTICLE_ROOT")
+    navigate(ADD_ARTICLE_ROOT)
 }
 
-private fun NavController.navToWeb() {
-    val key = System.currentTimeMillis()
-    UrlCache.putUrl(key, ChineseMarkdownWeb)
-    navigate("${WEB_VIEW_ROOT}/$key")
+private fun NavController.navToWeb(url: String? = null) {
+    UrlNavArguments[WEB_VIEW_URL_KEY] = url ?: DEFAULT_WEB_URL
+    navigate(WEB_VIEW_ROOT)
 }
 @Composable
 private fun NavigationTrackingSideEffect(navController: NavHostController) {

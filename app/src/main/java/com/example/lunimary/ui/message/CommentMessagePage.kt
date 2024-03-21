@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.LunimaryScreen
-import com.example.lunimary.models.Comment
-import com.example.lunimary.models.responses.CombinedMessage
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.isCurrentlyConnected
 
@@ -31,7 +29,7 @@ fun CommentMessagePage(messageViewModel: MessageViewModel) {
             when(networkResult) {
                 is NetworkResult.Success -> {
                     item { Spacer(modifier = Modifier.height(16.dp)) }
-                    items(messageViewModel.transformData()) { item: ItemData ->
+                    items(messageViewModel.transformCommentsData()) { item: ItemData ->
                         CommentItem(
                             user = item.user,
                             article = item.article,

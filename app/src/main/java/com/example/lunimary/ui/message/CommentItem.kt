@@ -92,7 +92,7 @@ fun CommentItem(
                     )
                 }
                 Surface(
-                    modifier = modifier
+                    modifier = Modifier
                         .height(45.dp)
                         .width(80.dp),
                     shape = RoundedCornerShape(8)

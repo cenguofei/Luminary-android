@@ -9,26 +9,21 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.Comment
-import com.example.lunimary.models.ExistingFriendship
 import com.example.lunimary.models.User
 import com.example.lunimary.models.responses.CombinedCommentMessage
 import com.example.lunimary.models.source.remote.repository.CollectRepository
 import com.example.lunimary.models.source.remote.repository.CommentRepository
 import com.example.lunimary.models.source.remote.repository.FriendSourceRepository
 import com.example.lunimary.models.source.remote.repository.LikeRepository
-import com.example.lunimary.models.source.remote.repository.MessageRepository
 import com.example.lunimary.models.source.remote.repository.UserRepository
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.util.currentUser
-import com.example.lunimary.util.empty
-import com.example.lunimary.util.logd
 
 class BrowseViewModel : BaseViewModel() {
     private val userRepository = UserRepository()
     private val friendSourceRepository = FriendSourceRepository()
     private val likeRepository = LikeRepository()
     private val collectRepository = CollectRepository()
-    private val messageRepository by lazy { MessageRepository() }
     private val commentRepository by lazy { CommentRepository() }
 
     private var hasSetArticle = false

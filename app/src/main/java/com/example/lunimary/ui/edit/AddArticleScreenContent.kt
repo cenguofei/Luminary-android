@@ -36,7 +36,7 @@ fun AddArticleScreenContent(
     onNavToWeb: () -> Unit
 ) {
     CheckLoginState()
-    val pagers = listOf("Edit", "Preview")
+    val pagers = listOf(stringResource(id = R.string.edit), stringResource(id = R.string.preview))
     val pagerState = rememberPagerState { pagers.size }
     val coroutine = rememberCoroutineScope()
     val showWarnDialog = remember { mutableStateOf(false) }
@@ -44,7 +44,9 @@ fun AddArticleScreenContent(
         text = stringResource(id = R.string.title_or_content_cannot_empty),
         openDialog = showWarnDialog
     )
-    Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .statusBarsPadding()) {
         Column {
             LunimaryToolbar(
                 onBack = onBack,

@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.lunimary.base.niceDateToDay
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.empty
 import kotlinx.android.parcel.Parcelize
@@ -38,7 +39,7 @@ data class Article(
     val body: String = empty, // content
 
     /**
-     * ÎÄÕÂ¿É¼û·¶Î§
+     * ï¿½ï¿½ï¿½Â¿É¼ï¿½ï¿½ï¿½Î§
      */
     @ColumnInfo(name = "visible_mode") val visibleMode: VisibleMode = VisibleMode.PUBLIC,
 
@@ -51,7 +52,7 @@ data class Article(
     val comments: Int = Int.Default,
 
     /**
-     * ä¯ÀÀÊýÁ¿
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     @ColumnInfo(name = "views_num") val viewsNum: Int = Int.Default,
 
@@ -67,7 +68,7 @@ data class Article(
 
 
     /**
-     * ÎÄÕÂ·¢²¼ÁË¶àÉÙÌì
+     * ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     val daysFromToday: Int
         get() {
@@ -77,7 +78,7 @@ data class Article(
     /**
      * format of publishTime
      */
-    val niceDate: String get() = dateTimeFormat.format(timestamp)
+    val niceDate: String get() = timestamp.niceDateToDay
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -126,8 +127,7 @@ data class Article(
         val Default = Article(id = -1)
     }
 }
-@SuppressLint("SimpleDateFormat")
-val dateTimeFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+
 
 //@RequiresApi(Build.VERSION_CODES.O)
 //val formatterToSeconds: DateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")

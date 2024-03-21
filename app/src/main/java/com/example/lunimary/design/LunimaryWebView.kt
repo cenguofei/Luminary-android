@@ -51,8 +51,8 @@ fun LunimaryWebView(
             val loadingState = state.loadingState
             if (loadingState is LoadingState.Loading) {
                 LinearProgressIndicator(
-                    progress = loadingState.progress,
-                    modifier = Modifier.fillMaxWidth()
+                    progress = { loadingState.progress },
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
             WebView(

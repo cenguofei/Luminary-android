@@ -17,7 +17,7 @@ class LikeSourceImpl : BaseSourceImpl by BaseSourceImpl(), LikeSource {
 
     override suspend fun giveLike(userId: Long, articleId: Long): DataResponse<Unit> {
         return client.securityPost(urlString = createLikePath) {
-            setJsonBody(Like(userId = userId, articleId = articleId))
+            setJsonBody(Like(userId = userId, articleId = articleId, timestamp = System.currentTimeMillis()))
         }.init()
     }
 

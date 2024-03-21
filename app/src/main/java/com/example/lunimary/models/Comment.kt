@@ -1,5 +1,6 @@
 package com.example.lunimary.models
 
+import com.example.lunimary.base.niceDateToDay
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.empty
 
@@ -27,5 +28,5 @@ data class Comment(
      */
     val timestamp: Long = Long.Default
 ) {
-    val niceDate: String get() = dateTimeFormat.format(timestamp)
+    val niceDate: String get() = timestamp.niceDateToDay
 }

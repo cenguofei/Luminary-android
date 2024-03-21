@@ -41,7 +41,8 @@ fun BrowseScreenContent(
     onFollowClick: () -> Unit,
     onUnfollowClick: () -> Unit,
     browseViewModel: BrowseViewModel,
-    onEditCommentClick: () -> Unit
+    onEditCommentClick: () -> Unit,
+    onLinkClick: (String) -> Unit
 ) {
     val uiState by browseViewModel.uiState.observeAsState()
     val listState = rememberLazyListState()
@@ -88,7 +89,8 @@ fun BrowseScreenContent(
                         systemDarkMode -> MaterialTheme.colorScheme.primary
                         else -> Color.Blue
                     },
-                    style = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface)
+                    style = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
+//                    onLinkClicked = onLinkClick
                 )
             }
 

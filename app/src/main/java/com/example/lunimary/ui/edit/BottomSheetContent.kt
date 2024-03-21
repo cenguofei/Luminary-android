@@ -82,15 +82,11 @@ private fun BottomButtons(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        val linearColors = listOf(
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
-            MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f)
-        )
         LinearButton(
             modifier = Modifier.weight(1f),
             onClick = { editViewModel.saveAsDraft() },
             text = stringResource(id = R.string.save_as_draft),
-            colors = linearColors
+            height = 40.dp
         )
         Spacer(modifier = Modifier.width(12.dp))
         val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
@@ -107,7 +103,7 @@ private fun BottomButtons(
                 )
             },
             text = stringResource(id = R.string.publish_content),
-            colors = linearColors
+            height = 40.dp
         )
     }
 }

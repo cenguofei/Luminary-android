@@ -33,6 +33,7 @@ fun NavGraphBuilder.browseScreen(
         BrowseScreen(
             onBack = appState::popBackStack,
             browseViewModel = browseViewModel,
+            onLinkClick = { appState.navToWeb(it) }
         )
     }
 }
@@ -41,6 +42,7 @@ fun NavGraphBuilder.browseScreen(
 fun BrowseScreen(
     onBack: () -> Unit,
     browseViewModel: BrowseViewModel,
+    onLinkClick: (String) -> Unit
 ) {
     val showEditContent = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -49,7 +51,8 @@ fun BrowseScreen(
             browseViewModel = browseViewModel,
             onFollowClick = browseViewModel::onFollowClick,
             onUnfollowClick = browseViewModel::onUnfollowClick,
-            onEditCommentClick = { showEditContent.value = true }
+            onEditCommentClick = { showEditContent.value = true },
+            onLinkClick = onLinkClick
         )
         val commentText = remember { mutableStateOf(empty) }
         if (showEditContent.value) {

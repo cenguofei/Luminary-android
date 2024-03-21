@@ -18,13 +18,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
+import com.example.lunimary.models.Article
 import com.example.lunimary.util.notNull
 
 @Composable
 fun RoundedCornerContent(
     uiState: State<UserUiState?>,
     userDetailViewModel: UserDetailViewModel,
-    onDraftClick: () -> Unit
+    onDraftClick: () -> Unit,
+    onItemClick: (Article) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize()) {
@@ -33,7 +35,8 @@ fun RoundedCornerContent(
         AboutArticles(
             coroutineScope = coroutineScope,
             userDetailViewModel = userDetailViewModel,
-            onDraftClick = onDraftClick
+            onDraftClick = onDraftClick,
+            onItemClick = onItemClick
         )
     }
 }
