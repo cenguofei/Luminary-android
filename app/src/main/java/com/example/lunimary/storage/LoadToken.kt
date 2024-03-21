@@ -36,8 +36,10 @@ fun loadLocalToken(): BearerTokens? {
 }
 
 fun removeToken() {
+    "remove token".logd("token_debug")
     val mmkv = MMKV.mmkvWithID(currentUser.username)
     mmkv.remove(MMKVKeys.TOKEN_INFO)
+    "after remove:accessToken=${loadLocalToken()?.accessToken}".logd("token_debug")
 }
 suspend fun refreshToken(): BearerTokens? {
     return withContext(Dispatchers.IO) {
@@ -64,6 +66,7 @@ suspend fun refreshToken(): BearerTokens? {
 }
 
 fun saveTokens(tokenInfo: TokenInfo, username: String) {
+    "saveTokens,access=${tokenInfo.accessToken}".logd("token_debug")
     tokenInfo.encodeParcelable(
         key = MMKVKeys.TOKEN_INFO,
         mmapID = username

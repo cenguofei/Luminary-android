@@ -7,9 +7,8 @@ import com.example.lunimary.util.encodeString
 import com.tencent.mmkv.MMKV
 
 fun loadSession(
-    key: String,
-    mmapID: String? = null
-) : String = decodeString(key, mmapID) ?: empty
+    key: String
+) : String = decodeString(key, currentUser.username) ?: empty
 
 fun saveSession(
     username: String,

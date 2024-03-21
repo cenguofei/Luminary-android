@@ -108,12 +108,16 @@ class UserViewModel : BaseViewModel() {
             onSuccess = { data, msg ->
                 data?.let { userData ->
                     _registerState.postValue(NetworkResult.Success(userData, msg))
-                }
+                } ?: _registerState.postValue(NetworkResult.Error(msg ?: unknownErrorMsg))
             },
             onFailed = {
                 _registerState.postValue(NetworkResult.Error(it))
             }
         )
+    }
+
+    fun resetRegisterState() {
+        _registerState.postValue(NetworkResult.None())
     }
 
     fun reset() {

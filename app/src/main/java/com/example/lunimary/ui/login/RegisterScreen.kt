@@ -53,7 +53,10 @@ fun RegisterScreen(
         is NetworkResult.Success -> {
             LaunchedEffect(
                 key1 = registerState,
-                block = { appState.navToLogin() }
+                block = {
+                    appState.navToLogin()
+                    userViewModel.resetRegisterState()
+                }
             )
             coroutineScope.launch {
                 val data = registerState.asSuccess()

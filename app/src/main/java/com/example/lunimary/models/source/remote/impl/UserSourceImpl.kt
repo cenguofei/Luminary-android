@@ -38,9 +38,9 @@ class UserSourceImpl: BaseSourceImpl by BaseSourceImpl(),  UserSource {
         )
         val session = response.headers[MMKVKeys.LUMINARY_SESSION]
             ?: empty.also { "Session is empty".logd() }
-        val accessToken = response.headers[MMKVKeys.ACCESS_TOKEN]
+        val accessToken = response.headers["access_token"]
             ?: empty.also { "Access token is empty".logd() }
-        val refreshToken = response.headers[MMKVKeys.REFRESH_TOKEN]
+        val refreshToken = response.headers["refresh_token"]
             ?: empty.also { "Refresh token is empty".logd() }
         "session=$session \n accessToken=$accessToken \n refreshToken=$refreshToken".logd("token")
         val loginUsername = response.body<UserResponse>().data?.user?.username

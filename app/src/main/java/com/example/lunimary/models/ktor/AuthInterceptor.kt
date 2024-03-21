@@ -4,6 +4,7 @@ import com.example.lunimary.storage.refreshToken
 import com.example.lunimary.util.HttpConst
 import com.example.lunimary.util.UserState
 import com.example.lunimary.util.logd
+import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.Dispatchers
