@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -81,43 +82,38 @@ fun InteractionBottomBar(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.End
         ) {
-            if (browseViewModel.hasFetchedLike.value) {
-                if (browseViewModel.likedTheArticle.value) {
-                    IconButton(onClick = browseViewModel::onCancelLike) {
-                        Icon(
-                            imageVector = Icons.Default.ThumbUp,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                } else {
-                    IconButton(onClick = browseViewModel::onGiveLike) {
-                        Icon(
-                            imageVector = Icons.Default.ThumbUp,
-                            contentDescription = null,
-                            tint = grayTint
-                        )
-                    }
+            if (browseViewModel.likedTheArticle.value) {
+                IconButton(onClick = browseViewModel::onCancelLike) {
+                    Icon(
+                        imageVector = Icons.Default.ThumbUp,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                IconButton(onClick = browseViewModel::onGiveLike) {
+                    Icon(
+                        imageVector = Icons.Default.ThumbUp,
+                        contentDescription = null,
+                        tint = grayTint
+                    )
                 }
             }
-
-            if (browseViewModel.hasFetchedStar.value) {
-                if (browseViewModel.staredTheArticle.value) {
-                    IconButton(onClick = browseViewModel::onCancelStar) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                } else {
-                    IconButton(onClick = browseViewModel::onGiveStar) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = grayTint
-                        )
-                    }
+            if (browseViewModel.staredTheArticle.value) {
+                IconButton(onClick = browseViewModel::onCancelStar) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                IconButton(onClick = browseViewModel::onGiveStar) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = grayTint
+                    )
                 }
             }
         }

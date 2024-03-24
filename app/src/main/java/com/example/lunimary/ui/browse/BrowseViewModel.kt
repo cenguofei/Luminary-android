@@ -106,7 +106,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun onGiveLike() {
-        fly(FLY_GIVE_OR_CANCEL_LIKE) {
+        fly(FLy_ABOUT_LIKE) {
             request(
                 block = {
                     likeRepository.giveLike(currentUser.id, uiState.value!!.article.id)
@@ -114,13 +114,13 @@ class BrowseViewModel : BaseViewModel() {
                 onSuccess = { _, _ ->
                     _likedTheArticle.value = true
                 },
-                onFinish = { land(FLY_GIVE_OR_CANCEL_LIKE) }
+                onFinish = { land(FLy_ABOUT_LIKE) }
             )
         }
     }
 
     fun onCancelLike() {
-        fly(FLY_GIVE_OR_CANCEL_LIKE) {
+        fly(FLy_ABOUT_LIKE) {
             request(
                 block = {
                     likeRepository.cancelLike(currentUser.id, uiState.value!!.article.id)
@@ -128,36 +128,33 @@ class BrowseViewModel : BaseViewModel() {
                 onSuccess = { _, _ ->
                     _likedTheArticle.value = false
                 },
-                onFinish = { land(FLY_GIVE_OR_CANCEL_LIKE) }
+                onFinish = { land(FLy_ABOUT_LIKE) }
             )
         }
     }
 
     private val _likedTheArticle: MutableState<Boolean> = mutableStateOf(false)
     val likedTheArticle: State<Boolean> get() = _likedTheArticle
-    private val _hasFetchedLike: MutableState<Boolean> = mutableStateOf(false)
-    val hasFetchedLike: State<Boolean> get() = _hasFetchedLike
+
     private fun existsLike(articleId: Long) {
-        fly(FLY_EXISTS_LIKE) {
+        fly(FLy_ABOUT_LIKE) {
             request(
                 block = {
                     likeRepository.existsLike(userId = currentUser.id, articleId = articleId)
                 },
                 onSuccess = { data, _ ->
                     _likedTheArticle.value = data ?: false
-                    _hasFetchedLike.value = true
                 },
-                onFinish = { land(FLY_EXISTS_LIKE) }
+                onFinish = { land(FLy_ABOUT_LIKE) }
             )
         }
     }
 
     private val _staredTheArticle: MutableState<Boolean> = mutableStateOf(false)
     val staredTheArticle: State<Boolean> get() = _staredTheArticle
-    private val _hasFetchedStar: MutableState<Boolean> = mutableStateOf(false)
-    val hasFetchedStar: State<Boolean> get() = _hasFetchedStar
+
     private fun fetchStar(articleId: Long) {
-        fly(FLY_STAR) {
+        fly(FLY_ABOUT_STAR) {
             request(
                 block = {
                     collectRepository.existsCollect(
@@ -167,15 +164,14 @@ class BrowseViewModel : BaseViewModel() {
                 },
                 onSuccess = { data, _ ->
                     _staredTheArticle.value = data ?: false
-                    _hasFetchedStar.value = true
                 },
-                onFinish = { land(FLY_STAR) }
+                onFinish = { land(FLY_ABOUT_STAR) }
             )
         }
     }
 
     fun onGiveStar() {
-        fly(FLY_GIVE_OR_CANCEL_COLLECT) {
+        fly(FLY_ABOUT_STAR) {
             request(
                 block = {
                     collectRepository.giveCollect(currentUser.id, uiState.value!!.article.id)
@@ -183,13 +179,13 @@ class BrowseViewModel : BaseViewModel() {
                 onSuccess = { _, _ ->
                     _staredTheArticle.value = true
                 },
-                onFinish = { land(FLY_GIVE_OR_CANCEL_COLLECT) }
+                onFinish = { land(FLY_ABOUT_STAR) }
             )
         }
     }
 
     fun onCancelStar() {
-        fly(FLY_GIVE_OR_CANCEL_COLLECT) {
+        fly(FLY_ABOUT_STAR) {
             request(
                 block = {
                     collectRepository.cancelCollect(currentUser.id, uiState.value!!.article.id)
@@ -197,7 +193,7 @@ class BrowseViewModel : BaseViewModel() {
                 onSuccess = { _, _ ->
                     _staredTheArticle.value = false
                 },
-                onFinish = { land(FLY_GIVE_OR_CANCEL_COLLECT) }
+                onFinish = { land(FLY_ABOUT_STAR) }
             )
         }
     }
@@ -267,9 +263,8 @@ data class UiState(
 const val FLY_FETCH_USER = "fly_fetch_user"
 const val FLY_EXISTING_FRIENDSHIP = "fly_existing_friendship"
 const val FLY_FOLLOW_OR_UNFOLLOW = "fly_follow_or_unfollow"
-const val FLY_EXISTS_LIKE = "fly_exists_like"
-const val FLY_STAR = "fly_star"
-const val FLY_GIVE_OR_CANCEL_LIKE = "fly_give_or_cancel_like"
+const val FLY_ABOUT_STAR = "____fly_about_star____"
+const val FLy_ABOUT_LIKE = "____fly_about_like____"
 const val FLY_GIVE_OR_CANCEL_COLLECT = "fly_give_or_cancel_collect"
 const val FLY_CREATE_COMMENT = "fly_create_comment"
 const val FLY_ALL_COMMENTS_OF_ARTICLE = "fly_all_comments_of_article"
