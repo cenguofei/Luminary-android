@@ -16,7 +16,6 @@ fun HomeContent(
     tabs: List<HomeCategories>,
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    coroutineScope: CoroutineScope,
     isOffline: StateFlow<Boolean>,
     onItemClick: (Article) -> Unit,
 ) {
@@ -26,13 +25,16 @@ fun HomeContent(
             HomeCategories.Recommend -> {
                 RecommendPage(
                     recommendViewModel = recommendViewModel,
-                    coroutineScope = coroutineScope,
                     isOffline = isOffline,
                     onItemClick = onItemClick
                 )
             }
             HomeCategories.Following -> {
-                FollowingPage()
+                FollowingPage(
+                    recommendViewModel = recommendViewModel,
+                    isOffline = isOffline,
+                    onItemClick = onItemClick
+                )
             }
         }
     }

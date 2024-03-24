@@ -6,7 +6,7 @@ import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.FriendSource
 import com.example.lunimary.models.source.remote.impl.FriendSourceImpl
 
-class FriendSourceRepository: BaseRepository by BaseRepository(), FriendSource {
+class FriendRepository: BaseRepository by BaseRepository(), FriendSource {
     private val friendSource: FriendSource = FriendSourceImpl()
 
     override suspend fun follow(meId: Long, whoId: Long): DataResponse<Unit> =

@@ -13,7 +13,7 @@ import com.example.lunimary.models.User
 import com.example.lunimary.models.responses.CombinedCommentMessage
 import com.example.lunimary.models.source.remote.repository.CollectRepository
 import com.example.lunimary.models.source.remote.repository.CommentRepository
-import com.example.lunimary.models.source.remote.repository.FriendSourceRepository
+import com.example.lunimary.models.source.remote.repository.FriendRepository
 import com.example.lunimary.models.source.remote.repository.LikeRepository
 import com.example.lunimary.models.source.remote.repository.UserRepository
 import com.example.lunimary.network.NetworkResult
@@ -21,7 +21,7 @@ import com.example.lunimary.util.currentUser
 
 class BrowseViewModel : BaseViewModel() {
     private val userRepository = UserRepository()
-    private val friendSourceRepository = FriendSourceRepository()
+    private val friendRepository = FriendRepository()
     private val likeRepository = LikeRepository()
     private val collectRepository = CollectRepository()
     private val commentRepository by lazy { CommentRepository() }
@@ -42,7 +42,7 @@ class BrowseViewModel : BaseViewModel() {
         fly(FLY_EXISTING_FRIENDSHIP) {
             request(
                 block = {
-                    friendSourceRepository.existingFriendship(currentUser.id, whoId)
+                    friendRepository.existingFriendship(currentUser.id, whoId)
                 },
                 onSuccess = { data, _ ->
                     val newUiState = uiState.value?.copy(hasFetchedFriendship = true)
@@ -81,7 +81,7 @@ class BrowseViewModel : BaseViewModel() {
         fly(FLY_FOLLOW_OR_UNFOLLOW) {
             request(
                 block = {
-                    friendSourceRepository.follow(currentUser.id, articleOwner.value.id)
+                    friendRepository.follow(currentUser.id, articleOwner.value.id)
                 },
                 onSuccess = { _, _ ->
                     _uiState.postValue(uiState.value?.copy(isFollowByMe = true))
@@ -95,7 +95,7 @@ class BrowseViewModel : BaseViewModel() {
         fly(FLY_FOLLOW_OR_UNFOLLOW) {
             request(
                 block = {
-                    friendSourceRepository.unfollow(articleOwner.value.id)
+                    friendRepository.unfollow(articleOwner.value.id)
                 },
                 onSuccess = { _, _ ->
                     _uiState.postValue(uiState.value?.copy(isFollowByMe = false))

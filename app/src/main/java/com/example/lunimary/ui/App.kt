@@ -39,6 +39,7 @@ import com.example.lunimary.ui.edit.addArticleScreen
 import com.example.lunimary.ui.home.topLevelScreens
 import com.example.lunimary.ui.login.loginScreen
 import com.example.lunimary.ui.login.registerScreen
+import com.example.lunimary.ui.relation.relationScreen
 import com.example.lunimary.ui.search.searchScreen
 import com.example.lunimary.ui.settings.settingsScreen
 import com.example.lunimary.ui.user.draft.draftsScreen
@@ -136,5 +137,6 @@ private fun LunimaryNavHost(
         searchScreen(appState = appState)
         webViewScreen(appState = appState)
         browseScreen(appState = appState)
+        relationScreen(appState = appState)
     }
 }

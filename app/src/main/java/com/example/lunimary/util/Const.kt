@@ -25,6 +25,7 @@ inline val registerPath: String get() = "$userRootPath/register"
 //Page
 inline val pageRootPath: String get() = "/pages"
 inline val pageArticlesPath: String get() = "$articlesRootPath$pageRootPath"
+inline val pageFriendsArticlesPath: String get() = "$articlesRootPath$pageRootPath/friends"
 inline val pageUsersPath: String get() = "$userRootPath$pageRootPath"
 inline val pageCollectsPath: String get() = "$collectRootPath$pageRootPath"
 inline val pageLikesPath: String get() = "$likeRootPath$pageRootPath"
@@ -75,6 +76,8 @@ inline val unfollowPath: String get() = "$friendRootPath/unfollow"
 inline val myFollowingsPath: String get() = "$friendRootPath/following"
 inline val myFollowersPath: String get() = "$friendRootPath/followers"
 inline val existingFriendshipPath: String get() = "$friendRootPath/existing_friendship"
+inline val mutualFollowFriendsPath: String get() = "$friendRootPath/mutual"
+
 
 //Token
 inline val refreshToken: String get() = "/token/refresh"

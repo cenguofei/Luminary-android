@@ -15,8 +15,6 @@ interface ArticleSource {
 
     suspend fun allArticles(curPage: Int, perPageCount: Int) : PageResponse<Article>
 
-    suspend fun recommendedArticles(curPage: Int, perPageCount: Int) : PageResponse<Article>
-
     suspend fun publicArticles(
         userId: Long
     ): DataResponse<List<Article>>

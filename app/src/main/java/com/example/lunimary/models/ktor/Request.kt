@@ -85,13 +85,17 @@ fun HttpRequestBuilder.addPagesParam(curPage: Int, perPageCount: Int) {
     }
 }
 
+fun HttpRequestBuilder.addQueryParam(name: String, value: Any) {
+    url {
+        parameters.append(name, value.toString())
+    }
+}
+
 fun HttpRequestBuilder.addUserIdPath(
     userId: Long? = null
 ) {
-    url {
-        val id = userId ?: currentUser.id
-        appendPathSegments(id.toString())
-    }
+    val id = userId ?: currentUser.id
+    addPathParam(id)
 }
 
 fun HttpRequestBuilder.addPathParam(value: Any) {
@@ -105,11 +109,15 @@ fun addSecurityFactors(
     block: HttpRequestBuilder.() -> Unit = {}
 ): HttpRequestBuilder = HttpRequestBuilder().apply {
     url(urlString)
-    if (needSession) { setSession() }
-    if (needAuth) { setBearAuth() }
+    if (needSession) {
+        setSession()
+    }
+    if (needAuth) {
+        setBearAuth()
+    }
 }.apply(block)
 
 
-suspend inline fun <T, reified R: BaseResponse<T>> HttpResponse.init(): R {
+suspend inline fun <T, reified R : BaseResponse<T>> HttpResponse.init(): R {
     return body<R>().init(this)
 }

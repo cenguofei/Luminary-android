@@ -1,8 +1,10 @@
 package com.example.lunimary.design
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +24,11 @@ fun UserHeadImage(
 ) {
     Surface(
         modifier = modifier.size(size),
-        shape = RoundedCornerShape(50)
+        shape = RoundedCornerShape(50),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.primary
+        )
     ) {
         AsyncImage(
             model = model,

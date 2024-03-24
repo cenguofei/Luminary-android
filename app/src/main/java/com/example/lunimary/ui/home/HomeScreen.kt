@@ -50,7 +50,6 @@ fun HomeScreen(
             tabs = tabs,
             modifier = Modifier.weight(1f),
             pagerState = pagerState,
-            coroutineScope = coroutineScope,
             isOffline = appState.isOffline,
             onItemClick = onItemClick
         )

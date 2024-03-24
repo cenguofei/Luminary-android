@@ -26,8 +26,10 @@ import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.BROWSE_ARTICLE_KEY
 import com.example.lunimary.ui.common.DEFAULT_WEB_URL
 import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
+import com.example.lunimary.ui.common.RelationPageType
 import com.example.lunimary.ui.common.UrlNavArguments
 import com.example.lunimary.ui.common.WEB_VIEW_URL_KEY
+import com.example.lunimary.ui.common.setRelationPage
 import com.example.lunimary.ui.login.UserViewModel
 import com.google.accompanist.systemuicontroller.SystemUiController
 import kotlinx.coroutines.CoroutineScope
@@ -147,6 +149,8 @@ class LunimaryAppState(
     fun navToWeb(url: String? = null) { navController.navToWeb(url) }
 
     fun navToBrowse(article: Article) { navController.navToBrowse(article) }
+
+    fun navToRelation(relationPageType: RelationPageType) { navController.navToRelation(relationPageType) }
 }
 
 private fun NavController.navToBrowse(article: Article) {
@@ -195,6 +199,11 @@ fun NavController.navToUser() {
             launchSingleTop = true
         }
     )
+}
+
+private fun NavController.navToRelation(relationPageType: RelationPageType) {
+    setRelationPage(relationPageType)
+    navigate(Screens.Relation.route)
 }
 
 private fun NavController.navToEdit(draftArticle: Article?) {

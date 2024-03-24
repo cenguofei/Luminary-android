@@ -26,7 +26,8 @@ fun UserDetailContent(
     user: User,
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
-    appState: LunimaryAppState
+    appState: LunimaryAppState,
+    onRelationClick: (UserDataType) -> Unit
 ) {
     val uiState = userDetailViewModel.uiState.observeAsState()
     Column(modifier = modifier
@@ -44,7 +45,8 @@ fun UserDetailContent(
                 uiState = uiState,
                 userDetailViewModel = userDetailViewModel,
                 onDraftClick = onDraftClick,
-                onItemClick = { appState.navToBrowse(it) }
+                onItemClick = { appState.navToBrowse(it) },
+                onRelationClick = onRelationClick
             )
         }
     }
@@ -66,7 +68,7 @@ fun UserInformation(user: User) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = user.id.toString(),
+                text = "ID:${user.id + 5201314L}",
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium
             )

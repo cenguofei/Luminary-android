@@ -2,6 +2,8 @@ package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.ktor.addPagesParam
+import com.example.lunimary.models.ktor.addPathParam
+import com.example.lunimary.models.ktor.addQueryParam
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.securityDelete
 import com.example.lunimary.models.ktor.securityPost
@@ -14,6 +16,7 @@ import com.example.lunimary.util.articlesRootPath
 import com.example.lunimary.util.createArticlePath
 import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.pageArticlesPath
+import com.example.lunimary.util.pageFriendsArticlesPath
 import com.example.lunimary.util.privacyArticlesOfUserPath
 import com.example.lunimary.util.publicArticlesOfUserPath
 import com.example.lunimary.util.updateArticleByIdPath
@@ -23,17 +26,13 @@ import io.ktor.http.appendPathSegments
 class ArticleSourceImpl: BaseSourceImpl by BaseSourceImpl(), ArticleSource {
     override suspend fun getArticleById(id: Long): DataResponse<Article> {
         return client.get(urlString = articlesRootPath) {
-            url {
-                appendPathSegments(id.toString())
-            }
+            addPathParam(id)
         }.init()
     }
 
     override suspend fun deleteArticleById(id: Long): DataResponse<Unit> {
         return client.securityDelete(urlString = articlesRootPath) {
-            url {
-                appendPathSegments(id.toString())
-            }
+            addPathParam(id)
         }.init()
     }
 
@@ -55,28 +54,15 @@ class ArticleSourceImpl: BaseSourceImpl by BaseSourceImpl(), ArticleSource {
         }.init()
     }
 
-    override suspend fun recommendedArticles(
-        curPage: Int,
-        perPageCount: Int
-    ): PageResponse<Article> {
-        return client.get(urlString = pageArticlesPath) {
-            addPagesParam(curPage, perPageCount)
-        }.init()
-    }
-
     override suspend fun publicArticles(userId: Long): DataResponse<List<Article>> {
         return client.get(urlString = publicArticlesOfUserPath) {
-            url {
-                appendPathSegments(currentUser.id.toString())
-            }
+            addPathParam(userId)
         }.init()
     }
 
     override suspend fun privacyArticles(userId: Long): DataResponse<List<Article>> {
         return client.get(urlString = privacyArticlesOfUserPath) {
-            url {
-                appendPathSegments(currentUser.id.toString())
-            }
+            addPathParam(currentUser.id)
         }.init()
     }
 }

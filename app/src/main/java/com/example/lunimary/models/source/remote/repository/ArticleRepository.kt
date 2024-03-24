@@ -25,12 +25,6 @@ class ArticleRepository : BaseRepository by BaseRepository(), ArticleSource {
     override suspend fun allArticles(curPage: Int, perPageCount: Int): PageResponse<Article> =
         withDispatcher { articleSource.allArticles(curPage, perPageCount) }
 
-    override suspend fun recommendedArticles(
-        curPage: Int,
-        perPageCount: Int
-    ): PageResponse<Article> =
-        withDispatcher { articleSource.recommendedArticles(curPage, perPageCount) }
-
     override suspend fun publicArticles(userId: Long): DataResponse<List<Article>> =
         withDispatcher { articleSource.publicArticles(userId) }
 

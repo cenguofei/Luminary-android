@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.channels.Channel
@@ -79,12 +80,13 @@ fun <T : Any> CascadeMenu(
     menu: CascadeMenuItem<T>,
     colors: CascadeMenuColors = cascadeMenuColors(),
     offset: DpOffset = DpOffset.Zero,
+    width: Dp = MAX_WIDTH,
     onItemSelected: (T) -> Unit,
     onDismiss: () -> Unit,
 ) {
     DropdownMenu(
         modifier = modifier
-            .width(MAX_WIDTH)
+            .width(width)
             .background(colors.backgroundColor),
         expanded = isOpen,
         onDismissRequest = onDismiss,

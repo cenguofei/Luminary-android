@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.lunimary.ui.LunimaryAppState
+import com.example.lunimary.ui.common.RelationPageType
 import com.example.lunimary.util.currentUser
 
 @Composable
@@ -46,7 +47,21 @@ fun UserDetailScreen(
             user = user,
             userDetailViewModel = userDetailViewModel,
             onDraftClick = onDraftClick,
-            appState = appState
+            appState = appState,
+            onRelationClick = {
+                when(it) {
+                    UserDataType.Friends -> {
+                        appState.navToRelation(RelationPageType.Friends)
+                    }
+                    UserDataType.Follow -> {
+                        appState.navToRelation(RelationPageType.Follow)
+                    }
+                    UserDataType.Followers -> {
+                        appState.navToRelation(RelationPageType.Followers)
+                    }
+                    UserDataType.Likes -> { }
+                }
+            }
         )
     }
 }

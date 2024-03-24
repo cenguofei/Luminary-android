@@ -89,8 +89,7 @@ class MessageViewModel : BaseViewModel() {
     }
 
     fun transformLikeData(): List<LikeMessage> {
-        val data = (likesMessage.value as? NetworkResult.Success)?.data ?: return emptyList()
-        return data.sortedByDescending { it.timestamp }
+        return (likesMessage.value as? NetworkResult.Success)?.data ?: return emptyList()
     }
 
     private val _followMessage: MutableState<NetworkResult<List<UserFriend>>> =
@@ -120,8 +119,7 @@ class MessageViewModel : BaseViewModel() {
     }
 
     fun transformFollowData(): List<UserFriend> {
-        val data = (followMessage.value as? NetworkResult.Success)?.data ?: return emptyList()
-        return data.sortedByDescending { it.beFriendTime }
+        return (followMessage.value as? NetworkResult.Success)?.data ?: return emptyList()
     }
 }
 

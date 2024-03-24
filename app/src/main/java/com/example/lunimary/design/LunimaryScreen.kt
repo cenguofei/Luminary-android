@@ -78,7 +78,6 @@ fun <T : Any> LunimaryPagingScreen(
         onErrorClick = { items.refresh() },
         empty = showEmpty,
         networkError = networkError && items.isEmpty(),
-        searchEmpty = showEmpty,
         noMessage = noMessage,
         shimmer = showShimmer,
         snackbarData = snackbarData,

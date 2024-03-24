@@ -6,6 +6,7 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
+import com.example.lunimary.models.ext.UserFriend
 import com.example.lunimary.models.source.remote.repository.ArticleRepository
 import com.example.lunimary.models.source.remote.repository.ArticlesOfUserLikeRepository
 import com.example.lunimary.models.source.remote.repository.UserDetailRepository
@@ -25,6 +26,7 @@ class UserDetailViewModel : BaseViewModel() {
         likesOfUserArticles()
         followers()
         followings()
+        mutualFollowUsers()
     }
 
     private val _publicArticles: MutableLiveData<NetworkResult<List<Article>>> =
@@ -153,7 +155,7 @@ class UserDetailViewModel : BaseViewModel() {
                 },
                 onSuccess = { data, _ ->
                     data?.let {
-                        _uiState.postValue(uiState.value?.copy(followings = it))
+                        _uiState.postValue(uiState.value?.copy(followingNum = it.num))
                     }
                 },
                 onFinish = { land(FLY_FOLLOWINGS) }
@@ -169,13 +171,28 @@ class UserDetailViewModel : BaseViewModel() {
                 },
                 onSuccess = { data, _ ->
                     data?.let {
-                        _uiState.postValue(uiState.value?.copy(followers = it))
+                        _uiState.postValue(uiState.value?.copy(followersNum = it.num))
                     }
                 },
-                onFailed = {
-
-                },
+                onFailed = { },
                 onFinish = { land(FLY_FOLLOWERS) }
+            )
+        }
+    }
+
+    private fun mutualFollowUsers() {
+        fly(FLY_MUTUAL_FOLLOW_USERS) {
+            request(
+                block = {
+                    repository.mutualFollowUsers()
+                },
+                onSuccess = { data, _ ->
+                    data?.let {
+                        _uiState.postValue(uiState.value?.copy(friendsNum = it.num))
+                    }
+                },
+                onFailed = { },
+                onFinish = { land(FLY_MUTUAL_FOLLOW_USERS) }
             )
         }
     }
@@ -183,10 +200,11 @@ class UserDetailViewModel : BaseViewModel() {
 
 data class UserUiState(
     val likesOfUserArticles: Long = 0,
-    val followings: List<User> = emptyList(),
-    val followers: List<User> = emptyList(),
+    val followingNum:Int = 0,
+    val followersNum: Int = 0,
     val articlesOfUser: List<Article> = emptyList(),
-    val errorOfGetArticlesOfUser: String = empty
+    val errorOfGetArticlesOfUser: String = empty,
+    val friendsNum: Int = 0
 )
 
 const val FLY_LIKES_OF_USER_ARTICLES = "fly_likes_of_user_articles"
@@ -196,3 +214,4 @@ const val FLY_PUBLIC_ARTICLES_OF_USER = "fly_public_articles_of_user"
 const val FLY_PRIVACY_ARTICLES_OF_USER = "fly_privacy_articles_of_user"
 const val FLY_COLLECTS_OF_USER = "fly_articles_of_user_collected"
 const val FLY_LIKES_OF_USER = "fly_articles_of_user_liked"
+const val FLY_MUTUAL_FOLLOW_USERS = "fly_mutual_follow_users"

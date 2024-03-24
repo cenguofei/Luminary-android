@@ -4,17 +4,12 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.responses.DEFAULT_PER_PAGE_COUNT
+import com.example.lunimary.models.source.remote.PageSource
 import com.example.lunimary.models.source.remote.repository.ArticleRepository
 
 class ArticlePagingSource(
-    private val repository: ArticleRepository = ArticleRepository()
+    private val source: PageSource<Article>
 ) : PagingSource<Int, Article>() {
-    //    override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
-//        return state.anchorPosition?.let {
-//            state.closestPageToPosition(it)?.prevKey?.plus(1)
-//                ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
-//        }
-//    }
     override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
         return null
     }
@@ -22,7 +17,7 @@ class ArticlePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
         return try {
             val wishPage = params.key ?: 0
-            val pageResponse = repository.recommendedArticles(wishPage, DEFAULT_PER_PAGE_COUNT)
+            val pageResponse = source.pages(wishPage, DEFAULT_PER_PAGE_COUNT)
             if (pageResponse.isSuccess()) {
                 val data = pageResponse.data
                 LoadResult.Page(
