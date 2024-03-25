@@ -60,7 +60,7 @@ fun EditPage(
                 val path = mediaResource.path
                 val name = mediaResource.name
                 val mimeType = mediaResource.mimeType
-                fileViewModel.updateSelectedFile(uri, path, name)
+                fileViewModel.updateSelectedFile(path, name)
                 "mediaResource:uri=$uri, path=$path, name=$name, mimeType=$mimeType".logd("select_pic")
             }
             fileViewModel.updateShowImageSelector(false)

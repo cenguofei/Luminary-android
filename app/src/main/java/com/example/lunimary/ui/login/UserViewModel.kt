@@ -65,7 +65,7 @@ class UserViewModel : BaseViewModel() {
             onSuccess = { data, _ ->
                 if (data?.user != null) {
                     _loginState.postValue(NetworkResult.Success(data))
-                    UserState.updateUser(data.user)
+                    UserState.updateLocalUser(data.user)
                 } else {
                     _loginState.postValue(NetworkResult.Error(unknownErrorMsg))
                 }

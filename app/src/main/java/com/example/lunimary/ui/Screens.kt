@@ -9,7 +9,8 @@ enum class Screens(val route: String) {
     Drafts("drafts"),
     WebView(WEB_VIEW_ROOT),
     BrowseArticle(BROWSE_ARTICLE_ROOT),
-    Relation("relation")
+    Relation("relation"),
+    Information("user/information")
 }
 
 const val LOGIN_ROOT = "login"

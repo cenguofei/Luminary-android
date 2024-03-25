@@ -1,4 +1,4 @@
-package com.example.lunimary.design
+package com.example.lunimary.ui.webview
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import com.example.lunimary.design.LunimaryToolbar
 import com.kevinnzou.web.LoadingState
 import com.kevinnzou.web.WebView
 import com.kevinnzou.web.rememberWebViewNavigator

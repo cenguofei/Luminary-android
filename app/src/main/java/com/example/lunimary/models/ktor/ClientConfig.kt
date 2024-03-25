@@ -29,7 +29,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
-const val HOST = "192.168.31.237"
+const val HOST = "192.168.31.238"
 const val PORT = 8080
 
 val httpClient = HttpClient(OkHttp) {

@@ -61,7 +61,8 @@ fun UserDetailScreen(
                     }
                     UserDataType.Likes -> { }
                 }
-            }
+            },
+            onUsernameClick = { appState.navToInformation() }
         )
     }
 }

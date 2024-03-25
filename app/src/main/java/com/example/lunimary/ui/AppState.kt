@@ -151,6 +151,12 @@ class LunimaryAppState(
     fun navToBrowse(article: Article) { navController.navToBrowse(article) }
 
     fun navToRelation(relationPageType: RelationPageType) { navController.navToRelation(relationPageType) }
+
+    fun navToInformation() { navController.navToInformation() }
+}
+
+private fun NavController.navToInformation() {
+    navigate(Screens.Information.route)
 }
 
 private fun NavController.navToBrowse(article: Article) {

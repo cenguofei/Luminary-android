@@ -24,7 +24,7 @@ object UserState {
             }
         }
 
-    fun updateUser(user: User) {
+    fun updateLocalUser(user: User) {
         "currentUser: $currentUser".logd()
         "更新用户:user:$user".logd()
         updated = true

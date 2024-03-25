@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -27,13 +28,19 @@ fun UserDetailContent(
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
     appState: LunimaryAppState,
-    onRelationClick: (UserDataType) -> Unit
+    onRelationClick: (UserDataType) -> Unit,
+    onUsernameClick: () -> Unit
 ) {
     val uiState = userDetailViewModel.uiState.observeAsState()
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(top = 120.dp)) {
-        UserInformation(user)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 120.dp)
+    ) {
+        UserInformation(
+            user = user,
+            onUsernameClick = onUsernameClick
+        )
         Spacer(modifier = Modifier.height(12.dp))
         Surface(
             modifier = Modifier
@@ -53,7 +60,10 @@ fun UserDetailContent(
 }
 
 @Composable
-fun UserInformation(user: User) {
+fun UserInformation(
+    user: User,
+    onUsernameClick: () -> Unit
+) {
     Row(
         modifier = Modifier.padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -61,11 +71,13 @@ fun UserInformation(user: User) {
         UserHeadImage(model = user.realHeadUrl())
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(
-                text = user.username,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.titleMedium
-            )
+            TextButton(onClick = onUsernameClick) {
+                Text(
+                    text = user.username,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "ID:${user.id + 5201314L}",

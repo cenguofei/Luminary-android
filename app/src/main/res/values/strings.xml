@@ -94,4 +94,11 @@
     <string name="mutual_follow">互相关注</string>
     <string name="already_follow">已关注</string>
     <string name="return_follow">回关</string>
+    <string name="change_cover">更换封面</string>
+    <string name="change_head_img">更换头像</string>
+    <string name="username">用户名</string>
+    <string name="sex">性别</string>
+    <string name="unknown">未知</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
 </resources>

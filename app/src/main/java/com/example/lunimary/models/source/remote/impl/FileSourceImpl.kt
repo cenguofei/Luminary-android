@@ -17,7 +17,8 @@ import java.io.File
 class FileSourceImpl : BaseSourceImpl by BaseSourceImpl(), FileSource {
     override suspend fun uploadFile(
         path: String,
-        filename: String
+        filename: String,
+        uploadType: Int
     ): DataResponse<UploadData> {
         val file = File(path)
         return client.submitFormWithBinaryData(
@@ -35,7 +36,7 @@ class FileSourceImpl : BaseSourceImpl by BaseSourceImpl(), FileSource {
             block = {
                 setSession()
                 setBearAuth()
-                url { parameters.append("upload_type", UPLOAD_TYPE_ARTICLE_COVER.toString()) }
+                url { parameters.append("upload_type", uploadType.toString()) }
             }
         ).init()
     }
