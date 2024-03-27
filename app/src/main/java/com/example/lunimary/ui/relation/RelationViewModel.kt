@@ -11,7 +11,6 @@ import com.example.lunimary.models.ext.FollowersInfo
 import com.example.lunimary.models.source.remote.repository.FriendRepository
 import com.example.lunimary.models.source.remote.repository.RelationRepository
 import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.ui.browse.FLY_FOLLOW_OR_UNFOLLOW
 import com.example.lunimary.util.currentUser
 
 class RelationViewModel : BaseViewModel() {

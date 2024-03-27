@@ -1,24 +1,17 @@
 package com.example.lunimary.models.source.remote.impl
 
-import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowInfo
 import com.example.lunimary.models.ext.FollowersInfo
 import com.example.lunimary.models.ext.UserFriend
 import com.example.lunimary.models.ktor.addPathParam
-import com.example.lunimary.models.ktor.addQueryParam
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.responses.DataResponse
-import com.example.lunimary.models.responses.RelationData
 import com.example.lunimary.models.responses.RelationResponse
 import com.example.lunimary.models.source.remote.RelationSource
 import com.example.lunimary.models.source.remote.UserDetailSource
 import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.likesOfUserPath
-import com.example.lunimary.util.mutualFollowFriendsPath
-import com.example.lunimary.util.myFollowersPath
-import com.example.lunimary.util.myFollowingsPath
 import io.ktor.client.request.get
-import io.ktor.http.appendPathSegments
 
 class UserDetailSourceImpl: BaseSourceImpl by BaseSourceImpl(),  UserDetailSource {
     private val delegate: RelationSource = RelationSourceImpl()

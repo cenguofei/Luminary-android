@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.LunimaryScreen
 import com.example.lunimary.network.isCurrentlyConnected
+import com.example.lunimary.ui.common.UserItem
 
 @Composable
 fun FriendsPage(
@@ -27,10 +28,7 @@ fun FriendsPage(
             val data = relationViewModel.friends.value.data ?: emptyList()
             item { Spacer(modifier = Modifier.height(16.dp)) }
             items(data) {
-                FriendItem(
-                    user = it,
-                    needRelation = false
-                )
+                UserItem(user = it)
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }

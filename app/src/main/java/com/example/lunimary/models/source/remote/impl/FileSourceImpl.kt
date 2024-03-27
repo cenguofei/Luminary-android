@@ -1,6 +1,5 @@
 package com.example.lunimary.models.source.remote.impl
 
-import com.example.lunimary.models.UPLOAD_TYPE_ARTICLE_COVER
 import com.example.lunimary.models.UploadData
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.setBearAuth

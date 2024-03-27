@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,11 +35,9 @@ import com.example.lunimary.R
 import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
-import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowInfo
 import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.ui.user.draft.DraftItemOperations
-import com.example.lunimary.util.empty
+import com.example.lunimary.ui.common.signatures
 
 data class FollowItemData(
     val followInfo: FollowInfo,

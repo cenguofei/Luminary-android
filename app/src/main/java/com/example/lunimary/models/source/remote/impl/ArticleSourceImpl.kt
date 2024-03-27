@@ -3,7 +3,6 @@ package com.example.lunimary.models.source.remote.impl
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.ktor.addPagesParam
 import com.example.lunimary.models.ktor.addPathParam
-import com.example.lunimary.models.ktor.addQueryParam
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.ktor.securityDelete
 import com.example.lunimary.models.ktor.securityPost
@@ -16,13 +15,11 @@ import com.example.lunimary.util.articlesRootPath
 import com.example.lunimary.util.createArticlePath
 import com.example.lunimary.util.currentUser
 import com.example.lunimary.util.pageArticlesPath
-import com.example.lunimary.util.pageFriendsArticlesPath
 import com.example.lunimary.util.privacyArticlesOfUserPath
 import com.example.lunimary.util.publicArticlesOfUserPath
 import com.example.lunimary.util.updateArticleByIdPath
 import com.example.lunimary.util.whenBrowseArticlePath
 import io.ktor.client.request.get
-import io.ktor.http.appendPathSegments
 
 class ArticleSourceImpl: BaseSourceImpl by BaseSourceImpl(), ArticleSource {
     override suspend fun getArticleById(id: Long): DataResponse<Article> {

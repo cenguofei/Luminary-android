@@ -74,7 +74,6 @@ class SearchViewModel : BaseViewModel() {
                 Pager(PagingConfig(pageSize = 5)) { it }
                     .flow.cachedIn(viewModelScope)
                     .collectLatest { data ->
-                        "data=$data".logi("search_test")
                         trySend(data)
                     }
             }
@@ -102,7 +101,6 @@ class SearchViewModel : BaseViewModel() {
                 Pager(PagingConfig(pageSize = 5)) { it }.flow
                     .cachedIn(viewModelScope)
                     .collectLatest { data ->
-                        "data=$data".logi("search_test")
                         trySend(data)
                     }
             }

@@ -7,11 +7,8 @@ import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.models.source.remote.PageSource
 import com.example.lunimary.models.source.remote.impl.BaseSourceImpl
-import com.example.lunimary.util.empty
 import com.example.lunimary.util.searchArticlePath
 import io.ktor.client.request.get
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class SearchArticleSource(
     private val searchContent: String

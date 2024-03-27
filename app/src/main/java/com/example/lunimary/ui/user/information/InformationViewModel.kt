@@ -10,7 +10,6 @@ import com.example.lunimary.models.UPLOAD_TYPE_USER_HEAD
 import com.example.lunimary.models.UploadData
 import com.example.lunimary.models.source.remote.repository.FileRepository
 import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.ui.edit.FLY_UPLOAD_FILE
 
 class InformationViewModel : BaseViewModel() {
     private val fileRepository = FileRepository()

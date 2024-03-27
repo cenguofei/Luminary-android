@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.request
 import com.example.lunimary.models.Article
-import com.example.lunimary.models.User
-import com.example.lunimary.models.ext.UserFriend
 import com.example.lunimary.models.source.remote.repository.ArticleRepository
 import com.example.lunimary.models.source.remote.repository.ArticlesOfUserLikeRepository
 import com.example.lunimary.models.source.remote.repository.UserDetailRepository

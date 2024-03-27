@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +37,7 @@ import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.ext.FollowersInfo
 import com.example.lunimary.network.NetworkResult
+import com.example.lunimary.ui.common.signatures
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -150,6 +149,3 @@ fun FollowerItem(
         }
     }
 }
-
-val NormalContainerColor = Color(243, 243, 243)
-

@@ -8,7 +8,6 @@ import com.example.lunimary.models.source.remote.SearchSource
 import com.example.lunimary.models.source.remote.impl.SearchSourceImpl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 
 class SearchRepository : BaseRepository by BaseRepository() {
     private val source: SearchSource = SearchSourceImpl()

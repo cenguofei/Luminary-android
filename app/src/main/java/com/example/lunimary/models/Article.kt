@@ -12,7 +12,6 @@ import com.example.lunimary.util.Default
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import kotlinx.android.parcel.Parcelize
-import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset

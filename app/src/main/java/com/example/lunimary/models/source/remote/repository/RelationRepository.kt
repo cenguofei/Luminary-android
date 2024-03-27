@@ -1,7 +1,6 @@
 package com.example.lunimary.models.source.remote.repository
 
 import com.example.lunimary.base.BaseRepository
-import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowInfo
 import com.example.lunimary.models.ext.FollowersInfo
 import com.example.lunimary.models.ext.UserFriend

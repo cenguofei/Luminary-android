@@ -7,7 +7,6 @@ import com.example.lunimary.models.ktor.addQueryParam
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.models.source.remote.SearchSource
-import com.example.lunimary.util.pageArticlesPath
 import com.example.lunimary.util.searchArticlePath
 import com.example.lunimary.util.searchUserPath
 import io.ktor.client.request.get

@@ -5,7 +5,6 @@ import com.example.lunimary.models.ktor.addPagesParam
 import com.example.lunimary.models.ktor.init
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.models.source.remote.PageSource
-import com.example.lunimary.models.source.remote.impl.BaseSourceImpl
 import com.example.lunimary.util.pageArticlesPath
 import io.ktor.client.request.get
 import kotlinx.coroutines.Dispatchers
