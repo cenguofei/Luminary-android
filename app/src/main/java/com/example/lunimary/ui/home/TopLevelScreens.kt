@@ -74,7 +74,7 @@ fun TopLevelScreens(appState: LunimaryAppState, destination: TopLevelDestination
                             isLogout = { appState.navToLogin() }
                         )
                     },
-                    onSearchClick = {},
+                    onSearchClick = { appState.navToSearch() },
                     appState = appState,
                     onLoginClick = {
                         appState.navToLogin()

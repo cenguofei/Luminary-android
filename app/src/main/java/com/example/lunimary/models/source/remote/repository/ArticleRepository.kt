@@ -30,4 +30,7 @@ class ArticleRepository : BaseRepository by BaseRepository(), ArticleSource {
 
     override suspend fun privacyArticles(userId: Long): DataResponse<List<Article>> =
         withDispatcher { articleSource.privacyArticles(userId) }
+
+    override suspend fun whenBrowseArticle(articleId: Long): DataResponse<Boolean> =
+        withDispatcher { articleSource.whenBrowseArticle(articleId) }
 }

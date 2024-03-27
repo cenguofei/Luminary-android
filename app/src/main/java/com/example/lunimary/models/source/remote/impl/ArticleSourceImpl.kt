@@ -20,6 +20,7 @@ import com.example.lunimary.util.pageFriendsArticlesPath
 import com.example.lunimary.util.privacyArticlesOfUserPath
 import com.example.lunimary.util.publicArticlesOfUserPath
 import com.example.lunimary.util.updateArticleByIdPath
+import com.example.lunimary.util.whenBrowseArticlePath
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 
@@ -63,6 +64,12 @@ class ArticleSourceImpl: BaseSourceImpl by BaseSourceImpl(), ArticleSource {
     override suspend fun privacyArticles(userId: Long): DataResponse<List<Article>> {
         return client.get(urlString = privacyArticlesOfUserPath) {
             addPathParam(currentUser.id)
+        }.init()
+    }
+
+    override suspend fun whenBrowseArticle(articleId: Long): DataResponse<Boolean> {
+        return client.get(urlString = whenBrowseArticlePath) {
+            addPathParam(articleId)
         }.init()
     }
 }

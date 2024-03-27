@@ -60,6 +60,8 @@ fun <T : Any> LunimaryPagingScreen(
     coroutine: CoroutineScope = rememberCoroutineScope(),
     color: Color = Color.Transparent,
     checkLoginState: Boolean = false,
+    searchEmptyEnabled: Boolean = false,
+    shimmer: Boolean = true,
     items: LazyPagingItems<T>,
     key: ((index: Int) -> Any)? = null,
     itemContent: @Composable (T) -> Unit
@@ -69,7 +71,7 @@ fun <T : Any> LunimaryPagingScreen(
     val showErrorMsg = if (loadState.refresh is LoadState.Error) {
         (loadState.refresh as LoadState.Error).error.message
     } else stringResource(id = R.string.load_error_and_retry)
-    val showShimmer = loadState.refresh is LoadState.Loading
+    val showShimmer = if (shimmer) loadState.refresh is LoadState.Loading else false
     val showEmpty = loadState.refresh is LoadState.NotLoading && items.isEmpty()
     LunimaryScreen(
         modifier = modifier,
@@ -80,6 +82,7 @@ fun <T : Any> LunimaryPagingScreen(
         networkError = networkError && items.isEmpty(),
         noMessage = noMessage,
         shimmer = showShimmer,
+        searchEmpty = if (searchEmptyEnabled) showEmpty else false,
         snackbarData = snackbarData,
         openLoadingWheelDialog = openLoadingWheelDialog,
         coroutine = coroutine,

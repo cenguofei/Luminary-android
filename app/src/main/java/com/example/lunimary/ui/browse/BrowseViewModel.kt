@@ -11,6 +11,7 @@ import com.example.lunimary.models.Article
 import com.example.lunimary.models.Comment
 import com.example.lunimary.models.User
 import com.example.lunimary.models.responses.CombinedCommentMessage
+import com.example.lunimary.models.source.remote.repository.ArticleRepository
 import com.example.lunimary.models.source.remote.repository.CollectRepository
 import com.example.lunimary.models.source.remote.repository.CommentRepository
 import com.example.lunimary.models.source.remote.repository.FriendRepository
@@ -24,6 +25,7 @@ class BrowseViewModel : BaseViewModel() {
     private val friendRepository = FriendRepository()
     private val likeRepository = LikeRepository()
     private val collectRepository = CollectRepository()
+    private val articleRepository =ArticleRepository()
     private val commentRepository by lazy { CommentRepository() }
 
     private var hasSetArticle = false
@@ -36,6 +38,11 @@ class BrowseViewModel : BaseViewModel() {
         existsLike(article.id)
         fetchStar(article.id)
         getAllCommentsOfArticle(article.id)
+        whenBroseArticle(article.id)
+    }
+
+    private fun whenBroseArticle(articleId: Long) {
+        request { articleRepository.whenBrowseArticle(articleId) }
     }
 
     private fun existingFriendship(whoId: Long) {

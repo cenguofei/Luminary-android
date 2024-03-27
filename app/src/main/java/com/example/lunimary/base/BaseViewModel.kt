@@ -24,10 +24,10 @@ open class BaseViewModel : ViewModel() {
 }
 
 fun <T> ViewModel.request(
-    block: suspend () -> BaseResponse<T>,
     onSuccess: (data:T?, msg: String?) -> Unit = { _, _ -> },
     onFailed: (msg: String) -> Unit = {},
-    onFinish: () -> Unit = {}
+    onFinish: () -> Unit = {},
+    block: suspend () -> BaseResponse<T>
 ): Job {
     return viewModelScope.launch {
         runCatching {

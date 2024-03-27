@@ -7,17 +7,17 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.models.Article
-import com.example.lunimary.models.source.remote.paging.ArticlePagingSource
+import com.example.lunimary.models.source.remote.paging.AppPagingSource
 import com.example.lunimary.models.source.remote.paging.FriendsPageArticles
 import com.example.lunimary.models.source.remote.paging.RecommendPageArticles
 import kotlinx.coroutines.flow.Flow
 
 class RecommendViewModel : BaseViewModel() {
     val recommendArticles: Flow<PagingData<Article>> = Pager(PagingConfig(pageSize = 5)) {
-        ArticlePagingSource(RecommendPageArticles())
+        AppPagingSource(RecommendPageArticles())
     }.flow.cachedIn(viewModelScope)
 
     val friendsArticles: Flow<PagingData<Article>> = Pager(PagingConfig(pageSize = 5)) {
-        ArticlePagingSource(FriendsPageArticles())
+        AppPagingSource(FriendsPageArticles())
     }.flow.cachedIn(viewModelScope)
 }

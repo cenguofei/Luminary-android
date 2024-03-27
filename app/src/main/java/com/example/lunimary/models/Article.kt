@@ -1,6 +1,8 @@
 package com.example.lunimary.models
 
+import android.os.Build
 import android.os.Parcelable
+import androidx.annotation.RequiresApi
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -8,7 +10,15 @@ import androidx.room.PrimaryKey
 import com.example.lunimary.base.niceDateToDay
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.empty
+import com.example.lunimary.util.logd
 import kotlinx.android.parcel.Parcelize
+import java.sql.Timestamp
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+import java.util.Calendar
+import kotlin.math.abs
 
 @Entity
 @kotlinx.serialization.Serializable
@@ -28,9 +38,6 @@ data class Article(
 
     val body: String = empty, // content
 
-    /**
-     * ���¿ɼ���Χ
-     */
     @ColumnInfo(name = "visible_mode") val visibleMode: VisibleMode = VisibleMode.PUBLIC,
 
     val tags: Array<String> = emptyArray(),
@@ -41,9 +48,6 @@ data class Article(
 
     val comments: Int = Int.Default,
 
-    /**
-     * �������
-     */
     @ColumnInfo(name = "views_num") val viewsNum: Int = Int.Default,
 
     val cover: String = empty,
@@ -57,13 +61,7 @@ data class Article(
     val reallyCoverUrl: String get() = fileBaseUrl + cover
 
 
-    /**
-     * ���·����˶�����
-     */
-    val daysFromToday: Int
-        get() {
-            return Int.Default
-        }
+    val daysFromToday: Long get() = getDaysSinceTimestamp(timestamp)
 
     /**
      * format of publishTime
@@ -118,15 +116,57 @@ data class Article(
     }
 }
 
-
-//@RequiresApi(Build.VERSION_CODES.O)
-//val formatterToSeconds: DateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")
-
-
 enum class VisibleMode {
     OWN,
     PUBLIC,
     FRIEND
+}
+
+fun getDaysSinceTimestamp(timestamp: Long): Long {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        getDaysSinceTimestampApi26(timestamp)
+    } else {
+        getDaysSinceTimestampLessApi26(timestamp)
+    }.also {
+        "days=$it, less api 26=${getDaysSinceTimestampLessApi26(timestamp)}".logd("getDaysSinceTimestamp")
+    }
+}
+
+/**
+ * 将日期和时间分开处理，忽略了时间部分的差异，因此仅计算日期的差异
+ */
+@RequiresApi(Build.VERSION_CODES.O)
+private fun getDaysSinceTimestampApi26(timestamp: Long): Long {
+    val currentDate = LocalDate.now()
+    val dateFromTimestamp = LocalDateTime.ofEpochSecond(timestamp / 1000, 0, ZoneOffset.UTC).toLocalDate()
+
+    val diffInDays = ChronoUnit.DAYS.between(dateFromTimestamp, currentDate)
+    return abs(diffInDays)
+}
+
+/**
+ * 在计算天数差异时，考虑了日期和时间的完整差异
+ */
+private fun getDaysSinceTimestampLessApi26(timestamp: Long): Long {
+    val currentDate = Calendar.getInstance()
+    val dateFromTimestamp = Calendar.getInstance().apply {
+        timeInMillis = timestamp
+    }
+
+    // 将日期设置为该天的开始时间，以忽略时间部分的差异
+    currentDate.set(Calendar.HOUR_OF_DAY, 0)
+    currentDate.set(Calendar.MINUTE, 0)
+    currentDate.set(Calendar.SECOND, 0)
+    currentDate.set(Calendar.MILLISECOND, 0)
+
+    dateFromTimestamp.set(Calendar.HOUR_OF_DAY, 0)
+    dateFromTimestamp.set(Calendar.MINUTE, 0)
+    dateFromTimestamp.set(Calendar.SECOND, 0)
+    dateFromTimestamp.set(Calendar.MILLISECOND, 0)
+
+    val diffInMillis = currentDate.timeInMillis - dateFromTimestamp.timeInMillis
+
+    return diffInMillis / (24 * 60 * 60 * 1000)
 }
 
 val testArticle = Article(

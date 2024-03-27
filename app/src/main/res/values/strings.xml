@@ -101,4 +101,7 @@
     <string name="unknown">未知</string>
     <string name="male">男</string>
     <string name="female">女</string>
+    <string name="search">搜索</string>
+    <string name="search_article">搜索文章</string>
+    <string name="search_user">搜索用户</string>
 </resources>

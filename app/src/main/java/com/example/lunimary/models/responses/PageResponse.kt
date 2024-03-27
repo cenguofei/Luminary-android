@@ -24,9 +24,9 @@ data class Page<T>(
     val pageSize: Long = 0,
 
     /**
-     * 数据库中文章的数量
+     * 数据总量
      */
-    val totalArticle: Long = 0,
+    val total: Long = 0,
 
     val lists: List<T>
 )

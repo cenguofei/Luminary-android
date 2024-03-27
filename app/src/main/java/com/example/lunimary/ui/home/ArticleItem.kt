@@ -119,7 +119,9 @@ fun AboutTheArticle(
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
-        ArticleSingleAmount(text = "${article.daysFromToday}天前")
+        val daysFromToday = article.daysFromToday
+        val time = if (daysFromToday > 20) article.niceDate else daysFromToday
+        ArticleSingleAmount(text = "${time}${if (daysFromToday < 20) "天前" else "" }")
     }
 }
 
