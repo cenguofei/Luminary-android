@@ -16,14 +16,14 @@ class UserDetailRepository : BaseRepository by BaseRepository(), UserDetailSourc
     private val userDetailSource: UserDetailSource = UserDetailSourceImpl()
     private val collectSource: CollectedArticlesOfUser = CollectedArticlesOfUserImpl()
 
-    override suspend fun likesOfUser(): DataResponse<Long> =
-        withDispatcher { userDetailSource.likesOfUser() }
+    override suspend fun likesOfUser(userId: Long): DataResponse<Long> =
+        withDispatcher { userDetailSource.likesOfUser(userId) }
 
-    override suspend fun followings(): RelationResponse<FollowInfo> =
-        withDispatcher { userDetailSource.followings() }
+    override suspend fun followings(userId: Long): RelationResponse<FollowInfo> =
+        withDispatcher { userDetailSource.followings(userId = userId) }
 
-    override suspend fun followers(): RelationResponse<FollowersInfo> =
-        withDispatcher { userDetailSource.followers() }
+    override suspend fun followers(userId: Long): RelationResponse<FollowersInfo> =
+        withDispatcher { userDetailSource.followers(userId = userId) }
 
     override suspend fun collectsOfUser(userId: Long): DataResponse<List<Article>> =
         withDispatcher { collectSource.collectsOfUser(userId) }

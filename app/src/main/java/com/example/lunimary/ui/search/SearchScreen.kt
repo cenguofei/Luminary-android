@@ -143,7 +143,8 @@ fun SearchScreen(
                     searchViewModel.onSearchTypeChanged(SearchType.User)
                     UserPage(
                         isOffline = isOffline,
-                        userItems = userItems
+                        userItems = userItems,
+                        onItemClick = { u -> appState.navToViewUser(u) }
                     )
                 }
             }

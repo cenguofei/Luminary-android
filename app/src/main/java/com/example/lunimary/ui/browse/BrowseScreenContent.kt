@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.base.DarkThemeSetting
 import com.example.lunimary.base.SettingMMKV
+import com.example.lunimary.models.User
+import com.example.lunimary.models.checkUserNotNone
 import com.example.lunimary.network.NetworkResult
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -40,7 +42,8 @@ fun BrowseScreenContent(
     onUnfollowClick: () -> Unit,
     browseViewModel: BrowseViewModel,
     onEditCommentClick: () -> Unit,
-    onLinkClick: (String) -> Unit
+    onLinkClick: (String) -> Unit,
+    onUserClick: (User) -> Unit
 ) {
     val uiState by browseViewModel.uiState.observeAsState()
     val listState = rememberLazyListState()
@@ -52,7 +55,8 @@ fun BrowseScreenContent(
             onUnfollowClick = onUnfollowClick,
             listState = listState,
             uiState = uiState!!,
-            browseViewModel = browseViewModel
+            browseViewModel = browseViewModel,
+            onUserClick = onUserClick
         )
         LazyColumn(
             modifier = Modifier
@@ -67,7 +71,12 @@ fun BrowseScreenContent(
                     uiState = uiState!!,
                     onUnfollowClick = onUnfollowClick,
                     onFollowClick = onFollowClick,
-                    browseViewModel = browseViewModel
+                    browseViewModel = browseViewModel,
+                    onUserClick = {
+                        checkUserNotNone {
+                            onUserClick(browseViewModel.articleOwner.value)
+                        }
+                    }
                 )
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }

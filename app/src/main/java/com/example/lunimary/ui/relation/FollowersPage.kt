@@ -14,11 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.LunimaryScreen
+import com.example.lunimary.models.User
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.network.isCurrentlyConnected
 
 @Composable
-fun FollowersPage(relationViewModel: RelationViewModel) {
+fun FollowersPage(
+    relationViewModel: RelationViewModel,
+    onItemClick: (User) -> Unit
+) {
     LunimaryScreen(
         networkResult = relationViewModel.followers.value,
         networkError = !LocalContext.current.isCurrentlyConnected()
@@ -43,7 +47,8 @@ fun FollowersPage(relationViewModel: RelationViewModel) {
                     state = state,
                     onCancelFollowClick = {
                         relationViewModel.onUnfollowClick(it.follower.id, state = state)
-                    }
+                    },
+                    onItemClick = onItemClick
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }

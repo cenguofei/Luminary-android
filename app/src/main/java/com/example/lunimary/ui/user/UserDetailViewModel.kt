@@ -131,7 +131,7 @@ class UserDetailViewModel : BaseViewModel() {
         fly(FLY_LIKES_OF_USER_ARTICLES) {
             request(
                 block = {
-                    repository.likesOfUser()
+                    repository.likesOfUser(currentUser.id)
                 },
                 onSuccess = { data, _ ->
                     if (data != null) {
@@ -149,7 +149,7 @@ class UserDetailViewModel : BaseViewModel() {
         fly(FLY_FOLLOWINGS) {
             request(
                 block = {
-                    repository.followings()
+                    repository.followings(currentUser.id)
                 },
                 onSuccess = { data, _ ->
                     data?.let {
@@ -165,7 +165,7 @@ class UserDetailViewModel : BaseViewModel() {
         fly(FLY_FOLLOWERS) {
             request(
                 block = {
-                    repository.followers()
+                    repository.followers(currentUser.id)
                 },
                 onSuccess = { data, _ ->
                     data?.let {

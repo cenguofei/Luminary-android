@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.user
+package com.example.lunimary.ui.viewuser
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,25 +22,18 @@ import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 
 @Composable
-fun UserDetailContent(
+fun ViewUserDetailContent(
     modifier: Modifier,
     user: User,
-    userDetailViewModel: UserDetailViewModel,
-    onDraftClick: () -> Unit,
+    viewModel: ViewUserViewModel,
     appState: LunimaryAppState,
-    onRelationClick: (UserDataType) -> Unit,
-    onClick: () -> Unit
 ) {
-    val uiState = userDetailViewModel.uiState.observeAsState()
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(top = 120.dp)
     ) {
-        UserInformation(
-            user = user,
-            onClick = onClick
-        )
+        ViewUserInformation(user = user)
         Spacer(modifier = Modifier.height(12.dp))
         Surface(
             modifier = Modifier
@@ -48,36 +41,30 @@ fun UserDetailContent(
                 .fillMaxSize(),
             shape = RoundedCornerShape(topStartPercent = 8, topEndPercent = 8),
         ) {
-            RoundedCornerContent(
-                uiState = uiState,
-                userDetailViewModel = userDetailViewModel,
-                onDraftClick = onDraftClick,
-                onItemClick = { appState.navToBrowse(it) },
-                onRelationClick = onRelationClick
+            ViewUserRoundedCornerContent(
+                viewModel = viewModel,
+                onItemClick = { appState.navToBrowse(it) }
             )
         }
     }
 }
 
 @Composable
-fun UserInformation(
-    user: User,
-    onClick: () -> Unit
+fun ViewUserInformation(
+    user: User
 ) {
     Row(
         modifier = Modifier.padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        UserHeadImage(model = user.realHeadUrl(), onClick = onClick)
+        UserHeadImage(model = user.realHeadUrl())
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            TextButton(onClick = onClick) {
-                Text(
-                    text = user.username,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
+            Text(
+                text = user.username,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleMedium
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "ID:${user.id + 5201314L}",

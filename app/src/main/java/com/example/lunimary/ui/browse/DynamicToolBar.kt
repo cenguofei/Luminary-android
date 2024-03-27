@@ -50,6 +50,7 @@ fun DynamicToolBar(
     onUnfollowClick: () -> Unit,
     uiState: UiState,
     browseViewModel: BrowseViewModel,
+    onUserClick: (User) -> Unit
 ) {
     val firstVisibleIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val alphaAnim = animateFloatAsState(
@@ -84,7 +85,8 @@ fun DynamicToolBar(
             ) {
                 UserHeadImage(
                     model = browseViewModel.articleOwner.value.realHeadUrl().notNull,
-                    size = 40.dp
+                    size = 40.dp,
+                    onClick = { onUserClick(browseViewModel.articleOwner.value) }
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 FollowOrUnfollow(

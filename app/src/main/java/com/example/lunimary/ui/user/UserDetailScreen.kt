@@ -15,9 +15,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.lunimary.R
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.common.RelationPageType
 import com.example.lunimary.util.currentUser
@@ -62,7 +64,7 @@ fun UserDetailScreen(
                     UserDataType.Likes -> { }
                 }
             },
-            onUsernameClick = { appState.navToInformation() }
+            onClick = { appState.navToInformation() }
         )
     }
 }
@@ -78,7 +80,10 @@ fun UserBackground(modifier: Modifier) {
             model = currentUser.realBackgroundUrl(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            placeholder = painterResource(id = R.drawable.user_background),
+            error = painterResource(id = R.drawable.user_background),
+            fallback = painterResource(id = R.drawable.user_background)
         )
     }
 }

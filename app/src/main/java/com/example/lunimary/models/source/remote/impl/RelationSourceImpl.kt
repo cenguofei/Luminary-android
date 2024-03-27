@@ -15,20 +15,26 @@ import com.example.lunimary.util.myFollowingsPath
 import io.ktor.client.request.get
 
 class RelationSourceImpl : BaseSourceImpl by BaseSourceImpl(), RelationSource {
-    override suspend fun followings(onlyNum: Boolean): RelationResponse<FollowInfo> {
+    override suspend fun followings(
+        onlyNum: Boolean,
+        userId: Long
+    ): RelationResponse<FollowInfo> {
         return client.get(
             urlString = myFollowingsPath,
         ) {
-            addPathParam(currentUser.id)
+            addPathParam(userId)
             addQueryParam("onlyNum", onlyNum)
         }.init()
     }
 
-    override suspend fun followers(onlyNum: Boolean): RelationResponse<FollowersInfo> {
+    override suspend fun followers(
+        onlyNum: Boolean,
+        userId: Long
+    ): RelationResponse<FollowersInfo> {
         return client.get(
             urlString = myFollowersPath
         ) {
-            addPathParam(currentUser.id)
+            addPathParam(userId)
             addQueryParam("onlyNum", onlyNum)
         }.init()
     }

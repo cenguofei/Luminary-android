@@ -20,6 +20,7 @@ import androidx.navigation.navOptions
 import com.example.lunimary.base.DarkThemeSetting
 import com.example.lunimary.base.SettingMMKV
 import com.example.lunimary.models.Article
+import com.example.lunimary.models.User
 import com.example.lunimary.network.NetworkMonitor
 import com.example.lunimary.network.NetworkMonitorImpl
 import com.example.lunimary.ui.common.ArticleNavArguments
@@ -29,8 +30,10 @@ import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
 import com.example.lunimary.ui.common.RelationPageType
 import com.example.lunimary.ui.common.UrlNavArguments
 import com.example.lunimary.ui.common.WEB_VIEW_URL_KEY
+import com.example.lunimary.ui.common.setNavViewUser
 import com.example.lunimary.ui.common.setRelationPage
 import com.example.lunimary.ui.login.UserViewModel
+import com.example.lunimary.util.currentUser
 import com.google.accompanist.systemuicontroller.SystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -154,6 +157,17 @@ class LunimaryAppState(
 
     fun navToInformation() { navController.navToInformation() }
     fun navToSearch() { navController.navToSearch() }
+
+    fun navToViewUser(user: User) { navController.navToViewUser(user) }
+}
+
+private fun NavController.navToViewUser(user: User) {
+    if (user.id == currentUser.id) {
+        navToUser()
+        return
+    }
+    setNavViewUser(user)
+    navigate(Screens.ViewUser.route)
 }
 
 private fun NavController.navToSearch() {

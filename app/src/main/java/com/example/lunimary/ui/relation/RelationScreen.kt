@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.RelationPageType
@@ -36,7 +37,8 @@ fun NavGraphBuilder.relationScreen(appState: LunimaryAppState) {
         RelationScreen(
             pageType = pageType,
             onBack = appState::popBackStack,
-            relationViewModel = relationViewModel
+            relationViewModel = relationViewModel,
+            onItemClick = { appState.navToViewUser(it) }
         )
     }
 }
@@ -47,6 +49,7 @@ fun RelationScreen(
     pageType: RelationPageType,
     onBack: () -> Unit,
     relationViewModel: RelationViewModel,
+    onItemClick: (User) -> Unit
 ) {
     val tabs = remember {
         listOf(
@@ -82,18 +85,21 @@ fun RelationScreen(
                 RelationPageType.Friends -> {
                     FriendsPage(
                         relationViewModel = relationViewModel,
+                        onItemClick = onItemClick
                     )
                 }
 
                 RelationPageType.Follow -> {
                     FollowPage(
                         relationViewModel = relationViewModel,
+                        onItemClick = onItemClick
                     )
                 }
 
                 RelationPageType.Followers -> {
                     FollowersPage(
                         relationViewModel = relationViewModel,
+                        onItemClick = onItemClick
                     )
                 }
             }

@@ -7,14 +7,16 @@ import com.example.lunimary.models.responses.RelationResponse
 
 interface RelationSource {
     suspend fun followings(
-        onlyNum: Boolean = true
+        onlyNum: Boolean = true,
+        userId: Long
     ): RelationResponse<FollowInfo>
 
     suspend fun followers(
-        onlyNum: Boolean = true
+        onlyNum: Boolean = true,
+        userId: Long
     ): RelationResponse<FollowersInfo>
 
     suspend fun mutualFollowUsers(
-        onlyNum: Boolean = true
+        onlyNum: Boolean = true,
     ): RelationResponse<UserFriend>
 }

@@ -10,7 +10,8 @@ enum class Screens(val route: String) {
     WebView(WEB_VIEW_ROOT),
     BrowseArticle(BROWSE_ARTICLE_ROOT),
     Relation("relation"),
-    Information("user/information")
+    Information("user/information"),
+    ViewUser("view_user")
 }
 
 const val LOGIN_ROOT = "login"

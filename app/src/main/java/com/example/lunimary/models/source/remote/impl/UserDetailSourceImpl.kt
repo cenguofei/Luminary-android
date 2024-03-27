@@ -15,15 +15,15 @@ import io.ktor.client.request.get
 
 class UserDetailSourceImpl: BaseSourceImpl by BaseSourceImpl(),  UserDetailSource {
     private val delegate: RelationSource = RelationSourceImpl()
-    override suspend fun likesOfUser(): DataResponse<Long> {
+    override suspend fun likesOfUser(userId: Long): DataResponse<Long> {
         return client.get(urlString = likesOfUserPath) {
-            addPathParam(currentUser.id)
+            addPathParam(userId)
         }.init()
     }
 
-    override suspend fun followings(): RelationResponse<FollowInfo> = delegate.followings()
+    override suspend fun followings(userId: Long): RelationResponse<FollowInfo> = delegate.followings(userId = userId)
 
-    override suspend fun followers(): RelationResponse<FollowersInfo> = delegate.followers()
+    override suspend fun followers(userId: Long): RelationResponse<FollowersInfo> = delegate.followers(userId = userId)
 
     override suspend fun mutualFollowUsers(): RelationResponse<UserFriend> = delegate.mutualFollowUsers()
 }

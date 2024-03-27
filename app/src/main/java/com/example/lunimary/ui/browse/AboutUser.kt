@@ -26,13 +26,18 @@ fun AboutUser(
     onFollowClick: () -> Unit,
     onUnfollowClick: () -> Unit,
     uiState: UiState,
-    browseViewModel: BrowseViewModel
+    browseViewModel: BrowseViewModel,
+    onUserClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        UserHeadImage(model = browseViewModel.articleOwner.value.realHeadUrl(), size = 55.dp)
+        UserHeadImage(
+            model = browseViewModel.articleOwner.value.realHeadUrl(),
+            size = 55.dp,
+            onClick = onUserClick
+        )
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(

@@ -7,11 +7,11 @@ import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.RelationResponse
 
 interface UserDetailSource {
-    suspend fun likesOfUser(): DataResponse<Long>
+    suspend fun likesOfUser(userId: Long): DataResponse<Long>
 
-    suspend fun followings(): RelationResponse<FollowInfo>
+    suspend fun followings(userId: Long): RelationResponse<FollowInfo>
 
-    suspend fun followers(): RelationResponse<FollowersInfo>
+    suspend fun followers(userId: Long): RelationResponse<FollowersInfo>
 
     suspend fun mutualFollowUsers(): RelationResponse<UserFriend>
 }

@@ -1,5 +1,7 @@
 package com.example.lunimary.ui.common
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -27,10 +30,19 @@ import com.example.lunimary.models.User
 @Composable
 fun UserItem(
     user: User,
-    onMoreClick: () -> Unit = {}
+    clickEnabled: Boolean = true,
+    onMoreClick: () -> Unit = {},
+    onItemClick: (User) -> Unit = {}
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = androidx.compose.material.ripple.rememberRipple(),
+                enabled = clickEnabled,
+                onClick = { onItemClick(user) }
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         UserHeadImage(model = user.realHeadUrl(), size = 50.dp)
@@ -65,4 +77,12 @@ fun UserItem(
     }
 }
 
-val signatures = listOf("每天都要开心", "世界很大，我要去走走", "我真的栓q", "夜未央，天微亮","又是一个安静的晚上","炊烟袅袅升起","如传世的青花瓷，自顾自美丽，你眼带笑意")
+val signatures = listOf(
+    "每天都要开心",
+    "世界很大，我要去走走",
+    "我真的栓q",
+    "夜未央，天微亮",
+    "又是一个安静的晚上",
+    "炊烟袅袅升起",
+    "如传世的青花瓷，自顾自美丽，你眼带笑意"
+)

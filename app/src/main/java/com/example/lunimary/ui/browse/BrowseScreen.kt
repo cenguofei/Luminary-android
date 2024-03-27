@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.ArticleNavArguments
@@ -33,7 +34,8 @@ fun NavGraphBuilder.browseScreen(
         BrowseScreen(
             onBack = appState::popBackStack,
             browseViewModel = browseViewModel,
-            onLinkClick = { appState.navToWeb(it) }
+            onLinkClick = appState::navToWeb,
+            onUserClick = appState::navToViewUser
         )
     }
 }
@@ -42,7 +44,8 @@ fun NavGraphBuilder.browseScreen(
 fun BrowseScreen(
     onBack: () -> Unit,
     browseViewModel: BrowseViewModel,
-    onLinkClick: (String) -> Unit
+    onLinkClick: (String) -> Unit,
+    onUserClick: (User) -> Unit
 ) {
     val showEditContent = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -52,7 +55,8 @@ fun BrowseScreen(
             onFollowClick = browseViewModel::onFollowClick,
             onUnfollowClick = browseViewModel::onUnfollowClick,
             onEditCommentClick = { showEditContent.value = true },
-            onLinkClick = onLinkClick
+            onLinkClick = onLinkClick,
+            onUserClick = onUserClick
         )
         val commentText = remember { mutableStateOf(empty) }
         if (showEditContent.value) {

@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun UserPage(
     isOffline: StateFlow<Boolean>,
-    userItems: LazyPagingItems<User>
+    userItems: LazyPagingItems<User>,
+    onItemClick: (User) -> Unit
 ) {
     val offline = isOffline.collectAsStateWithLifecycle()
     LunimaryPagingScreen(
@@ -21,6 +22,9 @@ fun UserPage(
         shimmer = false,
         searchEmptyEnabled = true
     ) {
-        UserItem(user = it)
+        UserItem(
+            user = it,
+            onItemClick = onItemClick
+        )
     }
 }

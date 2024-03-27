@@ -1,6 +1,8 @@
 package com.example.lunimary.ui.relation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +37,7 @@ import com.example.lunimary.R
 import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
+import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowersInfo
 import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.ui.common.signatures
@@ -46,12 +49,21 @@ fun FollowerItem(
     onMoreClick: () -> Unit,
     onReturnFollowClick: () -> Unit,
     onCancelFollowClick: () -> Unit,
-    state: MutableState<NetworkResult<Unit>>
+    state: MutableState<NetworkResult<Unit>>,
+    clickEnabled: Boolean = true,
+    onItemClick: (User) -> Unit = {}
 ) {
     val followersInfoState = remember { mutableStateOf(followersInfo) }
     val user = followersInfoState.value.follower
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = androidx.compose.material.ripple.rememberRipple(),
+                enabled = clickEnabled,
+                onClick = { onItemClick(user) }
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         UserHeadImage(model = user.realHeadUrl(), size = 50.dp)

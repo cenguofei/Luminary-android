@@ -2,6 +2,7 @@ package com.example.lunimary.models
 
 import android.os.Parcelable
 import com.example.lunimary.util.currentUser
+import com.example.lunimary.util.logd
 import kotlinx.android.parcel.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -29,9 +30,11 @@ data class User(
     }
 }
 
-fun checkUserNotNone() {
-    check(currentUser != User.NONE) {
-        "The current user is NONE."
+fun checkUserNotNone(action: () -> Unit) {
+    if (currentUser != User.NONE) {
+        action()
+    } else {
+        "The current user is NONE.".logd()
     }
 }
 

@@ -21,6 +21,26 @@ fun UserHeadImage(
     modifier: Modifier = Modifier,
     size: Dp = 80.dp,
     model: Any?,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = modifier.size(size),
+        shape = RoundedCornerShape(50),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.primary
+        ),
+        onClick = onClick
+    ) {
+        HeadImage(model = model)
+    }
+}
+
+@Composable
+fun UserHeadImage(
+    modifier: Modifier = Modifier,
+    size: Dp = 80.dp,
+    model: Any?,
 ) {
     Surface(
         modifier = modifier.size(size),
@@ -30,14 +50,21 @@ fun UserHeadImage(
             color = MaterialTheme.colorScheme.primary
         )
     ) {
-        AsyncImage(
-            model = model,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(50)),
-            placeholder = painterResource(id = R.drawable.head),
-        )
+        HeadImage(model = model)
     }
+}
+
+@Composable
+private fun HeadImage(model: Any?, ) {
+    AsyncImage(
+        model = model,
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(50)),
+        placeholder = painterResource(id = R.drawable.head),
+        fallback = painterResource(id = R.drawable.head),
+        error = painterResource(id = R.drawable.head)
+    )
 }
