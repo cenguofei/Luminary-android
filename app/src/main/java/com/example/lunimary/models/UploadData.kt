@@ -1,7 +1,7 @@
 package com.example.lunimary.models
 
-import com.example.lunimary.models.ktor.HOST
-import com.example.lunimary.models.ktor.PORT
+import com.example.lunimary.base.ktor.HOST
+import com.example.lunimary.base.ktor.PORT
 import com.example.lunimary.util.fileDownloadPath
 
 @kotlinx.serialization.Serializable

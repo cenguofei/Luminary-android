@@ -31,8 +31,8 @@ import com.example.lunimary.R
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.models.fileBaseUrl
-import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.network.asError
+import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.network.asError
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine
 import github.leavesczy.matisse.Matisse

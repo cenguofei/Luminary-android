@@ -1,45 +1,34 @@
 package com.example.lunimary.ui.message
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.lunimary.design.LunimaryScreen
-import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.network.isCurrentlyConnected
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.lunimary.design.LunimaryPagingContent
+import java.util.UUID
 
 @Composable
 fun CommentMessagePage(messageViewModel: MessageViewModel) {
-    LaunchedEffect(
-        key1 = Unit,
-        block = { messageViewModel.messageForComments() }
-    )
-    val networkResult = messageViewModel.commentsMessage.value
-    LunimaryScreen(
-        networkResult = networkResult,
-        networkError = !LocalContext.current.isCurrentlyConnected()
+    val commentsMessage = messageViewModel.commentsMessage.collectAsLazyPagingItems()
+    LunimaryPagingContent(
+        items = commentsMessage,
+        key = { commentsMessage[it]?.comment?.id ?: UUID.randomUUID() },
+        topItem = { Spacer(modifier = Modifier.height(16.dp)) },
+        viewModel = messageViewModel,
+        pagingKey = "CommentMessagePage"
     ) {
-        LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-            when(networkResult) {
-                is NetworkResult.Success -> {
-                    item { Spacer(modifier = Modifier.height(16.dp)) }
-                    items(messageViewModel.transformCommentsData()) { item: ItemData ->
-                        CommentItem(
-                            user = item.user,
-                            article = item.article,
-                            comment = item.comment
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-                else -> {}
-            }
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            CommentItem(
+                user = it.user,
+                article = it.article,
+                comment = it.comment
+            )
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

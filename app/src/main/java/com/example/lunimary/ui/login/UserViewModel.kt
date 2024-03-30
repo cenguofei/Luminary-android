@@ -3,16 +3,17 @@ package com.example.lunimary.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.request
 import com.example.lunimary.models.responses.UserData
 import com.example.lunimary.models.source.remote.UserSource
 import com.example.lunimary.models.source.remote.repository.UserRepository
-import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.storage.refreshToken
-import com.example.lunimary.storage.removeSession
-import com.example.lunimary.storage.removeToken
-import com.example.lunimary.util.UserState
+import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.network.isCurrentlyConnected
+import com.example.lunimary.base.storage.refreshToken
+import com.example.lunimary.base.storage.removeSession
+import com.example.lunimary.base.storage.removeToken
+import com.example.lunimary.base.UserState
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.Dispatchers
@@ -35,21 +36,28 @@ class UserViewModel : BaseViewModel() {
         isLogin: () -> Unit = {},
         logout: () -> Unit = {}
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val deferred = async { userSource.checkIsLogin() }
-            val response = deferred.await()
-            "检查登录状态：response=${response.data.toString() + response.code + response.msg}".logd()
-            if (response.data?.isLogin == true) {
-                isLogin()
-            } else {
-                val deffer = async { refreshToken() }
-                val tokens = deffer.await()
-                if (tokens == null) {
-                    logout()
-                } else {
+        if (!LunimaryApplication.applicationContext.isCurrentlyConnected()) {
+            return
+        }
+        runCatching {
+            viewModelScope.launch(Dispatchers.IO) {
+                val deferred = async { userSource.checkIsLogin() }
+                val response = deferred.await()
+                "检查登录状态：response=${response.data.toString() + response.code + response.msg}".logd()
+                if (response.data?.isLogin == true) {
                     isLogin()
+                } else {
+                    val deffer = async { refreshToken() }
+                    val tokens = deffer.await()
+                    if (tokens == null) {
+                        logout()
+                    } else {
+                        isLogin()
+                    }
                 }
             }
+        }.onFailure {
+            it.printStackTrace()
         }
     }
 

@@ -1,18 +1,29 @@
 package com.example.lunimary.models.source.remote
 
-import com.example.lunimary.models.LikeMessageResponse
+import com.example.lunimary.models.LikeMessage
+import com.example.lunimary.models.ext.CommentItem
 import com.example.lunimary.models.ext.UserFriend
-import com.example.lunimary.models.responses.CombinedCommentMessage
-import com.example.lunimary.models.responses.DataResponse
-import com.example.lunimary.models.responses.MessageResponse
+import com.example.lunimary.models.responses.PageResponse
+import com.example.lunimary.models.source.remote.impl.MessageSourceImpl
 
 interface MessageSource {
     /**
      * need session and token.
      */
-    suspend fun messageForComments(): MessageResponse<CombinedCommentMessage>
+    suspend fun messageForComments(
+        curPage: Int,
+        perPageCount: Int
+    ): PageResponse<CommentItem>
 
-    suspend fun messageForLikes(): LikeMessageResponse
+    suspend fun messageForLikes(
+        curPage: Int,
+        perPageCount: Int
+    ): PageResponse<LikeMessage>
 
-    suspend fun messageForFollows(): DataResponse<List<UserFriend>>
+    suspend fun messageForFollows(
+        curPage: Int,
+        perPageCount: Int
+    ): PageResponse<UserFriend>
+
+    companion object : MessageSource by MessageSourceImpl()
 }

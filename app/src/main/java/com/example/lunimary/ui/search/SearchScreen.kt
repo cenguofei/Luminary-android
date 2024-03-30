@@ -36,7 +36,6 @@ import com.example.lunimary.R
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.util.empty
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.searchScreen(
@@ -46,7 +45,6 @@ fun NavGraphBuilder.searchScreen(
         SearchScreen(
             appState = appState,
             onBack = appState::popBackStack,
-            isOffline = appState.isOffline
         )
     }
 }
@@ -56,7 +54,6 @@ fun NavGraphBuilder.searchScreen(
 fun SearchScreen(
     appState: LunimaryAppState,
     onBack: () -> Unit,
-    isOffline: StateFlow<Boolean>
 ) {
     val tabs = listOf(SearchType.Article, SearchType.User)
     val pagerState = rememberPagerState(0) { tabs.size }
@@ -134,17 +131,17 @@ fun SearchScreen(
                 SearchType.Article -> {
                     searchViewModel.onSearchTypeChanged(SearchType.Article)
                     ArticlePage(
-                        isOffline = isOffline,
                         onItemClick = { a -> appState.navToBrowse(a) },
-                        articleItems = articleItems
+                        articleItems = articleItems,
+                        viewModel = searchViewModel
                     )
                 }
                 SearchType.User -> {
                     searchViewModel.onSearchTypeChanged(SearchType.User)
                     UserPage(
-                        isOffline = isOffline,
                         userItems = userItems,
-                        onItemClick = { u -> appState.navToViewUser(u) }
+                        onItemClick = { u -> appState.navToViewUser(u) },
+                        viewModel = searchViewModel
                     )
                 }
             }

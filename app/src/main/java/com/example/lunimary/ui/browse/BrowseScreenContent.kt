@@ -28,11 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
-import com.example.lunimary.base.DarkThemeSetting
-import com.example.lunimary.base.SettingMMKV
+import com.example.lunimary.base.mmkv.DarkThemeSetting
+import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.models.User
 import com.example.lunimary.models.checkUserNotNone
-import com.example.lunimary.network.NetworkResult
+import com.example.lunimary.base.network.NetworkResult
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
@@ -150,7 +150,7 @@ fun BrowseScreenContent(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.load_comments_error),
-                                color = Color.Red
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }

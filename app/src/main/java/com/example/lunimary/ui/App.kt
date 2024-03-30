@@ -20,16 +20,14 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
-import com.example.lunimary.LocalNavNavController
+import com.example.lunimary.design.LocalNavNavController
 import com.example.lunimary.R
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.SnackbarHostStateHolder
@@ -46,7 +44,7 @@ import com.example.lunimary.ui.user.draft.draftsScreen
 import com.example.lunimary.ui.user.information.informationScreen
 import com.example.lunimary.ui.viewuser.viewUserScreen
 import com.example.lunimary.ui.webview.webViewScreen
-import com.example.lunimary.util.UserState
+import com.example.lunimary.base.UserState
 import com.example.lunimary.util.logd
 import kotlinx.coroutines.launch
 
@@ -57,18 +55,17 @@ fun LunimaryApp(
     startScreen: TopLevelDestination,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+    val online = appState.userViewModel.online.observeAsState()
 
-    // If user is not connected to the internet show a snack bar to inform them.
-    val notConnectedMessage = stringResource(R.string.not_connected)
-    LaunchedEffect(isOffline) {
-        if (isOffline) {
+    val notConnectedMessage = stringResource(R.string.not_connected_no_retry)
+    LaunchedEffect(online.value) {
+        if (online.value == false) {
             snackbarHostState.showSnackbar(
                 message = notConnectedMessage,
-                duration = SnackbarDuration.Long,
+                duration = SnackbarDuration.Short,
             )
-            "notConnectedMessage=$notConnectedMessage".logd()
         }
+        "online=${online.value}".logd("App_is_off_line")
     }
     Scaffold(
         modifier = Modifier,

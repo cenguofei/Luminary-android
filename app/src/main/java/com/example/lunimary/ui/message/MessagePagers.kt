@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 fun MessagePagers(
     pagerState: PagerState,
     tabs: List<MessagePageType>,
-    messageViewModel: MessageViewModel
+    messageViewModel: MessageViewModel,
 ) {
     HorizontalPager(state = pagerState) { page ->
         when(tabs[page]) {

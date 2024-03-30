@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.local.LocalArticleRepository
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 import kotlinx.coroutines.launch
 
 class DraftsViewModel: BaseViewModel() {

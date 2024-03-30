@@ -1,26 +1,24 @@
 package com.example.lunimary.ui.search
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
-import com.example.lunimary.design.LunimaryPagingScreen
+import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
 import com.example.lunimary.ui.home.ArticleItem
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun ArticlePage(
-    isOffline: StateFlow<Boolean>,
     onItemClick: (Article) -> Unit,
     articleItems: LazyPagingItems<Article>,
+    viewModel: SearchViewModel,
 ) {
-    val offline = isOffline.collectAsStateWithLifecycle()
-    LunimaryPagingScreen(
+    LunimaryPagingContent(
         items = articleItems,
-        networkError = offline.value,
         key = { articleItems[it]?.id!! },
         shimmer = false,
-        searchEmptyEnabled = true
+        searchEmptyEnabled = true,
+        viewModel = viewModel,
+        pagingKey = "ArticlePage_SearchViewModel"
     ) {
         ArticleItem(onItemClick = onItemClick, article = it)
     }

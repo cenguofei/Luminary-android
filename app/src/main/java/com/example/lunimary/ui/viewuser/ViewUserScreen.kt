@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -24,10 +22,7 @@ import com.example.lunimary.design.BackButton
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
-import com.example.lunimary.ui.common.RelationPageType
 import com.example.lunimary.ui.common.getNavViewUser
-import com.example.lunimary.ui.user.UserBackground
-import com.example.lunimary.ui.user.UserDataType
 
 fun NavGraphBuilder.viewUserScreen(
     appState: LunimaryAppState

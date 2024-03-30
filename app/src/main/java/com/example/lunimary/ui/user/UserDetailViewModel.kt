@@ -3,19 +3,18 @@ package com.example.lunimary.ui.user
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.request
+import com.example.lunimary.base.pager.pagerFlow
 import com.example.lunimary.models.Article
-import com.example.lunimary.models.source.remote.repository.ArticleRepository
-import com.example.lunimary.models.source.remote.repository.ArticlesOfUserLikeRepository
+import com.example.lunimary.models.source.remote.paging.UserCollectedArticleSource
+import com.example.lunimary.models.source.remote.paging.UserLikedArticleSource
+import com.example.lunimary.models.source.remote.paging.UserPrivacyArticleSource
+import com.example.lunimary.models.source.remote.paging.UserPublicArticleSource
 import com.example.lunimary.models.source.remote.repository.UserDetailRepository
-import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.empty
 
 class UserDetailViewModel : BaseViewModel() {
     private val repository = UserDetailRepository()
-    private val articleRepository = ArticleRepository()
-    private val articlesOfUserLikeRepository = ArticlesOfUserLikeRepository()
 
     private val _uiState: MutableLiveData<UserUiState> = MutableLiveData(UserUiState())
     val uiState: LiveData<UserUiState> get() = _uiState
@@ -26,106 +25,13 @@ class UserDetailViewModel : BaseViewModel() {
         followings()
         mutualFollowUsers()
     }
+    val publicArticles = pagerFlow { UserPublicArticleSource(currentUser.id) }
 
-    private val _publicArticles: MutableLiveData<NetworkResult<List<Article>>> =
-        MutableLiveData(NetworkResult.None())
-    val publicArticles: LiveData<NetworkResult<List<Article>>> get() = _publicArticles
-    fun publicArticles() {
-        fly(FLY_PUBLIC_ARTICLES_OF_USER) {
-            request(
-                block = {
-                    _publicArticles.postValue(NetworkResult.Loading())
-                    articleRepository.publicArticles(currentUser.id)
-                },
-                onSuccess = { data, _ ->
-                    _publicArticles.postValue(NetworkResult.Success(data))
-                },
-                onFailed = {
-                    _publicArticles.postValue(NetworkResult.Error(it))
-                },
-                onFinish = {
-                    land(FLY_PUBLIC_ARTICLES_OF_USER)
-                }
-            )
-        }
-    }
+    val privacyArticles = pagerFlow { UserPrivacyArticleSource }
 
-    private val _privacyArticles: MutableLiveData<NetworkResult<List<Article>>> =
-        MutableLiveData(NetworkResult.None())
-    val privacyArticles: LiveData<NetworkResult<List<Article>>> get() = _privacyArticles
-    fun privacyArticles() {
-        fly(FLY_PRIVACY_ARTICLES_OF_USER) {
-            request(
-                block = {
-                    _privacyArticles.postValue(NetworkResult.Loading())
-                    articleRepository.privacyArticles(currentUser.id)
-                },
-                onSuccess = { data, _ ->
-                    _privacyArticles.postValue(NetworkResult.Success(data))
-                },
-                onFailed = {
-                    _privacyArticles.postValue(NetworkResult.Error(it))
-                },
-                onFinish = {
-                    land(FLY_PRIVACY_ARTICLES_OF_USER)
-                }
-            )
-        }
-    }
+    val collectsOfUser = pagerFlow { UserCollectedArticleSource }
 
-    private val _collectsOfUser: MutableLiveData<NetworkResult<List<Article>>> =
-        MutableLiveData(NetworkResult.None())
-    val collectsOfUser: LiveData<NetworkResult<List<Article>>> get() = _collectsOfUser
-    fun collectsOfUser() {
-        fly(FLY_COLLECTS_OF_USER) {
-            request(
-                block = {
-                    _collectsOfUser.postValue(NetworkResult.Loading())
-                    repository.collectsOfUser(currentUser.id)
-                },
-                onSuccess = { data, msg ->
-                    if (data.isNullOrEmpty()) {
-                        _collectsOfUser.postValue(NetworkResult.Empty(msg ?: empty))
-                    } else {
-                        _collectsOfUser.postValue(NetworkResult.Success(data))
-                    }
-                },
-                onFailed = {
-                    _collectsOfUser.postValue(NetworkResult.Error(it))
-                },
-                onFinish = {
-                    land(FLY_COLLECTS_OF_USER)
-                }
-            )
-        }
-    }
-
-    private val _likesOfUser: MutableLiveData<NetworkResult<List<Article>>> =
-        MutableLiveData(NetworkResult.None())
-    val likesOfUser: LiveData<NetworkResult<List<Article>>> get() = _likesOfUser
-    fun likesOfUser() {
-        fly(FLY_LIKES_OF_USER) {
-            request(
-                block = {
-                    _likesOfUser.postValue(NetworkResult.Loading())
-                    articlesOfUserLikeRepository.likesOfUser(currentUser.id)
-                },
-                onSuccess = { data, msg ->
-                    if (data.isNullOrEmpty()) {
-                        _likesOfUser.postValue(NetworkResult.Empty(msg ?: empty))
-                    } else {
-                        _likesOfUser.postValue(NetworkResult.Success(data))
-                    }
-                },
-                onFailed = {
-                    _likesOfUser.postValue(NetworkResult.Error(it))
-                },
-                onFinish = {
-                    land(FLY_LIKES_OF_USER)
-                }
-            )
-        }
-    }
+    val likesOfUser = pagerFlow { UserLikedArticleSource }
 
     private fun likesOfUserArticles() {
         fly(FLY_LIKES_OF_USER_ARTICLES) {

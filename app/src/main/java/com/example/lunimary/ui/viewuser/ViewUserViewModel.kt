@@ -3,45 +3,17 @@ package com.example.lunimary.ui.viewuser
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.request
-import com.example.lunimary.models.Article
+import com.example.lunimary.base.pager.pagerFlow
 import com.example.lunimary.models.User
-import com.example.lunimary.models.source.remote.repository.ArticleRepository
+import com.example.lunimary.models.source.remote.paging.UserPublicArticleSource
 import com.example.lunimary.models.source.remote.repository.UserDetailRepository
-import com.example.lunimary.network.NetworkResult
 
 class ViewUserViewModel : BaseViewModel() {
-    private val articleRepository = ArticleRepository()
     private val userDetailRepository = UserDetailRepository()
-
-    private val _userArticles: MutableLiveData<NetworkResult<List<Article>>> = MutableLiveData(NetworkResult.None())
-    val userArticles: LiveData<NetworkResult<List<Article>>> get() = _userArticles
 
     private val _uiState: MutableState<UiState> = mutableStateOf(UiState())
     val uiState: State<UiState> get() = _uiState
-
-    private fun publicArticles(userId: Long) {
-        fly(FLY_VIEW_USER_PUBLIC_ARTICLES) {
-            request(
-                block = {
-                    _userArticles.postValue(NetworkResult.Loading())
-                    articleRepository.publicArticles(userId)
-                },
-                onSuccess = { data, _ ->
-                    _userArticles.postValue(NetworkResult.Success(data))
-                },
-                onFailed = {
-                    _userArticles.postValue(NetworkResult.Error(it))
-                },
-                onFinish = {
-                    land(FLY_VIEW_USER_PUBLIC_ARTICLES)
-                }
-            )
-        }
-    }
 
     private fun likesOfUserArticles(userId: Long) {
         fly(FLY_VIEW_USER_LIKES_OF_ARTICLES) {
@@ -95,10 +67,12 @@ class ViewUserViewModel : BaseViewModel() {
     }
 
     private var user = User.NONE
+    private val userId: Long get() = if (user != User.NONE) user.id else -1
+
+    val userArticles = pagerFlow { UserPublicArticleSource(userId) }
     fun setUser(newUser: User) {
         if (user == User.NONE) {
             user = newUser
-            publicArticles(user.id)
             likesOfUserArticles(user.id)
             followers(user.id)
             followings(user.id)

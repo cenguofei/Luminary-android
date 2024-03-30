@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
-import com.example.lunimary.util.UserState
+import com.example.lunimary.base.UserState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -50,7 +50,6 @@ fun HomeScreen(
             tabs = tabs,
             modifier = Modifier.weight(1f),
             pagerState = pagerState,
-            isOffline = appState.isOffline,
             onItemClick = onItemClick
         )
     }

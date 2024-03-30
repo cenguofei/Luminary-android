@@ -1,19 +1,17 @@
 package com.example.lunimary.ui.user
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import com.example.lunimary.design.LunimaryScreen
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.local.articleDao
-import com.example.lunimary.network.NetworkResult
 import com.example.lunimary.ui.home.ArticleItem
 import com.example.lunimary.ui.home.ArticleItemContainerColor
 import com.example.lunimary.ui.user.draft.DraftItem
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 
 
 @Composable
@@ -24,41 +22,29 @@ fun PublicPage(
     onDraftClick: () -> Unit
 ) {
     val drafts = articleDao.findArticlesByUsername(currentUser.username).observeAsState()
-    LaunchedEffect(
-        key1 = userDetailViewModel,
-        block = {
-            userDetailViewModel.publicArticles()
-        }
-    )
-    val compositionsState = userDetailViewModel.publicArticles.observeAsState()
-    LunimaryScreen(
+    val compositionsState = userDetailViewModel.publicArticles.collectAsLazyPagingItems()
+    LunimaryPagingContent(
         modifier = modifier,
-        error = compositionsState.value is NetworkResult.Error,
-        empty = compositionsState.value?.data.isNullOrEmpty(),
-        shimmer = compositionsState.value is NetworkResult.Loading,
-        errorMsg = (compositionsState.value as? NetworkResult.Error)?.msg,
-        emptyMsg = (compositionsState.value as? NetworkResult.Empty)?.msg,
-    ) {
-        val data = compositionsState.value?.data ?: emptyList()
-        LazyColumn(modifier = Modifier) {
+        items = compositionsState,
+        key = { compositionsState[it]?.id!! },
+        topItem = {
             if (drafts.value?.isNotEmpty() == true) {
-                item {
-                    DraftItem(
-                        articles = drafts.value ?: emptyList(),
-                        onClick = { onDraftClick() },
-                        showDraftLabel = true
-                    )
-                }
-            }
-            items(data.count()) {
-                ArticleItem(
-                    onItemClick = onItemClick,
-                    article = data[it],
-                    containerColor = ArticleItemContainerColor.Default.copy(
-                        normalColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
-                    )
+                DraftItem(
+                    articles = drafts.value ?: emptyList(),
+                    onClick = { onDraftClick() },
+                    showDraftLabel = true
                 )
             }
-        }
+        },
+        viewModel = userDetailViewModel,
+        pagingKey = "PublicPage_userDetailViewModel"
+    ) {
+        ArticleItem(
+            onItemClick = onItemClick,
+            article = it,
+            containerColor = ArticleItemContainerColor.Default.copy(
+                normalColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
+            )
+        )
     }
 }

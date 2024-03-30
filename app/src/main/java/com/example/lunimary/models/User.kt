@@ -1,7 +1,7 @@
 package com.example.lunimary.models
 
 import android.os.Parcelable
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.logd
 import kotlinx.android.parcel.Parcelize
 import kotlinx.serialization.SerialName

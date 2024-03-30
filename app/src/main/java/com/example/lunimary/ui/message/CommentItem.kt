@@ -28,7 +28,7 @@ import com.example.lunimary.models.Article
 import com.example.lunimary.models.Comment
 import com.example.lunimary.models.User
 import com.example.lunimary.models.fileBaseUrl
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 
 @Composable
 fun CommentItem(
@@ -38,7 +38,7 @@ fun CommentItem(
     comment: Comment
 ) {
     Row(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxWidth()
     ) {
         UserHeadImage(
             model = user.realHeadUrl(),

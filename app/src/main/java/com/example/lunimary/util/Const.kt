@@ -31,6 +31,10 @@ inline val pageCollectsPath: String get() = "$collectRootPath$pageRootPath"
 inline val pageLikesPath: String get() = "$likeRootPath$pageRootPath"
 inline val pageCommentsPath: String get() = "$commentRootPath$pageRootPath"
 
+inline val pageMyFriendsPath: String get() = "$friendRootPath$pageRootPath/relation/my_friends"
+inline val pageMyFollowingsPath: String get() = "$friendRootPath$pageRootPath/relation/followings"
+inline val pageMyFollowersPath: String get() = "$friendRootPath$pageRootPath/relation/followers"
+
 //Article
 inline val articlesRootPath: String get() = "/articles"
 inline val createArticlePath: String get() = "$articlesRootPath/create"

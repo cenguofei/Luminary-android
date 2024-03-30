@@ -1,9 +1,9 @@
 package com.example.lunimary.models.source.remote.paging
 
 import com.example.lunimary.models.User
-import com.example.lunimary.models.ktor.addPagesParam
-import com.example.lunimary.models.ktor.addQueryParam
-import com.example.lunimary.models.ktor.init
+import com.example.lunimary.base.ktor.addPagesParam
+import com.example.lunimary.base.ktor.addQueryParam
+import com.example.lunimary.base.ktor.init
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.models.source.remote.PageSource
 import com.example.lunimary.models.source.remote.impl.BaseSourceImpl

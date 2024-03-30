@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
-import com.example.lunimary.base.DarkThemeSetting
-import com.example.lunimary.base.SettingMMKV
+import com.example.lunimary.base.mmkv.DarkThemeSetting
+import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.design.LinearButton
 import dev.jeziellago.compose.markdowntext.MarkdownText
 

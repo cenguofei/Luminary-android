@@ -1,6 +1,6 @@
 package com.example.lunimary.models.source.remote
 
-import com.example.lunimary.models.responses.CombinedCommentMessage
+import com.example.lunimary.models.ext.CommentsWithUser
 import com.example.lunimary.models.responses.DataResponse
 
 interface CommentSource {
@@ -13,5 +13,5 @@ interface CommentSource {
 
     suspend fun getAllCommentsOfArticle(
         articleId: Long
-    ): DataResponse<CombinedCommentMessage>
+    ): DataResponse<List<CommentsWithUser>>
 }

@@ -39,7 +39,7 @@ import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowersInfo
-import com.example.lunimary.network.NetworkResult
+import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.ui.common.signatures
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -66,6 +66,7 @@ fun FollowerItem(
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(16.dp))
         UserHeadImage(model = user.realHeadUrl(), size = 50.dp)
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -159,5 +160,6 @@ fun FollowerItem(
         IconButton(onClick = onMoreClick) {
             Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
         }
+        Spacer(modifier = Modifier.width(16.dp))
     }
 }

@@ -21,10 +21,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.lunimary.R
 import com.example.lunimary.design.LocalSnackbarHostState
-import com.example.lunimary.design.LunimaryScreen
+import com.example.lunimary.design.LunimaryStateContent
 import com.example.lunimary.design.LunimaryToolbar
-import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.network.asError
+import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import kotlinx.coroutines.CoroutineScope
@@ -96,7 +96,7 @@ fun LoginScreen(
             }
         }
     )
-    LunimaryScreen(openLoadingWheelDialog = loginState is NetworkResult.Loading) {
+    LunimaryStateContent(openLoadingWheelDialog = loginState is NetworkResult.Loading) {
         val password = remember { mutableStateOf("") }
         val username = remember { mutableStateOf("") }
         Column(

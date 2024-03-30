@@ -15,14 +15,6 @@ interface ArticleSource {
 
     suspend fun allArticles(curPage: Int, perPageCount: Int) : PageResponse<Article>
 
-    suspend fun publicArticles(
-        userId: Long
-    ): DataResponse<List<Article>>
-
-    suspend fun privacyArticles(
-        userId: Long
-    ): DataResponse<List<Article>>
-
     suspend fun whenBrowseArticle(
         articleId: Long
     ): DataResponse<Boolean>

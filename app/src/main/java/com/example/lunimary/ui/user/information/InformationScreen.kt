@@ -28,12 +28,12 @@ import com.example.lunimary.R
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.models.User
-import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.network.asError
+import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
-import com.example.lunimary.util.UserState
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.UserState
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine
 import github.leavesczy.matisse.Matisse

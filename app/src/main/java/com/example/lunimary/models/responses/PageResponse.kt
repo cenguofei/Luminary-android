@@ -35,4 +35,5 @@ fun <T> Page<T>?.isNotEmpty(): Boolean = this != null && lists.isNotEmpty()
 
 fun <T> Page<T>?.isEmpty(): Boolean = !isNotEmpty()
 
+//TODO increment page count
 const val DEFAULT_PER_PAGE_COUNT = 6

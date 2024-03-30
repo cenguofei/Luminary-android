@@ -85,8 +85,13 @@ fun ArticleItem(
                 modifier = Modifier
                     .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
-                Content(content = article.body, modifier = Modifier.weight(0.6f))
-                ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
+                val contentModifier = if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {
+                    Modifier.weight(1f)
+                } else Modifier.weight(0.6f)
+                Content(content = article.body, modifier = contentModifier)
+                if (article.cover.isNotEmpty() && article.cover.startsWith("res/uploads")) {
+                    ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
+                }
             }
             Spacer(modifier = Modifier.height(4.dp))
             val tagWithColor = remember { article.tags.map { it to tagColors.random() } }

@@ -20,8 +20,8 @@ import com.example.lunimary.ui.TopLevelDestination
 import com.example.lunimary.ui.USER_ROOT
 import com.example.lunimary.ui.message.MessageScreen
 import com.example.lunimary.ui.user.UserDetailScreen
-import com.example.lunimary.util.checkLogin
-import com.example.lunimary.util.notLogin
+import com.example.lunimary.base.checkLogin
+import com.example.lunimary.base.notLogin
 
 fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
     composable(
@@ -87,7 +87,9 @@ fun TopLevelScreens(appState: LunimaryAppState, destination: TopLevelDestination
                 if (notLogin()) {
                     appState.navToLogin(true)
                 } else {
-                    MessageScreen(modifier = paddingModifier)
+                    MessageScreen(
+                        modifier = paddingModifier
+                    )
                 }
             }
 

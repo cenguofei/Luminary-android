@@ -15,7 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.lunimary.R
-import com.example.lunimary.design.LunimaryScreen
+import com.example.lunimary.design.LunimaryStateContent
 import com.example.lunimary.design.LunimaryToolbar
 import com.example.lunimary.models.Article
 import com.example.lunimary.ui.LunimaryAppState
@@ -42,7 +42,7 @@ fun DraftsScreen(
 ) {
     val draftsViewModel: DraftsViewModel = viewModel()
     val drafts = draftsViewModel.findDrafts().observeAsState()
-    LunimaryScreen {
+    LunimaryStateContent {
         LunimaryToolbar(
             onBack = onBack,
             between = {

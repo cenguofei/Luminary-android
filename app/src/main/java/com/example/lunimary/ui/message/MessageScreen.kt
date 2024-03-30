@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.design.LBHorizontalDivider
-import com.example.lunimary.design.LunimaryScreen
+import com.example.lunimary.ui.LunimaryAppState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -59,14 +59,10 @@ fun MessageScreen(
             }
         }
         LBHorizontalDivider()
-        LunimaryScreen(
-            modifier = Modifier
-        ) {
-            MessagePagers(
-                pagerState = pagerState,
-                tabs = tabs,
-                messageViewModel = messageViewModel
-            )
-        }
+        MessagePagers(
+            pagerState = pagerState,
+            tabs = tabs,
+            messageViewModel = messageViewModel,
+        )
     }
 }

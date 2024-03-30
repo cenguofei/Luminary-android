@@ -1,9 +1,9 @@
 package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.Article
-import com.example.lunimary.models.ktor.init
-import com.example.lunimary.models.ktor.securityPost
-import com.example.lunimary.models.ktor.setJsonBody
+import com.example.lunimary.base.ktor.init
+import com.example.lunimary.base.ktor.securityPost
+import com.example.lunimary.base.ktor.setJsonBody
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.AddArticleSource
 import com.example.lunimary.util.createArticlePath

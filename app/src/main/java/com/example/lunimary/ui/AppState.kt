@@ -17,12 +17,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.example.lunimary.base.DarkThemeSetting
-import com.example.lunimary.base.SettingMMKV
+import com.example.lunimary.base.mmkv.DarkThemeSetting
+import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
-import com.example.lunimary.network.NetworkMonitor
-import com.example.lunimary.network.NetworkMonitorImpl
+import com.example.lunimary.base.network.NetworkMonitor
+import com.example.lunimary.base.network.NetworkMonitorImpl
 import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.BROWSE_ARTICLE_KEY
 import com.example.lunimary.ui.common.DEFAULT_WEB_URL
@@ -33,7 +33,7 @@ import com.example.lunimary.ui.common.WEB_VIEW_URL_KEY
 import com.example.lunimary.ui.common.setNavViewUser
 import com.example.lunimary.ui.common.setRelationPage
 import com.example.lunimary.ui.login.UserViewModel
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 import com.google.accompanist.systemuicontroller.SystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted

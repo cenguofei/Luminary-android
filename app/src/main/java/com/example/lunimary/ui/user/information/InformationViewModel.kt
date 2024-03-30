@@ -4,12 +4,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.request
 import com.example.lunimary.models.UPLOAD_TYPE_USER_BACKGROUND
 import com.example.lunimary.models.UPLOAD_TYPE_USER_HEAD
 import com.example.lunimary.models.UploadData
 import com.example.lunimary.models.source.remote.repository.FileRepository
-import com.example.lunimary.network.NetworkResult
+import com.example.lunimary.base.network.NetworkResult
 
 class InformationViewModel : BaseViewModel() {
     private val fileRepository = FileRepository()
@@ -20,10 +19,12 @@ class InformationViewModel : BaseViewModel() {
     private val _uploadType: MutableState<UploadUserFileType> = mutableStateOf(UploadUserFileType.None)
     private val uploadType: State<UploadUserFileType> get() = _uploadType
 
-    private val _headUploadState: MutableState<NetworkResult<UploadData>> = mutableStateOf(NetworkResult.None())
+    private val _headUploadState: MutableState<NetworkResult<UploadData>> = mutableStateOf(
+        NetworkResult.None())
     val headUploadState: State<NetworkResult<UploadData>> get() = _headUploadState
 
-    private val _backgroundUploadState: MutableState<NetworkResult<UploadData>> = mutableStateOf(NetworkResult.None())
+    private val _backgroundUploadState: MutableState<NetworkResult<UploadData>> = mutableStateOf(
+        NetworkResult.None())
     val backgroundUploadState: State<NetworkResult<UploadData>> get() = _backgroundUploadState
 
     fun updateShowImageSelector(show: Boolean, type: UploadUserFileType) {

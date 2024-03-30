@@ -2,10 +2,10 @@ package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.ExistingFriendship
 import com.example.lunimary.models.Friend
-import com.example.lunimary.models.ktor.addPathParam
-import com.example.lunimary.models.ktor.init
-import com.example.lunimary.models.ktor.securityPost
-import com.example.lunimary.models.ktor.setJsonBody
+import com.example.lunimary.base.ktor.addPathParam
+import com.example.lunimary.base.ktor.init
+import com.example.lunimary.base.ktor.securityPost
+import com.example.lunimary.base.ktor.setJsonBody
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.FriendSource
 import com.example.lunimary.util.existingFriendshipPath

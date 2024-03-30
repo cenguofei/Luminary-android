@@ -14,14 +14,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lunimary.base.DarkThemeSetting
+import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.ui.LunimaryApp
 import com.example.lunimary.ui.TopLevelDestination
 import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.ui.rememberAppState
-import com.example.lunimary.util.UserState
+import com.example.lunimary.base.UserState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {

@@ -38,7 +38,7 @@ import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.User
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.notNull
 
 @OptIn(ExperimentalAnimationApi::class)

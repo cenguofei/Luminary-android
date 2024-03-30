@@ -6,26 +6,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.request
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.Comment
 import com.example.lunimary.models.User
-import com.example.lunimary.models.responses.CombinedCommentMessage
+import com.example.lunimary.models.ext.CommentsWithUser
 import com.example.lunimary.models.source.remote.repository.ArticleRepository
 import com.example.lunimary.models.source.remote.repository.CollectRepository
 import com.example.lunimary.models.source.remote.repository.CommentRepository
 import com.example.lunimary.models.source.remote.repository.FriendRepository
 import com.example.lunimary.models.source.remote.repository.LikeRepository
 import com.example.lunimary.models.source.remote.repository.UserRepository
-import com.example.lunimary.network.NetworkResult
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.currentUser
 
 class BrowseViewModel : BaseViewModel() {
     private val userRepository = UserRepository()
     private val friendRepository = FriendRepository()
     private val likeRepository = LikeRepository()
     private val collectRepository = CollectRepository()
-    private val articleRepository =ArticleRepository()
+    private val articleRepository = ArticleRepository()
     private val commentRepository by lazy { CommentRepository() }
 
     private var hasSetArticle = false
@@ -224,8 +223,9 @@ class BrowseViewModel : BaseViewModel() {
         }
     }
 
-    private val _comments: MutableState<NetworkResult<CombinedCommentMessage>> = mutableStateOf(NetworkResult.None())
-    val comments: State<NetworkResult<CombinedCommentMessage>> get() = _comments
+    private val _comments: MutableState<NetworkResult<List<CommentsWithUser>>> =
+        mutableStateOf(NetworkResult.None())
+    val comments: State<NetworkResult<List<CommentsWithUser>>> get() = _comments
     private fun getAllCommentsOfArticle(articleId: Long) {
         fly(FLY_ALL_COMMENTS_OF_ARTICLE) {
             request(
@@ -244,12 +244,12 @@ class BrowseViewModel : BaseViewModel() {
         }
     }
 
-    fun transform(data: CombinedCommentMessage) : List<Pair<User, Comment>> {
+    fun transform(data: List<CommentsWithUser>): List<Pair<User, Comment>> {
         val flatComments = mutableListOf<Pair<User, Comment>>()
-        data.forEach { combined ->
-            if (combined.user != null) {
-                combined.messages.forEach {
-                    flatComments += combined.user to it
+        data.forEach { commentsWithUser ->
+            if (commentsWithUser.user != null) {
+                commentsWithUser.comments.forEach {
+                    flatComments.add(commentsWithUser.user to it)
                 }
             }
         }
@@ -272,6 +272,5 @@ const val FLY_EXISTING_FRIENDSHIP = "fly_existing_friendship"
 const val FLY_FOLLOW_OR_UNFOLLOW = "fly_follow_or_unfollow"
 const val FLY_ABOUT_STAR = "____fly_about_star____"
 const val FLy_ABOUT_LIKE = "____fly_about_like____"
-const val FLY_GIVE_OR_CANCEL_COLLECT = "fly_give_or_cancel_collect"
 const val FLY_CREATE_COMMENT = "fly_create_comment"
 const val FLY_ALL_COMMENTS_OF_ARTICLE = "fly_all_comments_of_article"

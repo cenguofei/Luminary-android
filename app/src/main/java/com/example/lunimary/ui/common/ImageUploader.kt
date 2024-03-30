@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.lunimary.models.UploadData
-import com.example.lunimary.network.NetworkResult
+import com.example.lunimary.base.network.NetworkResult
 import github.leavesczy.matisse.Matisse
 import github.leavesczy.matisse.MediaResource
 import kotlinx.coroutines.CoroutineScope

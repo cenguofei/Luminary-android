@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -45,6 +44,7 @@ fun UserItem(
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(16.dp))
         UserHeadImage(model = user.realHeadUrl(), size = 50.dp)
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -74,6 +74,7 @@ fun UserItem(
         IconButton(onClick = onMoreClick) {
             Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
         }
+        Spacer(modifier = Modifier.width(16.dp))
     }
 }
 

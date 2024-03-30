@@ -1,9 +1,9 @@
 package com.example.lunimary.models.source.remote.impl
 
 import com.example.lunimary.models.Like
-import com.example.lunimary.models.ktor.init
-import com.example.lunimary.models.ktor.securityPost
-import com.example.lunimary.models.ktor.setJsonBody
+import com.example.lunimary.base.ktor.init
+import com.example.lunimary.base.ktor.securityPost
+import com.example.lunimary.base.ktor.setJsonBody
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.LikeSource
 import com.example.lunimary.util.cancelLikePath

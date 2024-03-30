@@ -3,12 +3,12 @@ package com.example.lunimary.models.source.remote.impl
 import com.example.lunimary.models.ext.FollowInfo
 import com.example.lunimary.models.ext.FollowersInfo
 import com.example.lunimary.models.ext.UserFriend
-import com.example.lunimary.models.ktor.addPathParam
-import com.example.lunimary.models.ktor.addQueryParam
-import com.example.lunimary.models.ktor.init
+import com.example.lunimary.base.ktor.addPathParam
+import com.example.lunimary.base.ktor.addQueryParam
+import com.example.lunimary.base.ktor.init
 import com.example.lunimary.models.responses.RelationResponse
 import com.example.lunimary.models.source.remote.RelationSource
-import com.example.lunimary.util.currentUser
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.mutualFollowFriendsPath
 import com.example.lunimary.util.myFollowersPath
 import com.example.lunimary.util.myFollowingsPath
@@ -41,7 +41,7 @@ class RelationSourceImpl : BaseSourceImpl by BaseSourceImpl(), RelationSource {
 
     override suspend fun mutualFollowUsers(onlyNum: Boolean): RelationResponse<UserFriend> {
         return client.get(urlString = mutualFollowFriendsPath) {
-            addQueryParam("userId", currentUser.id)
+            addPathParam(currentUser.id)
             addQueryParam("onlyNum", onlyNum)
         }.init()
     }
