@@ -1,6 +1,5 @@
 package com.example.lunimary.models.source.remote.impl
 
-import com.example.lunimary.models.Article
 import com.example.lunimary.base.ktor.addPagesParam
 import com.example.lunimary.base.ktor.addPathParam
 import com.example.lunimary.base.ktor.init
@@ -8,6 +7,7 @@ import com.example.lunimary.base.ktor.securityDelete
 import com.example.lunimary.base.ktor.securityPost
 import com.example.lunimary.base.ktor.securityPut
 import com.example.lunimary.base.ktor.setJsonBody
+import com.example.lunimary.models.Article
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.PageResponse
 import com.example.lunimary.models.source.remote.ArticleSource

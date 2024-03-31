@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
+import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.Comment
 import com.example.lunimary.models.User
@@ -16,8 +18,6 @@ import com.example.lunimary.models.source.remote.repository.CommentRepository
 import com.example.lunimary.models.source.remote.repository.FriendRepository
 import com.example.lunimary.models.source.remote.repository.LikeRepository
 import com.example.lunimary.models.source.remote.repository.UserRepository
-import com.example.lunimary.base.network.NetworkResult
-import com.example.lunimary.base.currentUser
 
 class BrowseViewModel : BaseViewModel() {
     private val userRepository = UserRepository()

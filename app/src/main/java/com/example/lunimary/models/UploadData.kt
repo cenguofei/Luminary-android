@@ -16,10 +16,4 @@ const val UPLOAD_TYPE_ARTICLE_COVER = 1
 const val UPLOAD_TYPE_OTHER = 2
 const val UPLOAD_TYPE_USER_BACKGROUND = 3
 
-val uploadTypes = listOf(
-    UPLOAD_TYPE_USER_HEAD,
-    UPLOAD_TYPE_ARTICLE_COVER,
-    UPLOAD_TYPE_OTHER
-)
-
 val fileBaseUrl =  "http://$HOST:$PORT$fileDownloadPath?file_url="

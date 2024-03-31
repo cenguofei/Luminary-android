@@ -1,4 +1,4 @@
-package com.example.lunimary.models.source.remote
+package com.example.lunimary.models.source.remote.paging
 
 import com.example.lunimary.models.responses.PageResponse
 

@@ -57,9 +57,6 @@ data class Article(
     @Ignore
     constructor() : this(id = Long.Default)
 
-    val reallyCoverUrl: String get() = fileBaseUrl + cover
-
-
     val daysFromToday: Long get() = getDaysSinceTimestamp(timestamp)
 
     /**
@@ -167,17 +164,3 @@ private fun getDaysSinceTimestampLessApi26(timestamp: Long): Long {
 
     return diffInMillis / (24 * 60 * 60 * 1000)
 }
-
-val testArticle = Article(
-    userId = 10007,
-    username = "ttt",
-    author = "Chen Guofei",
-    title = "Self study KTor development LuminaryBlog backend",
-    body = "Note: Databases that support a path context root will have this value appended to the generated SQL path expression by default, so it is not necessary to include it in the provided argument String. In the above example, if MySQL is being used, the provided path arguments should be .name and .language respectively.",
-    visibleMode = VisibleMode.PUBLIC,
-    tags = arrayOf("Kotlin", "Compose", "Android", "Ktor"),
-    collections = 99,
-    comments = 99,
-    likes = 99,
-    viewsNum = 99
-)

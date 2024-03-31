@@ -105,14 +105,6 @@ fun BackgroundPreview() {
 
 @LightAndDarkPreview
 @Composable
-fun DynamicGradientBackgroundPreview() {
-    LunimaryTheme(dynamicColor = true) {
-        LunimaryGradientBackground(Modifier.size(100.dp), content = {})
-    }
-}
-
-@LightAndDarkPreview
-@Composable
 fun GradientBackgroundPreview() {
     LunimaryTheme(dynamicColor = false) {
         LunimaryGradientBackground(Modifier.size(100.dp), content = {})

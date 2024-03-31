@@ -61,7 +61,7 @@ fun ViewUserScreen(
                 .align(Alignment.TopStart)
                 .statusBarsPadding()
                 .padding(start = 16.dp),
-            onBack = onBack
+            onClick = onBack
         )
         ViewUserDetailContent(
             modifier = Modifier,

@@ -1,9 +1,9 @@
 package com.example.lunimary.base.ktor
 
-import com.example.lunimary.models.responses.DataResponse
-import com.example.lunimary.base.storage.refreshToken
-import com.example.lunimary.util.HttpConst
 import com.example.lunimary.base.UserState
+import com.example.lunimary.base.storage.refreshToken
+import com.example.lunimary.models.responses.DataResponse
+import com.example.lunimary.util.HttpConst
 import com.example.lunimary.util.logd
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode

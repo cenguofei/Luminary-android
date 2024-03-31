@@ -10,5 +10,3 @@ data class CommentItem(
     val article: Article,
     val comment: Comment
 )
-
-typealias CommentItems = List<CommentItem>

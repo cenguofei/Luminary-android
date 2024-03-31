@@ -3,6 +3,7 @@ package com.example.lunimary.ui.user
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.pager.pagerFlow
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.remote.paging.UserCollectedArticleSource
@@ -10,7 +11,6 @@ import com.example.lunimary.models.source.remote.paging.UserLikedArticleSource
 import com.example.lunimary.models.source.remote.paging.UserPrivacyArticleSource
 import com.example.lunimary.models.source.remote.paging.UserPublicArticleSource
 import com.example.lunimary.models.source.remote.repository.UserDetailRepository
-import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.empty
 
 class UserDetailViewModel : BaseViewModel() {
@@ -114,8 +114,4 @@ data class UserUiState(
 const val FLY_LIKES_OF_USER_ARTICLES = "fly_likes_of_user_articles"
 const val FLY_FOLLOWINGS = "fly_followings"
 const val FLY_FOLLOWERS = "fly_followers"
-const val FLY_PUBLIC_ARTICLES_OF_USER = "fly_public_articles_of_user"
-const val FLY_PRIVACY_ARTICLES_OF_USER = "fly_privacy_articles_of_user"
-const val FLY_COLLECTS_OF_USER = "fly_articles_of_user_collected"
-const val FLY_LIKES_OF_USER = "fly_articles_of_user_liked"
 const val FLY_MUTUAL_FOLLOW_USERS = "fly_mutual_follow_users"

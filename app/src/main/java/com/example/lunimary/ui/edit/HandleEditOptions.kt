@@ -15,7 +15,3 @@ val editOptions: List<ImageVector>
         //Icons.Default.Redo,
         //Icons.Default.Settings
     )
-
-fun handleEditOptions(index: Int) {
-
-}

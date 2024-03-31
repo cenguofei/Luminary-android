@@ -3,17 +3,18 @@ package com.example.lunimary.base
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-interface BaseRepository {
+interface Repository {
     val dispatcher: CoroutineDispatcher
 
     suspend fun <T> withDispatcher(
         block: suspend CoroutineScope.() -> T
-    ): T { return kotlinx.coroutines.withContext(dispatcher, block) }
+    ): T = withContext(dispatcher, block)
 }
 
-fun BaseRepository(): BaseRepository {
-    return object : BaseRepository {
+fun Repository(): Repository {
+    return object : Repository {
         override val dispatcher: CoroutineDispatcher
             get() = Dispatchers.IO
     }

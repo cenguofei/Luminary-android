@@ -10,9 +10,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.User
-import com.example.lunimary.base.network.NetworkResult
 
 @Composable
 fun FollowersPage(

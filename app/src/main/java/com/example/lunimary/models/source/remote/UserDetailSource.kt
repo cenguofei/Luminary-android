@@ -5,6 +5,7 @@ import com.example.lunimary.models.ext.FollowersInfo
 import com.example.lunimary.models.ext.UserFriend
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.RelationResponse
+import com.example.lunimary.models.source.remote.impl.UserDetailSourceImpl
 
 interface UserDetailSource {
     suspend fun likesOfUser(userId: Long): DataResponse<Long>
@@ -14,4 +15,6 @@ interface UserDetailSource {
     suspend fun followers(userId: Long): RelationResponse<FollowersInfo>
 
     suspend fun mutualFollowUsers(): RelationResponse<UserFriend>
+
+    companion object : UserDetailSource by UserDetailSourceImpl()
 }

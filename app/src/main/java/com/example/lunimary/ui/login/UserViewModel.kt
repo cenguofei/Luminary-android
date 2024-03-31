@@ -5,15 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.models.responses.UserData
-import com.example.lunimary.models.source.remote.UserSource
-import com.example.lunimary.models.source.remote.repository.UserRepository
+import com.example.lunimary.base.UserState
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.base.storage.refreshToken
 import com.example.lunimary.base.storage.removeSession
 import com.example.lunimary.base.storage.removeToken
-import com.example.lunimary.base.UserState
+import com.example.lunimary.models.responses.UserData
+import com.example.lunimary.models.source.remote.repository.UserRepository
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +20,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class UserViewModel : BaseViewModel() {
-    private val userSource: UserSource = UserRepository()
+    private val userSource = UserRepository()
 
     private val _loginState: MutableLiveData<NetworkResult<UserData>> =
         MutableLiveData(NetworkResult.None())

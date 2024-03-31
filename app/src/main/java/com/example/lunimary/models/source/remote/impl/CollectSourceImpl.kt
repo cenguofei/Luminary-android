@@ -1,9 +1,9 @@
 package com.example.lunimary.models.source.remote.impl
 
-import com.example.lunimary.models.Collect
 import com.example.lunimary.base.ktor.init
 import com.example.lunimary.base.ktor.securityPost
 import com.example.lunimary.base.ktor.setJsonBody
+import com.example.lunimary.models.Collect
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.CollectSource
 import com.example.lunimary.util.cancelCollectPath

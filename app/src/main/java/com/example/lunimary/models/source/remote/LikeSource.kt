@@ -1,6 +1,7 @@
 package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.models.responses.DataResponse
+import com.example.lunimary.models.source.remote.impl.LikeSourceImpl
 
 interface LikeSource {
     suspend fun giveLike(
@@ -17,4 +18,6 @@ interface LikeSource {
         userId: Long,
         articleId: Long
     ): DataResponse<Boolean>
+
+    companion object : LikeSource by LikeSourceImpl()
 }

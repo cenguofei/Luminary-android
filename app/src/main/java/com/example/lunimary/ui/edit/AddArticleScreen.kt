@@ -20,6 +20,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.lunimary.R
+import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
@@ -27,8 +29,6 @@ import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.myObserveAsState
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.Article
-import com.example.lunimary.base.network.NetworkResult
-import com.example.lunimary.base.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.ArticleNavArguments

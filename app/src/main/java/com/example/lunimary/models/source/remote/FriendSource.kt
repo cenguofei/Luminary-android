@@ -2,6 +2,7 @@ package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.models.ExistingFriendship
 import com.example.lunimary.models.responses.DataResponse
+import com.example.lunimary.models.source.remote.impl.FriendSourceImpl
 
 interface FriendSource {
     /**
@@ -24,4 +25,6 @@ interface FriendSource {
         meId: Long,
         whoId: Long
     ): DataResponse<ExistingFriendship>
+
+    companion object : FriendSource by FriendSourceImpl()
 }

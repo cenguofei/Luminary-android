@@ -4,8 +4,6 @@ inline val empty: String get() = ""
 
 inline val unknownErrorMsg: String get() = "unknown error."
 
-inline val usersStringCacheAlias: String get() = "usersStringCache"
-
 inline val Long.Companion.Default: Long get() = 0L
 
 inline val Int.Companion.Default: Int get() = 0

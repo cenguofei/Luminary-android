@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
@@ -33,12 +32,13 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
 import com.example.lunimary.R
+import com.example.lunimary.base.currentUser
+import com.example.lunimary.design.BackButton
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.User
-import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.notNull
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -63,16 +63,11 @@ fun DynamicToolBar(
             .statusBarsPadding(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
+        BackButton(
             modifier = Modifier,
-            onClick = onBack
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-        }
+            onClick = onBack,
+            tint = MaterialTheme.colorScheme.onSurface
+        )
         Row(
             modifier = Modifier
                 .weight(1f)

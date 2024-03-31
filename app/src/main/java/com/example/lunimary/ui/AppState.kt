@@ -9,20 +9,18 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.base.mmkv.SettingMMKV
+import com.example.lunimary.base.notLogin
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
-import com.example.lunimary.base.network.NetworkMonitor
-import com.example.lunimary.base.network.NetworkMonitorImpl
 import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.BROWSE_ARTICLE_KEY
 import com.example.lunimary.ui.common.DEFAULT_WEB_URL
@@ -33,38 +31,23 @@ import com.example.lunimary.ui.common.WEB_VIEW_URL_KEY
 import com.example.lunimary.ui.common.setNavViewUser
 import com.example.lunimary.ui.common.setRelationPage
 import com.example.lunimary.ui.login.UserViewModel
-import com.example.lunimary.base.currentUser
-import com.example.lunimary.base.notLogin
 import com.example.lunimary.util.logd
-import com.google.accompanist.systemuicontroller.SystemUiController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberAppState(
-    networkMonitor: NetworkMonitor = NetworkMonitorImpl(LocalContext.current),
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
     userViewModel: UserViewModel,
     windowSizeClass: WindowSizeClass,
-    systemUiController: SystemUiController
 ): LunimaryAppState {
     NavigationTrackingSideEffect(navController)
     return remember(
         navController,
-        coroutineScope,
         windowSizeClass,
-        networkMonitor,
         userViewModel
     ) {
         LunimaryAppState(
             navController = navController,
-            coroutineScope = coroutineScope,
             windowSizeClass = windowSizeClass,
-            networkMonitor = networkMonitor,
-            systemUiController = systemUiController,
             userViewModel = userViewModel
         )
     }
@@ -73,10 +56,7 @@ fun rememberAppState(
 @Stable
 class LunimaryAppState(
     val navController: NavHostController,
-    coroutineScope: CoroutineScope,
     private val windowSizeClass: WindowSizeClass,
-    networkMonitor: NetworkMonitor,
-    val systemUiController: SystemUiController,
     val userViewModel: UserViewModel
 ) {
     private val _selectedBottomTab = mutableStateOf(TopLevelDestination.Home)
@@ -98,14 +78,6 @@ class LunimaryAppState(
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     val shouldShowNavRail: Boolean get() = !shouldShowBottomBar
-
-    val isOffline = networkMonitor.isOnline
-        .map(Boolean::not)
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false,
-        )
 
     private val _darkThemeSettingState = mutableStateOf(
         if (SettingMMKV.userHasSetTheme) {
@@ -148,86 +120,7 @@ class LunimaryAppState(
         if (notLogin() && selectedBottomTab.value != TopLevelDestination.Home) {
             updateSelectedBottomTab(TopLevelDestination.Home)
         }
-        val navOptions = when (from) {
-            Screens.Login.route -> {
-                navOptions {
-                    popUpTo(Screens.Login.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            Screens.Search.route -> {
-                navOptions {
-                    popUpTo(Screens.Search.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            Screens.Relation.route -> {
-                navOptions {
-                    popUpTo(Screens.Relation.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            Screens.BrowseArticle.route -> {
-                navOptions {
-                    popUpTo(Screens.BrowseArticle.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            Screens.BrowseArticle.route -> {
-                navOptions {
-                    popUpTo(Screens.BrowseArticle.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            Screens.Settings.route -> {
-                navOptions {
-                    popUpTo(Screens.Settings.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            Screens.ViewUser.route -> {
-                navOptions {
-                    popUpTo(Screens.ViewUser.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            Screens.AddArticle.route -> {
-                navOptions {
-                    popUpTo(Screens.AddArticle.route) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            }
-
-            else -> navOptions { }
-        }
-        val route = HOME_ROUTE
-        navController.navigate(
-            route = route,
-            navOptions = navOptions
-        )
+        navController.navToHomeWithFrom(from)
     }
 
     fun navToUser(
@@ -292,6 +185,89 @@ class LunimaryAppState(
         setNavViewUser(user)
         navigate(Screens.ViewUser.route)
     }
+}
+
+private fun NavController.navToHomeWithFrom(from: String) {
+    val navOptions = when (from) {
+        Screens.Login.route -> {
+            navOptions {
+                popUpTo(Screens.Login.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        Screens.Search.route -> {
+            navOptions {
+                popUpTo(Screens.Search.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        Screens.Relation.route -> {
+            navOptions {
+                popUpTo(Screens.Relation.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        Screens.BrowseArticle.route -> {
+            navOptions {
+                popUpTo(Screens.BrowseArticle.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        Screens.BrowseArticle.route -> {
+            navOptions {
+                popUpTo(Screens.BrowseArticle.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        Screens.Settings.route -> {
+            navOptions {
+                popUpTo(Screens.Settings.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        Screens.ViewUser.route -> {
+            navOptions {
+                popUpTo(Screens.ViewUser.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        Screens.AddArticle.route -> {
+            navOptions {
+                popUpTo(Screens.AddArticle.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        else -> navOptions { }
+    }
+    val route = HOME_ROUTE
+    navigate(
+        route = route,
+        navOptions = navOptions
+    )
 }
 
 private fun NavController.navToSearch() {

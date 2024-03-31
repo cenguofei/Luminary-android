@@ -66,7 +66,8 @@ open class BaseViewModel : ViewModel() {
     }
 
     /**
-     * 当从无网络状态变为有网络时
+     * 当多个网络减少一个时
+     *
      * two net to one net
      *
      * online=true
@@ -128,13 +129,13 @@ open class BaseViewModel : ViewModel() {
                         onFailed(response.msg)
                     }
                 }.onFailure {
-                    onFailed(it.message ?: unknownErrorMsg)
+                    onFailed(it.errorMsg)
                 }
                 onFinish()
             }.onFailure {
                 it.message?.loge()
                 it.printStackTrace()
-                onFailed(it.message ?: unknownErrorMsg)
+                onFailed(it.errorMsg)
                 onFinish()
             }
         }
@@ -145,5 +146,7 @@ open class BaseViewModel : ViewModel() {
             NetworkMonitorImpl(LunimaryApplication.applicationContext)
     }
 }
+
+val Throwable.errorMsg: String get() = message ?: unknownErrorMsg
 
 object ScopeViewModel : BaseViewModel()

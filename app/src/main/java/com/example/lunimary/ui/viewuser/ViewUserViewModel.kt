@@ -86,7 +86,6 @@ data class UiState(
     val followersNum: Int = 0
 )
 
-const val FLY_VIEW_USER_PUBLIC_ARTICLES = "fly_view_user_public_articles"
 const val FLY_VIEW_USER_LIKES_OF_ARTICLES = "fly_view_user_likes_of_user_articles"
 const val FLY_VIEW_USER_FOLLOWINGS = "fly_view_user_followings"
 const val FLY_VIEW_USER_FOLLOWERS = "fly_view_user_followers"

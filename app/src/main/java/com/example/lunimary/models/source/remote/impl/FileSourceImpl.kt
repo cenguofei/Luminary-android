@@ -1,9 +1,9 @@
 package com.example.lunimary.models.source.remote.impl
 
-import com.example.lunimary.models.UploadData
 import com.example.lunimary.base.ktor.init
 import com.example.lunimary.base.ktor.setBearAuth
 import com.example.lunimary.base.ktor.setSession
+import com.example.lunimary.models.UploadData
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.source.remote.FileSource
 import com.example.lunimary.util.fileUploadPath

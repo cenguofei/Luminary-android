@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,18 +39,13 @@ fun LunimaryToolbar(
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-                IconButton(
+                BackButton(
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .align(Alignment.TopStart),
-                    onClick = onBack
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
+                    onClick = onBack,
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
                 Row(content = between, modifier = Modifier.align(Alignment.Center))
                 Box(
                     modifier = Modifier

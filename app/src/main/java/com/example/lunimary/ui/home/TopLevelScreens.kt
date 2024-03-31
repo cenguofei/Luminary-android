@@ -14,9 +14,7 @@ import com.example.lunimary.base.checkLogin
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.ui.HOME_ROOT
 import com.example.lunimary.ui.LunimaryAppState
-import com.example.lunimary.ui.MESSAGE_ROOT
 import com.example.lunimary.ui.TopLevelDestination
-import com.example.lunimary.ui.USER_ROOT
 import com.example.lunimary.ui.message.MessageScreen
 import com.example.lunimary.ui.user.UserDetailScreen
 

@@ -3,7 +3,7 @@ package com.example.lunimary.base.pager
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.lunimary.models.responses.DEFAULT_PER_PAGE_COUNT
-import com.example.lunimary.models.source.remote.PageSource
+import com.example.lunimary.models.source.remote.paging.PageSource
 
 class AppPagingSource<T : Any>(
     private val source: PageSource<T>

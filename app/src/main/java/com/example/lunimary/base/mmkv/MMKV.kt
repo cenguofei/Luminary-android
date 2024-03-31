@@ -6,9 +6,6 @@ import com.tencent.mmkv.MMKV
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-/**
- * Created by TanJiaJun on 2020-01-11.
- */
 inline fun <T> delegate(
     key: String? = null,
     defaultValue: T,

@@ -28,8 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
-import com.example.lunimary.design.LocalNavNavController
 import com.example.lunimary.R
+import com.example.lunimary.base.UserState
+import com.example.lunimary.design.LocalNavNavController
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.SnackbarHostStateHolder
 import com.example.lunimary.models.User
@@ -45,7 +46,6 @@ import com.example.lunimary.ui.user.draft.draftsScreen
 import com.example.lunimary.ui.user.information.informationScreen
 import com.example.lunimary.ui.viewuser.viewUserScreen
 import com.example.lunimary.ui.webview.webViewScreen
-import com.example.lunimary.base.UserState
 import com.example.lunimary.util.logd
 import kotlinx.coroutines.launch
 

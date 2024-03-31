@@ -1,7 +1,6 @@
 package com.example.lunimary.models
 
 import com.example.lunimary.base.niceDateToSecond
-import com.example.lunimary.models.responses.DataResponse
 
 @kotlinx.serialization.Serializable
 data class LikeMessage(
@@ -11,5 +10,3 @@ data class LikeMessage(
 ) {
     val niceDate: String get() = timestamp.niceDateToSecond
 }
-
-typealias LikeMessageResponse = DataResponse<List<LikeMessage>>

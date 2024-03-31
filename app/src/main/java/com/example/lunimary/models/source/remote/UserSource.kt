@@ -4,6 +4,7 @@ import com.example.lunimary.models.LoginInfo
 import com.example.lunimary.models.User
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
+import com.example.lunimary.models.source.remote.impl.UserSourceImpl
 
 interface UserSource {
     /**
@@ -38,4 +39,6 @@ interface UserSource {
     suspend fun queryUser(userId: Long) : UserResponse
 
     suspend fun update(user: User) : UserResponse
+
+    companion object : UserSource by UserSourceImpl()
 }

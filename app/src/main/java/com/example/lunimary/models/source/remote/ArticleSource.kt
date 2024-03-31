@@ -3,6 +3,7 @@ package com.example.lunimary.models.source.remote
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.PageResponse
+import com.example.lunimary.models.source.remote.impl.ArticleSourceImpl
 
 interface ArticleSource {
     suspend fun getArticleById(id: Long) : DataResponse<Article>
@@ -18,4 +19,6 @@ interface ArticleSource {
     suspend fun whenBrowseArticle(
         articleId: Long
     ): DataResponse<Boolean>
+
+    companion object : ArticleSource by ArticleSourceImpl()
 }

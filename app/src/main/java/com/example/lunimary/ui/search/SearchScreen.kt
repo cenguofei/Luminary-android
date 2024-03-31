@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -33,6 +31,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.R
+import com.example.lunimary.design.BackButton
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.util.empty
@@ -65,13 +64,7 @@ fun SearchScreen(
             .fillMaxWidth()
             .statusBarsPadding()) {
             val primaryColor = MaterialTheme.colorScheme.primary
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                    tint = primaryColor
-                )
-            }
+            BackButton(tint = primaryColor, onClick = onBack)
             val searchContentState =
                 searchViewModel.searchContent.collectAsStateWithLifecycle(empty)
             val borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)

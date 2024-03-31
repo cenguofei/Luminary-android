@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseViewModel
+import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.tagColors
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.UploadData
@@ -18,8 +20,6 @@ import com.example.lunimary.models.source.local.LocalTagRepository
 import com.example.lunimary.models.source.local.Tag
 import com.example.lunimary.models.source.remote.repository.AddArticleRepository
 import com.example.lunimary.models.source.remote.repository.FileRepository
-import com.example.lunimary.base.network.NetworkResult
-import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import kotlinx.coroutines.launch

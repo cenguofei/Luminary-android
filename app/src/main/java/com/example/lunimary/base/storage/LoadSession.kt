@@ -2,8 +2,8 @@ package com.example.lunimary.base.storage
 
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.mmkv.decodeString
-import com.example.lunimary.util.empty
 import com.example.lunimary.base.mmkv.encodeString
+import com.example.lunimary.util.empty
 import com.tencent.mmkv.MMKV
 
 fun loadSession(

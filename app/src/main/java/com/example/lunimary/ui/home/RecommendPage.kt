@@ -1,11 +1,9 @@
 package com.example.lunimary.ui.home
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
-import com.example.lunimary.util.logd
 
 @Composable
 fun RecommendPage(
