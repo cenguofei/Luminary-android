@@ -2,10 +2,13 @@ package com.example.lunimary.models.source.remote.impl
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.lunimary.base.ktor.addPathParam
 import com.example.lunimary.models.LoginInfo
 import com.example.lunimary.base.ktor.init
 import com.example.lunimary.base.ktor.securityGet
 import com.example.lunimary.base.ktor.securityPost
+import com.example.lunimary.base.ktor.securityPut
+import com.example.lunimary.base.ktor.setJsonBody
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
 import com.example.lunimary.models.source.remote.UserSource
@@ -14,6 +17,7 @@ import com.example.lunimary.base.storage.TokenInfo
 import com.example.lunimary.base.storage.loadLocalToken
 import com.example.lunimary.base.storage.saveSession
 import com.example.lunimary.base.storage.saveTokens
+import com.example.lunimary.models.User
 import com.example.lunimary.util.checkIsLoginPath
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.getUserPath
@@ -21,6 +25,7 @@ import com.example.lunimary.util.logd
 import com.example.lunimary.util.loginPath
 import com.example.lunimary.util.logoutPath
 import com.example.lunimary.util.registerPath
+import com.example.lunimary.util.updateUserPath
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.header
@@ -81,5 +86,12 @@ class UserSourceImpl: BaseSourceImpl by BaseSourceImpl(),  UserSource {
             url { appendPathSegments(userId.toString()) }
         }
         return response.init()
+    }
+
+    override suspend fun update(user: User): UserResponse {
+        return client.securityPut(urlString = updateUserPath) {
+            addPathParam(user.id)
+            setJsonBody(user)
+        }.init()
     }
 }

@@ -15,7 +15,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,15 +28,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.lunimary.R
+import com.example.lunimary.base.UserState
+import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.models.User
-import com.example.lunimary.base.network.NetworkResult
-import com.example.lunimary.base.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
-import com.example.lunimary.base.UserState
-import com.example.lunimary.base.currentUser
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine
 import github.leavesczy.matisse.Matisse
@@ -152,7 +155,10 @@ fun InformationScreen(
             }
         }
     )
-
+    val newUser = remember { mutableStateOf(user.copy()) }
+    val showBottomDrawer = remember { mutableStateOf(false) }
+    val editItemType = remember { mutableStateOf(EditItemType.Username) }
+    val initialText: MutableState<Any> = remember { mutableStateOf(newUser.value.username) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -171,7 +177,13 @@ fun InformationScreen(
         ) {
             InformationItems(
                 user = user,
-                headImageSize = headImageSize
+                headImageSize = headImageSize,
+                informationViewModel = informationViewModel,
+                onBack = onBack,
+                newUser = newUser,
+                initialText = initialText,
+                editItemType = editItemType,
+                showBottomDrawer = showBottomDrawer
             )
         }
 
@@ -202,6 +214,13 @@ fun InformationScreen(
                 contentDescription = null
             )
         }
+
+        BottomDrawer(
+            showBottomDrawer = showBottomDrawer,
+            editItemType = editItemType,
+            initialText = initialText,
+            newUser = newUser
+        )
     }
 }
 

@@ -105,4 +105,10 @@
     <string name="search">搜索</string>
     <string name="search_article">搜索文章</string>
     <string name="search_user">搜索用户</string>
+    <string name="birth">生日</string>
+    <string name="signature">简介</string>
+    <string name="blog_address">博客地址</string>
+    <string name="not_allowed_modifier_username">暂不支持修改用户名</string>
+    <string name="no_save_of_back">资料修改尚未保存，返回后所有资料修改不会生效</string>
+    <string name="save">保存</string>
 </resources>

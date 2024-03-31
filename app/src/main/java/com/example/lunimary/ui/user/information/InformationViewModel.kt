@@ -4,14 +4,19 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.example.lunimary.base.BaseViewModel
+import com.example.lunimary.base.UserState
+import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.models.UPLOAD_TYPE_USER_BACKGROUND
 import com.example.lunimary.models.UPLOAD_TYPE_USER_HEAD
 import com.example.lunimary.models.UploadData
+import com.example.lunimary.models.User
 import com.example.lunimary.models.source.remote.repository.FileRepository
-import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.models.source.remote.repository.UserRepository
 
 class InformationViewModel : BaseViewModel() {
     private val fileRepository = FileRepository()
+    private val userRepository = UserRepository()
 
     private val _showImageSelector: MutableState<Boolean> = mutableStateOf(false)
     val showImageSelector: State<Boolean> get() = _showImageSelector
@@ -68,9 +73,33 @@ class InformationViewModel : BaseViewModel() {
             )
         }
     }
+
+    private val _updateUserState: MutableState<NetworkResult<Unit>> = mutableStateOf(NetworkResult.None())
+    val updateUserState: State<NetworkResult<Unit>> get() = _updateUserState
+
+    fun save(newUser: User) {
+        if (newUser == currentUser) return
+        fly(FLY_UPDATE_USER) {
+            request(
+                block = {
+                    _updateUserState.value = NetworkResult.Loading()
+                    userRepository.update(newUser)
+                },
+                onSuccess = { _, _ ->
+                    UserState.updateLocalUser(newUser.copy())
+                    _updateUserState.value = NetworkResult.Success()
+                },
+                onFailed = {
+                    _updateUserState.value = NetworkResult.Error(it)
+                },
+                onFinish = { land(FLY_UPDATE_USER) }
+            )
+        }
+    }
 }
 
 const val FLY_UPLOAD_USER_HEAD_OR_BACKGROUND = "fly_upload_user_head_or_background"
+const val FLY_UPDATE_USER = "fly_update_user"
 
 enum class UploadUserFileType {
     HeadImage,

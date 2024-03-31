@@ -22,6 +22,7 @@ import com.example.lunimary.ui.TopLevelDestination
 import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.ui.rememberAppState
 import com.example.lunimary.base.UserState
+import com.example.lunimary.util.logd
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
                 windowSizeClass = calculateWindowSizeClass(this),
                 userViewModel = userViewModel
             )
+            "appState=$appState".logd("appState")
             val darkTheme = DarkThemeConfig(themeSetting = appState.darkThemeSettingState.value)
             LaunchedEffect(systemUiController, darkTheme) {
                 systemUiController.systemBarsDarkContentEnabled = !darkTheme

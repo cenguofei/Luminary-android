@@ -35,6 +35,7 @@ import com.example.lunimary.ui.common.setRelationPage
 import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.notLogin
+import com.example.lunimary.util.logd
 import com.google.accompanist.systemuicontroller.SystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -85,18 +86,13 @@ class LunimaryAppState(
         if (newDestination == selectedBottomTab.value) {
             return
         }
+        "updateSelectedBottomTab: $newDestination".logd("TopLevelScreens")
         _selectedBottomTab.value = newDestination
     }
 
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
-
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            TopLevelDestination.Home.route -> TopLevelDestination.Home
-            else -> null
-        }
 
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
@@ -110,8 +106,6 @@ class LunimaryAppState(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = false,
         )
-
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
 
     private val _darkThemeSettingState = mutableStateOf(
         if (SettingMMKV.userHasSetTheme) {

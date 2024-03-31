@@ -1,6 +1,7 @@
 package com.example.lunimary.models.source.remote
 
 import com.example.lunimary.models.LoginInfo
+import com.example.lunimary.models.User
 import com.example.lunimary.models.responses.DataResponse
 import com.example.lunimary.models.responses.UserResponse
 
@@ -35,4 +36,6 @@ interface UserSource {
      * 查询用户信息
      */
     suspend fun queryUser(userId: Long) : UserResponse
+
+    suspend fun update(user: User) : UserResponse
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,9 +32,9 @@ import com.example.lunimary.R
 @Composable
 fun LunimaryDialog(
     onDismissRequest: () -> Unit = {},
-    properties: DialogProperties = DialogProperties(),
+    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
     text: String,
-    height: Dp = 100.dp,
+    height: Dp = 150.dp,
     width: Dp = 250.dp,
     openDialog: MutableState<Boolean> = remember { mutableStateOf(false) },
     onCancelClick: (() -> Unit)? = null,
@@ -46,7 +47,7 @@ fun LunimaryDialog(
         ) {
             Surface(
                 modifier = Modifier.size(height = height, width = width),
-                shape = RoundedCornerShape(12),
+                shape = RoundedCornerShape(12)
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -57,12 +58,16 @@ fun LunimaryDialog(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = text,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)) {
+                            Text(
+                                text = text,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+                        }
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(
                             verticalAlignment = Alignment.CenterVertically,

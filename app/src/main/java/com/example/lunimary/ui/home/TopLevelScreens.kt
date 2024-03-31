@@ -4,17 +4,14 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.lunimary.base.checkLogin
+import com.example.lunimary.base.notLogin
 import com.example.lunimary.ui.HOME_ROOT
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.MESSAGE_ROOT
@@ -22,9 +19,6 @@ import com.example.lunimary.ui.TopLevelDestination
 import com.example.lunimary.ui.USER_ROOT
 import com.example.lunimary.ui.message.MessageScreen
 import com.example.lunimary.ui.user.UserDetailScreen
-import com.example.lunimary.base.checkLogin
-import com.example.lunimary.base.notLogin
-import com.example.lunimary.util.logd
 
 fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
     composable(
@@ -35,34 +29,16 @@ fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
                 type = NavType.StringType
             }
         )
-    ) { navBackStackEntry ->
-        val topType = when (
-            navBackStackEntry.arguments?.getString("topScreen") ?: HOME_ROOT
-        ) {
-            MESSAGE_ROOT -> {
-                TopLevelDestination.Message
-            }
-
-            USER_ROOT -> {
-                TopLevelDestination.User
-            }
-
-            else -> TopLevelDestination.Home
-        }
+    ) {
         TopLevelScreens(
-            appState = appState,
-            destination = topType
+            appState = appState
         )
     }
 }
 
 @Composable
-fun TopLevelScreens(appState: LunimaryAppState, destination: TopLevelDestination) {
+fun TopLevelScreens(appState: LunimaryAppState) {
     val selectedBottomTab = appState.selectedBottomTab
-    LaunchedEffect(
-        key1 = Unit,
-        block = { appState.updateSelectedBottomTab(destination) }
-    )
     Scaffold(
         modifier = Modifier,
         containerColor = Color.Transparent,
