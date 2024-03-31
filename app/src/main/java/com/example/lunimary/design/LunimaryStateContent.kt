@@ -1,6 +1,7 @@
 package com.example.lunimary.design
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,18 +13,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +48,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,8 +70,10 @@ import com.example.lunimary.base.UserState
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T : Any> LunimaryPagingContent(
     modifier: Modifier = Modifier,
@@ -84,6 +105,7 @@ fun <T : Any> LunimaryPagingContent(
         (loadState.refresh is LoadState.Error) -> {
             (loadState.refresh as LoadState.Error).error.message
         }
+
         else -> stringResource(id = R.string.load_error_and_retry)
     }
     val showShimmer = if (shimmer) loadState.refresh is LoadState.Loading else false
@@ -108,40 +130,65 @@ fun <T : Any> LunimaryPagingContent(
         color = color,
         checkLoginState = checkLoginState
     ) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            topItem?.let { item { it() } }
-            items(items.itemCount, key = key) {
-                items[it]?.let { item -> itemContent(item) }
-            }
-            when {
-                loadState.append is LoadState.NotLoading -> {
-                    if ((loadState.append as LoadState.NotLoading).endOfPaginationReached) {
-                        //没有更多
-                        item { Footer(desc = stringResource(id = R.string.loading_no_more)) }
+        val state = rememberPullToRefreshState()
+        val scaleFraction = if (state.isRefreshing) 1f else
+            LinearOutSlowInEasing.transform(state.progress).coerceIn(0f, 1f)
+        if (state.isRefreshing) {
+            LaunchedEffect(key1 = Unit, block = { items.refresh() })
+        }
+        val isNotLoading = items.loadState.refresh is LoadState.NotLoading
+        val isError = items.loadState.refresh is LoadState.Error
+        if (isNotLoading || isError) {
+            LaunchedEffect(key1 = Unit, block = { state.endRefresh() })
+        }
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(state.nestedScrollConnection)) {
+            LazyColumn(Modifier.fillMaxSize()) {
+                topItem?.let { item { it() } }
+                if (!state.isRefreshing) {
+                    items(items.itemCount, key = key) { index ->
+                        items[index]?.let { item -> itemContent(item) }
                     }
                 }
+                when {
+                    loadState.append is LoadState.NotLoading -> {
+                        if ((loadState.append as LoadState.NotLoading).endOfPaginationReached) {
+                            //没有更多
+                            item { Footer(desc = stringResource(id = R.string.loading_no_more)) }
+                        }
+                    }
 
-                !hasNetwork && items.isNotEmpty() -> {
-                    //没有网，但是前面请求的数据还在
-                    item { Footer(desc = stringResource(id = R.string.load_error_for_no_net)) }
-                }
+                    !hasNetwork && items.isNotEmpty() -> {
+                        //没有网，但是前面请求的数据还在
+                        item { Footer(desc = stringResource(id = R.string.load_error_for_no_net)) }
+                    }
 
-                loadState.append is LoadState.Loading -> {
-                    //底部加载
-                    item { Footer(desc = stringResource(id = R.string.loading)) }
-                }
+                    loadState.append is LoadState.Loading -> {
+                        //底部加载
+                        item { Footer(desc = stringResource(id = R.string.loading)) }
+                    }
 
-                items.loadState.append is LoadState.Error -> {
-                    //底部错误，点击重试
-                    item {
-                        Footer(
-                            desc = stringResource(id = R.string.load_error_and_retry),
-                            enabled = true,
-                            onClick = { items.retry() }
-                        )
+                    items.loadState.append is LoadState.Error -> {
+                        //底部错误，点击重试
+                        item {
+                            Footer(
+                                desc = stringResource(id = R.string.load_error_and_retry),
+                                enabled = true,
+                                onClick = { items.retry() }
+                            )
+                        }
                     }
                 }
             }
+            PullToRefreshContainer(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
+                state = state,
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }
@@ -239,7 +286,9 @@ fun LunimaryStateContent(
                 )
             }
 
-            shimmer -> { ShimmerList() }
+            shimmer -> {
+                ShimmerList()
+            }
 
             searchEmpty -> {
                 ShowReasonForNoContent(
