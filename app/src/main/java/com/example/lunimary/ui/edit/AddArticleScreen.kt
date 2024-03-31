@@ -77,7 +77,7 @@ fun NavGraphBuilder.addArticleScreen(
             onPublish = { editViewModel.publish() },
             editViewModel = editViewModel,
             coroutineScope = coroutineScope,
-            onFinish = { appState.navToUser() },
+            onFinish = { appState.navToUser(Screens.AddArticle.route) },
             draftArticle = draftArticle,
             onNavToWeb = { appState.navToWeb(ChineseMarkdownWeb) }
         )

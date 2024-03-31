@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +28,7 @@ fun ChangeCover(
 ) {
     Surface(
         modifier = modifier.padding(end = 16.dp),
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+        color = Color.Black.copy(alpha = 0.4f),
         onClick = onClick,
         shape = RoundedCornerShape(50)
     ) {
@@ -35,7 +36,7 @@ fun ChangeCover(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
         ) {
-            val contentColor = MaterialTheme.colorScheme.surface
+            val contentColor = Color.White.copy(alpha = 0.7f)
             Icon(
                 imageVector = Icons.Default.PhotoCamera,
                 contentDescription = null,
@@ -46,7 +47,7 @@ fun ChangeCover(
             Text(
                 text = stringResource(id = R.string.change_cover),
                 fontSize = 12.sp,
-                color = contentColor.copy(alpha = 0.7f)
+                color = contentColor
             )
         }
     }

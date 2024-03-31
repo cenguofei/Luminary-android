@@ -26,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.example.lunimary.design.LocalNavNavController
 import com.example.lunimary.R
@@ -117,9 +118,21 @@ private fun LunimaryNavHost(
     val userState = UserState.currentUserState.observeAsState()
     val coroutine = rememberCoroutineScope()
     if (userState.value == User.NONE && UserState.updated) {
-        coroutine.launch {
-            onShowSnackbar("你当前为非登录状态！", null)
-        }
+        LaunchedEffect(
+            key1 = Unit,
+            block = {
+                coroutine.launch {
+                    onShowSnackbar("你当前为非登录状态！", null)
+                }
+            }
+        )
+    }
+    val visibleEntries = navController.visibleEntries.collectAsStateWithLifecycle()
+    visibleEntries.value.forEach { navBackStackEntry ->
+        val arguments = navBackStackEntry.arguments
+        val destination = navBackStackEntry.destination
+//        "navBackStackEntry toString=$navBackStackEntry".logd("visibleEntries")
+        "route=${destination.route}, arguments=$arguments ".logd("visibleEntries")
     }
 
     NavHost(

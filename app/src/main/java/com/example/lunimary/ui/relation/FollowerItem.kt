@@ -135,7 +135,7 @@ fun FollowerItem(
                     ),
                     modifier = Modifier.padding(horizontal = 8.dp),
                     fontSize = 10.sp,
-                    color = if (alsoFollow) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.W500
                 )
             }

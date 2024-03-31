@@ -40,10 +40,8 @@ fun EditComment(
 ) {
     BackHandler { onDismiss() }
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f),
+        modifier = Modifier.fillMaxSize(),
+        color = Color.Black.copy(alpha = 0.45f),
         onClick = onDismiss
     ) {
         Box(
@@ -55,6 +53,7 @@ fun EditComment(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16))
+                        .imePadding()
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     TextField(
@@ -97,11 +96,12 @@ fun EditComment(
                             onClick = { onSend(commentText.value) },
                             text = stringResource(id = R.string.send),
                             enabled = commentText.value.isNotBlank(),
-                            shape = RoundedCornerShape(25)
+                            shape = RoundedCornerShape(25),
+                            colors = listOf()
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                     }
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

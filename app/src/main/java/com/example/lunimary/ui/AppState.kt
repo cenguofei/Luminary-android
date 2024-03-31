@@ -34,6 +34,7 @@ import com.example.lunimary.ui.common.setNavViewUser
 import com.example.lunimary.ui.common.setRelationPage
 import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.notLogin
 import com.google.accompanist.systemuicontroller.SystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -77,6 +78,16 @@ class LunimaryAppState(
     val systemUiController: SystemUiController,
     val userViewModel: UserViewModel
 ) {
+    private val _selectedBottomTab = mutableStateOf(TopLevelDestination.Home)
+    val selectedBottomTab: State<TopLevelDestination> get() = _selectedBottomTab
+
+    fun updateSelectedBottomTab(newDestination: TopLevelDestination) {
+        if (newDestination == selectedBottomTab.value) {
+            return
+        }
+        _selectedBottomTab.value = newDestination
+    }
+
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -122,52 +133,171 @@ class LunimaryAppState(
 
     var lastBackClickedTime = System.currentTimeMillis()
     fun popBackStack() {
-        if (System.currentTimeMillis() - lastBackClickedTime < 1000){
+        if (System.currentTimeMillis() - lastBackClickedTime < 1000) {
             return
         }
         navController.popBackStack()
     }
 
     /**
-     * @param backType
+     * @param fromNeedLogin
      * false -> system default
      * true -> our defined
      */
-    fun navToLogin(backType: Boolean = false) { navController.navToLogin(backType) }
-
-    fun navToHome() { navController.navToHome() }
-
-    fun navToMessage() { navController.navToMessage() }
-
-    fun navToUser() { navController.navToUser() }
-
-    fun navToSettings() { navController.navigate(Screens.Settings.route) }
-
-    fun navToRegister() { navController.navigate(Screens.Register.route) }
-
-    fun navToEdit(draftArticle: Article? = null) { navController.navToEdit(draftArticle) }
-
-    fun navToDraft() { navController.navigate(Screens.Drafts.route) }
-
-    fun navToWeb(url: String? = null) { navController.navToWeb(url) }
-
-    fun navToBrowse(article: Article) { navController.navToBrowse(article) }
-
-    fun navToRelation(relationPageType: RelationPageType) { navController.navToRelation(relationPageType) }
-
-    fun navToInformation() { navController.navToInformation() }
-    fun navToSearch() { navController.navToSearch() }
-
-    fun navToViewUser(user: User) { navController.navToViewUser(user) }
-}
-
-private fun NavController.navToViewUser(user: User) {
-    if (user.id == currentUser.id) {
-        navToUser()
-        return
+    fun navToLogin(fromNeedLogin: Boolean = false) {
+        navController.navToLogin(fromNeedLogin)
     }
-    setNavViewUser(user)
-    navigate(Screens.ViewUser.route)
+
+    fun navToHome(
+        from: String
+    ) {
+        if (notLogin() && selectedBottomTab.value != TopLevelDestination.Home) {
+            updateSelectedBottomTab(TopLevelDestination.Home)
+        }
+        val navOptions = when (from) {
+            Screens.Login.route -> {
+                navOptions {
+                    popUpTo(Screens.Login.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            Screens.Search.route -> {
+                navOptions {
+                    popUpTo(Screens.Search.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            Screens.Relation.route -> {
+                navOptions {
+                    popUpTo(Screens.Relation.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            Screens.BrowseArticle.route -> {
+                navOptions {
+                    popUpTo(Screens.BrowseArticle.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            Screens.BrowseArticle.route -> {
+                navOptions {
+                    popUpTo(Screens.BrowseArticle.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            Screens.Settings.route -> {
+                navOptions {
+                    popUpTo(Screens.Settings.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            Screens.ViewUser.route -> {
+                navOptions {
+                    popUpTo(Screens.ViewUser.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            Screens.AddArticle.route -> {
+                navOptions {
+                    popUpTo(Screens.AddArticle.route) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
+
+            else -> navOptions { }
+        }
+        val route = HOME_ROUTE
+        navController.navigate(
+            route = route,
+            navOptions = navOptions
+        )
+    }
+
+    fun navToUser(
+        from: String
+    ) {
+        updateSelectedBottomTab(TopLevelDestination.User)
+        navToHome(from)
+    }
+
+    fun navToSettings() {
+        navController.navigate(Screens.Settings.route)
+    }
+
+    fun navToRegister() {
+        navController.navigate(Screens.Register.route)
+    }
+
+    fun navToEdit(draftArticle: Article? = null) {
+        navController.navToEdit(draftArticle)
+    }
+
+    fun navToDraft() {
+        navController.navigate(Screens.Drafts.route)
+    }
+
+    fun navToWeb(url: String? = null) {
+        navController.navToWeb(url)
+    }
+
+    fun navToBrowse(article: Article) {
+        navController.navToBrowse(article)
+    }
+
+    fun navToRelation(relationPageType: RelationPageType) {
+        navController.navToRelation(relationPageType)
+    }
+
+    fun navToInformation() {
+        navController.navToInformation()
+    }
+
+    fun navToSearch() {
+        navController.navToSearch()
+    }
+
+    fun navToViewUser(
+        user: User,
+        from: String
+    ) {
+        navController.navToViewUser(user, from)
+    }
+
+    private fun NavController.navToViewUser(
+        user: User,
+        from: String
+    ) {
+        if (user.id == currentUser.id) {
+            updateSelectedBottomTab(TopLevelDestination.User)
+            navToHome(from)
+            return
+        }
+        setNavViewUser(user)
+        navigate(Screens.ViewUser.route)
+    }
 }
 
 private fun NavController.navToSearch() {
@@ -183,47 +313,8 @@ private fun NavController.navToBrowse(article: Article) {
     navigate(BROWSE_ARTICLE_ROOT)
 }
 
-fun NavController.navToLogin(backType: Boolean = false) {
-    navigate("$LOGIN_ROOT/$backType")
-}
-
-fun NavController.navToHome() {
-    val route = HOME_ROUTE
-    navigate(
-        route = route,
-        navOptions = navOptions {
-            popUpTo(route) {
-                inclusive = true
-            }
-            launchSingleTop = true
-        }
-    )
-}
-
-fun NavController.navToMessage() {
-    val route = MESSAGE_ROUTE
-    navigate(
-        route = route,
-        navOptions = navOptions {
-            popUpTo(route) {
-                inclusive = true
-            }
-            launchSingleTop = true
-        }
-    )
-}
-
-fun NavController.navToUser() {
-    val route = USER_ROUTE
-    navigate(
-        route = route,
-        navOptions = navOptions {
-            popUpTo(route) {
-                inclusive = true
-            }
-            launchSingleTop = true
-        }
-    )
+fun NavController.navToLogin(fromNeedLogin: Boolean = false) {
+    navigate("$LOGIN_ROOT/$fromNeedLogin")
 }
 
 private fun NavController.navToRelation(relationPageType: RelationPageType) {
@@ -244,6 +335,7 @@ private fun NavController.navToWeb(url: String? = null) {
     UrlNavArguments[WEB_VIEW_URL_KEY] = url ?: DEFAULT_WEB_URL
     navigate(WEB_VIEW_ROOT)
 }
+
 @Composable
 private fun NavigationTrackingSideEffect(navController: NavHostController) {
     DisposableEffect(navController) {
@@ -252,7 +344,7 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
                 "navigation_events",
                 "Foods Destination:${destination.route.toString()},arguments:$arguments"
             )
-            val entries = navController.visibleEntries.value.toString()
+            val entries = navController.visibleEntries.value
             Log.v("navigation_events", "visibleEntries=$entries")
         }
 

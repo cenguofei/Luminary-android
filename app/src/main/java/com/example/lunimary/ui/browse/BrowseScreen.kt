@@ -25,7 +25,7 @@ fun NavGraphBuilder.browseScreen(
     ) {
         val article = ArticleNavArguments[BROWSE_ARTICLE_KEY]
         if (article == null) {
-            appState.navToHome()
+            appState.navToHome(Screens.BrowseArticle.route)
             "nav article = null".logd()
             return@composable
         }
@@ -35,7 +35,7 @@ fun NavGraphBuilder.browseScreen(
             onBack = appState::popBackStack,
             browseViewModel = browseViewModel,
             onLinkClick = appState::navToWeb,
-            onUserClick = appState::navToViewUser
+            onUserClick = { appState.navToViewUser(it, Screens.BrowseArticle.route) }
         )
     }
 }

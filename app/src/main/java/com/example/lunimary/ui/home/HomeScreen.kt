@@ -9,6 +9,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
@@ -28,6 +29,8 @@ fun HomeScreen(
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
     val userState = UserState.currentUserState.observeAsState()
+    val recommendViewModel: RecommendViewModel = viewModel()
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -50,7 +53,9 @@ fun HomeScreen(
             tabs = tabs,
             modifier = Modifier.weight(1f),
             pagerState = pagerState,
-            onItemClick = onItemClick
+            onItemClick = onItemClick,
+            goToLogin = { appState.navToLogin(true) },
+            recommendViewModel = recommendViewModel
         )
     }
 }

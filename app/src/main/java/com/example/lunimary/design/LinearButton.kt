@@ -33,10 +33,13 @@ fun LinearButton(
     shape: Shape = RoundedCornerShape(16),
     text: String
 ) {
+    val linearColors = colors.ifEmpty {
+        listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primary)
+    }
     Surface(
         modifier = modifier
             .background(
-                brush = Brush.linearGradient(colors),
+                brush = Brush.linearGradient(linearColors),
                 shape = shape
             )
             .height(height),

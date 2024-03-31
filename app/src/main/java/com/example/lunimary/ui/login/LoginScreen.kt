@@ -20,6 +20,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.lunimary.R
+import com.example.lunimary.base.checkLogin
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryStateContent
 import com.example.lunimary.design.LunimaryToolbar
@@ -27,6 +28,7 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
+import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -43,7 +45,7 @@ fun NavGraphBuilder.loginScreen(appState: LunimaryAppState, coroutineScope: Coro
         val fromNeedLogin = navBackEntry.arguments?.getBoolean("fromNeedLogin") ?: false
         BackHandler {
             if (fromNeedLogin) {
-                appState.navToHome()
+                appState.navToHome(Screens.Login.route)
             } else {
                 appState.popBackStack()
             }
@@ -51,7 +53,7 @@ fun NavGraphBuilder.loginScreen(appState: LunimaryAppState, coroutineScope: Coro
         LoginScreen(
             onBack = {
                 if (fromNeedLogin) {
-                    appState.navToHome()
+                    appState.navToHome(Screens.Login.route)
                 } else {
                     appState.popBackStack()
                 }
@@ -78,17 +80,25 @@ fun LoginScreen(
 ) {
     val loginState by userViewModel.loginState.observeAsState()
     val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
+    val notConnected = stringResource(id = R.string.not_connected)
     LaunchedEffect(
         key1 = loginState,
         block = {
             when(loginState) {
                 is NetworkResult.Success -> {
-                    appState.navToHome()
+                    appState.navToHome(Screens.Login.route)
                 }
                 is NetworkResult.Error -> {
                     coroutineScope.launch {
                         loginState.asError()?.msg?.let {
-                            snackbarHostState?.showSnackbar(message = it)
+                            val message = it.ifEmpty {
+                                if (userViewModel.online.value == true) {
+                                    unknownErrorMsg
+                                } else {
+                                    notConnected
+                                }
+                            }
+                            snackbarHostState?.showSnackbar(message = message)
                         }
                     }
                 }

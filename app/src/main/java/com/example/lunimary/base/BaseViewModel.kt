@@ -57,7 +57,7 @@ open class BaseViewModel : ViewModel() {
                 } else {
                     if (nowIsOnline) { // 无网 -> 有网
                         _online.postValue(true)
-                        noNetToHaveNet()
+                        onHaveNetwork()
                         dispatchOnHaveNetEvent()
                     }
                 }
@@ -83,10 +83,10 @@ open class BaseViewModel : ViewModel() {
      *
      * 即使有网也会经过 true -> false -> true，所以使用时应该更具实际情况再次判断是否应该请求网络
      */
-    open fun noNetToHaveNet() { }
+    open fun onHaveNetwork() { }
 
     private val onSwitchToHaveNetMap = mutableMapOf<String, () -> Unit>()
-    fun noNetToHaveNet(
+    fun registerOnHaveNetwork(
         key: String,
         noNetToHaveNet: () -> Unit
     ) {
@@ -95,6 +95,12 @@ open class BaseViewModel : ViewModel() {
             return
         }
         onSwitchToHaveNetMap[key] = noNetToHaveNet
+    }
+
+    fun unregisterOnHaveNetwork(key: String) {
+        if (onSwitchToHaveNetMap.containsKey(key)) {
+            onSwitchToHaveNetMap.remove(key)
+        }
     }
 
     private fun dispatchOnHaveNetEvent() {
@@ -121,6 +127,8 @@ open class BaseViewModel : ViewModel() {
                     } else {
                         onFailed(response.msg)
                     }
+                }.onFailure {
+                    onFailed(it.message ?: unknownErrorMsg)
                 }
                 onFinish()
             }.onFailure {

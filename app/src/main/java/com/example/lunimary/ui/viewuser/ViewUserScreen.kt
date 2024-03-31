@@ -32,7 +32,7 @@ fun NavGraphBuilder.viewUserScreen(
     ) {
         val user = getNavViewUser()
         if (user == User.NONE) {
-            appState.navToHome()
+            appState.navToHome(Screens.ViewUser.route)
             return@composable
         }
         ViewUserScreen(

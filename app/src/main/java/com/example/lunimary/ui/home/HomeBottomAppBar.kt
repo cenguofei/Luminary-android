@@ -19,7 +19,8 @@ import com.example.lunimary.ui.TopLevelDestination
 
 @Composable
 fun HomeBottomAppBar(
-    selectedBottomTab: MutableState<TopLevelDestination>,
+    selectedBottomTab: TopLevelDestination,
+    updateBottomSelectedState: (TopLevelDestination) -> Unit
 ) {
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.9f),
@@ -36,7 +37,7 @@ fun HomeBottomAppBar(
         ) {
             IconButton(
                 onClick = {
-                    updateBottomSelectedState(selectedBottomTab, TopLevelDestination.Home)
+                    updateBottomSelectedState(TopLevelDestination.Home)
                 }
             ) {
                 Icon(
@@ -48,7 +49,7 @@ fun HomeBottomAppBar(
 
             IconButton(
                 onClick = {
-                    updateBottomSelectedState(selectedBottomTab, TopLevelDestination.Message)
+                    updateBottomSelectedState(TopLevelDestination.Message)
                 }
             ) {
                 Icon(
@@ -60,7 +61,7 @@ fun HomeBottomAppBar(
 
             IconButton(
                 onClick = {
-                    updateBottomSelectedState(selectedBottomTab, TopLevelDestination.User)
+                    updateBottomSelectedState(TopLevelDestination.User)
                 }
             ) {
                 Icon(
@@ -70,15 +71,6 @@ fun HomeBottomAppBar(
                 )
             }
         }
-    }
-}
-
-private fun updateBottomSelectedState(
-    selectedBottomTab: MutableState<TopLevelDestination>,
-    tab: TopLevelDestination
-) {
-    if (selectedBottomTab.value != tab) {
-        selectedBottomTab.value = tab
     }
 }
 

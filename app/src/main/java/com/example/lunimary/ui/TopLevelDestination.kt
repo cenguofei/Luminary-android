@@ -2,7 +2,7 @@ package com.example.lunimary.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.Cottage
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +23,7 @@ enum class TopLevelDestination(
         route = "$TOP_ROOT/{topScreen}"
     ),
     Message(
-        icon = Icons.Default.Chat,
+        icon = Icons.AutoMirrored.Filled.Chat,
         iconTextId = R.string.message,
         route = "$TOP_ROOT/{topScreen}"
     ),
@@ -34,8 +34,8 @@ enum class TopLevelDestination(
     );
 
     @Composable
-    fun tintColor(selectedBottomTab: State<TopLevelDestination>): Color {
-        return if (selectedBottomTab.value == this) {
+    fun tintColor(selectedBottomTab: TopLevelDestination): Color {
+        return if (selectedBottomTab == this) {
             MaterialTheme.colorScheme.primary
         } else {
             MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)

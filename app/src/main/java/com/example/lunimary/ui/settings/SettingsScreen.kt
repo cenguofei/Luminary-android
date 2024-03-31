@@ -67,7 +67,7 @@ fun SettingsScreen(
         is NetworkResult.Success -> {
             showLoadingWheel.value = false
             appState.userViewModel.reset()
-            appState.navToHome()
+            appState.navToHome(Screens.Settings.route)
         }
 
         is NetworkResult.Error -> {

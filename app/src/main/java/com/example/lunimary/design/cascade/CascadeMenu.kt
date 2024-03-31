@@ -54,7 +54,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 val MAX_WIDTH = 192.dp
 
-fun  <T>AnimatedContentTransitionScope<T>.animateToPrevious(): ContentTransform {
+fun <T> AnimatedContentTransitionScope<T>.animateToPrevious(): ContentTransform {
     return slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right) togetherWith
             slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
 }
@@ -181,12 +181,8 @@ fun CascadeMenuItemText(
     color: Color,
     isHeaderText: Boolean = false,
 ) {
-    val style = if (isHeaderText) {
-        MaterialTheme.typography.titleSmall
-    } else {
-        MaterialTheme.typography.titleSmall
-    }
-
+    val style =
+        if (isHeaderText) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleSmall
     Text(
         modifier = modifier,
         text = text,
@@ -265,7 +261,6 @@ fun <T> CascadeChildItem(
         )
     }
 }
-////////////////////////
 
 @OptIn(ExperimentalAnimationApi::class)
 @ExperimentalAnimationApi
@@ -275,7 +270,6 @@ fun CascadeScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     val channel = remember { Channel<String>(Channel.CONFLATED) }
     val (isOpen, setIsOpen) = remember { mutableStateOf(false) }
-
 
     LaunchedEffect(key1 = channel) {
         channel.receiveAsFlow().collect {

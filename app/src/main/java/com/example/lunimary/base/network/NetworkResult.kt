@@ -1,8 +1,6 @@
 package com.example.lunimary.base.network
 
-import com.example.lunimary.design.SnackbarData
 import com.example.lunimary.util.empty
-import com.example.lunimary.util.logd
 
 sealed class NetworkResult<T>(
     val msg: String? = empty,
@@ -14,18 +12,8 @@ sealed class NetworkResult<T>(
 
     class Error<T>(msg: String = empty): NetworkResult<T>(msg = msg)
 
-    class Empty<T>(msg: String = empty): NetworkResult<T>(msg = msg)
-
     class None<T>: NetworkResult<T>()
 }
-
-fun <T> NetworkResult<T>?.isLoading(): Boolean = run {
-    "$this".logd("networkResult")
-    this != null && this == NetworkResult.Loading<T>()
-}
-
-fun <T> NetworkResult<T>?.isSuccess(): Boolean = this != null && this == NetworkResult.Success<T>()
-
 fun <T> NetworkResult<T>?.isError(): Boolean = this != null && this == NetworkResult.Error<T>()
 
 fun <T> NetworkResult<T>?.asSuccess(): NetworkResult.Success<T>? {
@@ -34,15 +22,5 @@ fun <T> NetworkResult<T>?.asSuccess(): NetworkResult.Success<T>? {
 
 fun <T> NetworkResult<T>?.asError(): NetworkResult.Error<T>? {
     return this as? NetworkResult.Error<T>
-}
-
-fun <T> NetworkResult<T>?.getErrorMsg(): String {
-    return this?.asError()?.msg ?: empty
-}
-
-fun <T> NetworkResult<T>?.toSnackbarData(): SnackbarData? {
-    return if (this.isError()) {
-        this!!.asError()?.msg?.let { SnackbarData(it) }
-    } else null
 }
 

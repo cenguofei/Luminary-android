@@ -3,6 +3,7 @@ package com.example.lunimary.ui.relation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -145,6 +146,7 @@ fun FollowItem(
                 },
                 enabled = enabled.value
             ) {
+                val color =  MaterialTheme.colorScheme.onSurface
                 Text(
                     text = when {
                         cancelFollow -> stringResource(id = R.string.follow)
@@ -153,7 +155,7 @@ fun FollowItem(
                     },
                     modifier = Modifier.padding(horizontal = 8.dp),
                     fontSize = 10.sp,
-                    color = if (cancelFollow) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface,
+                    color = color,
                     fontWeight = FontWeight.W500
                 )
             }

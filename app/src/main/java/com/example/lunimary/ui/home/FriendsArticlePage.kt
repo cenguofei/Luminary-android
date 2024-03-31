@@ -6,7 +6,7 @@ import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
 
 @Composable
-fun FollowingPage(
+fun FriendsArticlePage(
     recommendViewModel: RecommendViewModel,
     onItemClick: (Article) -> Unit
 ) {
@@ -15,7 +15,7 @@ fun FollowingPage(
         items = articles,
         key = { articles[it]?.id!! },
         viewModel = recommendViewModel,
-        pagingKey = "FollowingPage"
+        pagingKey = "FriendsArticlePage"
     ) {
         ArticleItem(onItemClick = onItemClick, article = it)
     }

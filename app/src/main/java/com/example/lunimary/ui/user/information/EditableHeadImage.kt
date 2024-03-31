@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -52,19 +53,18 @@ fun EditableHeadImage(
                     modifier = Modifier,
                     size = size
                 )
-
                 Spacer(
                     modifier = Modifier
                         .size(size)
                         .clip(RoundedCornerShape(50))
-                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f))
+                        .background(Color.Black.copy(alpha = 0.45f))
                 )
 
                 Column(
                     modifier = Modifier.padding(top = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val contentColor = MaterialTheme.colorScheme.surface
+                    val contentColor = Color.White.copy(alpha = 0.7f)
                     Icon(
                         imageVector = Icons.Default.PhotoCamera,
                         contentDescription = null,

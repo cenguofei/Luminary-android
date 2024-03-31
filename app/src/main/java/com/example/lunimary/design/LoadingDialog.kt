@@ -29,7 +29,9 @@ fun LoadingDialog(
                 modifier = Modifier.size(height = 100.dp, width = 100.dp),
                 shape = RoundedCornerShape(12),
             ) {
-                Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.fillMaxSize(),
@@ -40,7 +42,9 @@ fun LoadingDialog(
                                 text = description,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.align(Alignment.BottomCenter).padding(top = 4.dp)
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(top = 4.dp)
                             )
                         }
                     }

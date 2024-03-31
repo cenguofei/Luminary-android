@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import com.example.lunimary.ui.message.MessageScreen
 import com.example.lunimary.ui.user.UserDetailScreen
 import com.example.lunimary.base.checkLogin
 import com.example.lunimary.base.notLogin
+import com.example.lunimary.util.logd
 
 fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
     composable(
@@ -33,11 +36,17 @@ fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
             }
         )
     ) { navBackStackEntry ->
-        val topType = when(
+        val topType = when (
             navBackStackEntry.arguments?.getString("topScreen") ?: HOME_ROOT
         ) {
-            MESSAGE_ROOT -> { TopLevelDestination.Message }
-            USER_ROOT -> { TopLevelDestination.User }
+            MESSAGE_ROOT -> {
+                TopLevelDestination.Message
+            }
+
+            USER_ROOT -> {
+                TopLevelDestination.User
+            }
+
             else -> TopLevelDestination.Home
         }
         TopLevelScreens(
@@ -49,16 +58,19 @@ fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
 
 @Composable
 fun TopLevelScreens(appState: LunimaryAppState, destination: TopLevelDestination) {
-    val selectedBottomTab = rememberSaveable(stateSaver = Saver(
-        save = { it.toString() },
-        restore = { TopLevelDestination.valueOf(it) }
-    )) { mutableStateOf(destination) }
-
+    val selectedBottomTab = appState.selectedBottomTab
+    LaunchedEffect(
+        key1 = Unit,
+        block = { appState.updateSelectedBottomTab(destination) }
+    )
     Scaffold(
         modifier = Modifier,
         containerColor = Color.Transparent,
         bottomBar = {
-            HomeBottomAppBar(selectedBottomTab = selectedBottomTab)
+            HomeBottomAppBar(
+                selectedBottomTab = selectedBottomTab.value,
+                updateBottomSelectedState = appState::updateSelectedBottomTab
+            )
         }
     ) { paddingValues ->
         val paddingModifier = Modifier

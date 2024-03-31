@@ -20,6 +20,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,6 +49,7 @@ import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.ui.navToLogin
 import com.example.lunimary.base.UserState
 import com.example.lunimary.util.empty
+import com.example.lunimary.util.logd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -64,14 +66,18 @@ fun <T : Any> LunimaryPagingContent(
     key: ((index: Int) -> Any)? = null,
     topItem: (@Composable () -> Unit)? = null,
     items: LazyPagingItems<T>,
-    viewModel: BaseViewModel,
+    viewModel: BaseViewModel = ScopeViewModel,
     pagingKey: String,
     itemContent: @Composable (T) -> Unit
 ) {
-    LaunchedEffect(
-        key1 = Unit,
-        block = { viewModel.noNetToHaveNet(pagingKey) { items.retry() } }
-    )
+    DisposableEffect(key1 = Unit) {
+        "registerOnHaveNetwork:$pagingKey".logd("pagingKey")
+        viewModel.registerOnHaveNetwork(pagingKey) { items.retry() }
+        onDispose {
+            "unregisterOnHaveNetwork:$pagingKey".logd("pagingKey")
+            viewModel.unregisterOnHaveNetwork(pagingKey)
+        }
+    }
     val loadState = items.loadState
     val showError = (items.loadState.refresh is LoadState.Error) && items.isEmpty()
     val showErrorMsg = when {

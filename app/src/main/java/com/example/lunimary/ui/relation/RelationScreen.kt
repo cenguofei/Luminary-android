@@ -38,7 +38,7 @@ fun NavGraphBuilder.relationScreen(appState: LunimaryAppState) {
             pageType = pageType,
             onBack = appState::popBackStack,
             relationViewModel = relationViewModel,
-            onItemClick = { appState.navToViewUser(it) }
+            onItemClick = { appState.navToViewUser(it, Screens.Relation.route) }
         )
     }
 }
