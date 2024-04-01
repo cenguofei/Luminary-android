@@ -32,7 +32,8 @@ fun LoginOrRegisterScreenContent(
     coroutineScope: CoroutineScope,
     type: String,
     buttonText: String,
-    done: (username: String, password: String) -> Unit
+    done: (username: String, password: String) -> Unit,
+    onNavToProtocol: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -87,7 +88,8 @@ fun LoginOrRegisterScreenContent(
         Spacer(modifier = Modifier.height(10.dp))
         PrivacyProtocol(
             agreement = agreement,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onNavToProtocol = onNavToProtocol
         )
     }
 }

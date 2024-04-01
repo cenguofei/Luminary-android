@@ -2,7 +2,6 @@ package com.example.lunimary.ui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -40,6 +39,7 @@ import com.example.lunimary.ui.edit.addArticleScreen
 import com.example.lunimary.ui.home.topLevelScreens
 import com.example.lunimary.ui.login.loginScreen
 import com.example.lunimary.ui.login.registerScreen
+import com.example.lunimary.ui.privacy.privacyScreen
 import com.example.lunimary.ui.relation.relationScreen
 import com.example.lunimary.ui.search.searchScreen
 import com.example.lunimary.ui.settings.settingsScreen
@@ -152,5 +152,6 @@ private fun LunimaryNavHost(
         relationScreen(appState = appState)
         informationScreen(appState = appState)
         viewUserScreen(appState = appState)
+        privacyScreen(appState = appState)
     }
 }

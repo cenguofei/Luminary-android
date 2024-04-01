@@ -39,7 +39,7 @@
     <string name="password">密码</string>
     <string name="password_login">密码登录</string>
     <string name="read_and_agree">我已阅读并同意</string>
-    <string name="protocols">《用户协议》《隐私政策》</string>
+    <string name="protocols">《隐私政策》</string>
     <string name="agree_privacy_before_login_or_register">🚀请先阅读并同意隐私协议！</string>
     <string name="pwd_or_username_cannot_empty">🦊用户名或密码不能为空！</string>
     <string name="settings">设置</string>
@@ -111,4 +111,5 @@
     <string name="not_allowed_modifier_username">暂不支持修改用户名</string>
     <string name="no_save_of_back">资料修改尚未保存，返回后所有资料修改不会生效</string>
     <string name="save">保存</string>
+    <string name="privacy_protocol">隐私政策</string>
 </resources>

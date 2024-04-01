@@ -111,7 +111,8 @@ fun SettingsScreen(
         SettingsItems(
             modifier = Modifier.weight(1f),
             darkThemeSettingState = darkThemeSettingState,
-            onThemeSettingChange = appState::onThemeSettingChange
+            onThemeSettingChange = appState::onThemeSettingChange,
+            onNavToPrivacy = appState::navToPrivacy
         )
         if (currentUser != User.NONE) {
             LinearButton(

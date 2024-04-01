@@ -1,16 +1,21 @@
 package com.example.lunimary.ui.settings
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.BrightnessMedium
 import androidx.compose.material.icons.filled.Contrast
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,7 +38,8 @@ import com.example.lunimary.design.theme.LunimaryTheme
 fun SettingsItems(
     modifier: Modifier,
     darkThemeSettingState: State<DarkThemeSetting>,
-    onThemeSettingChange: (DarkThemeSetting) -> Unit
+    onThemeSettingChange: (DarkThemeSetting) -> Unit,
+    onNavToPrivacy: () -> Unit
 ) {
     LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
@@ -44,7 +50,7 @@ fun SettingsItems(
                 text = stringResource(id = R.string.dark_mode),
                 endContent = {
                     Icon(
-                        imageVector = Icons.Default.NavigateNext,
+                        imageVector = Icons.AutoMirrored.Filled.NavigateNext,
                         contentDescription = null,
                         modifier = Modifier.graphicsLayer { rotationZ = rotation.value }
                     )
@@ -54,7 +60,11 @@ fun SettingsItems(
                     showDarkModeChooser.value = !showDarkModeChooser.value
                 }
             )
-            if (showDarkModeChooser.value) {
+            AnimatedVisibility(
+                visible = showDarkModeChooser.value,
+                enter = slideInVertically { -it / 5 },
+                exit = slideOutVertically { -it / 5 }
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -117,6 +127,12 @@ fun SettingsItems(
                     )
                 }
             }
+
+            SettingItem(
+                text = stringResource(id = R.string.privacy_protocol),
+                icon = Icons.Default.PrivacyTip,
+                onClick = onNavToPrivacy
+            )
         }
     }
 }

@@ -11,7 +11,8 @@ enum class Screens(val route: String) {
     BrowseArticle(BROWSE_ARTICLE_ROOT),
     Relation("relation"),
     Information("user/information"),
-    ViewUser("view_user")
+    ViewUser("view_user"),
+    PrivacyProtocol("privacy")
 }
 
 const val LOGIN_ROOT = "login"

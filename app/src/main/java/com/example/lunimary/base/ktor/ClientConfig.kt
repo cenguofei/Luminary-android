@@ -28,8 +28,8 @@ const val PORT = 8080
 val httpClient = HttpClient(OkHttp) {
     engine {
         config {
-            connectTimeout(2L, TimeUnit.SECONDS)
-            readTimeout(2L, TimeUnit.SECONDS)
+            connectTimeout(10L, TimeUnit.SECONDS)
+            readTimeout(10L, TimeUnit.SECONDS)
             followRedirects(true)
         }
         addInterceptor(AuthInterceptor())

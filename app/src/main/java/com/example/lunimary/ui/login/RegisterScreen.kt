@@ -96,7 +96,8 @@ fun RegisterScreen(
                     userViewModel.register(username, password)
                 },
                 type = stringResource(id = R.string.register),
-                buttonText = stringResource(id = R.string.register)
+                buttonText = stringResource(id = R.string.register),
+                onNavToProtocol = appState::navToPrivacy
             )
         }
     }

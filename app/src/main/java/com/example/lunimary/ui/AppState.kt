@@ -173,6 +173,10 @@ class LunimaryAppState(
         navController.navToViewUser(user, from)
     }
 
+    fun navToPrivacy() {
+        navController.navigate(Screens.PrivacyProtocol.route)
+    }
+
     private fun NavController.navToViewUser(
         user: User,
         from: String

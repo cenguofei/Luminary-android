@@ -1,5 +1,6 @@
 package com.example.lunimary.ui.login
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -19,7 +20,8 @@ import com.example.lunimary.R
 @Composable
 fun PrivacyProtocol(
     modifier: Modifier,
-    agreement: MutableState<Boolean>
+    agreement: MutableState<Boolean>,
+    onNavToProtocol: () -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -45,7 +47,8 @@ fun PrivacyProtocol(
             text = stringResource(id = R.string.protocols),
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.clickable(onClick = onNavToProtocol)
         )
     }
 }

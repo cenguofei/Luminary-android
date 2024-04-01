@@ -132,7 +132,8 @@ fun LoginScreen(
                     userViewModel.login(username, password)
                 },
                 type = stringResource(id = R.string.password_login),
-                buttonText = stringResource(id = R.string.login)
+                buttonText = stringResource(id = R.string.login),
+                onNavToProtocol = appState::navToPrivacy
             )
         }
     }
