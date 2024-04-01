@@ -73,16 +73,20 @@ fun <T : Any> LunimaryPagingContent(
     topItem: (@Composable () -> Unit)? = null,
     items: LazyPagingItems<T>,
     viewModel: BaseViewModel = ScopeViewModel,
-    pagingKey: String,
+    pagingKey: String? = null,
+    refreshEnabled: Boolean = true,
     itemContent: @Composable (T) -> Unit
 ) {
-    DisposableEffect(key1 = Unit) {
-        "registerOnHaveNetwork:$pagingKey".logd("pagingKey")
-        viewModel.registerOnHaveNetwork(pagingKey) { items.retry() }
-        onDispose {
-            "unregisterOnHaveNetwork:$pagingKey".logd("pagingKey")
-            viewModel.unregisterOnHaveNetwork(pagingKey)
-        }
+    pagingKey?.let {
+        DisposableEffect(
+            key1 = Unit,
+            effect = {
+                viewModel.registerOnHaveNetwork(pagingKey) {
+                    items.retry()
+                }
+                onDispose { viewModel.unregisterOnHaveNetwork(pagingKey) }
+            }
+        )
     }
     val loadState = items.loadState
     val showError = (items.loadState.refresh is LoadState.Error) && items.isEmpty()
@@ -115,11 +119,11 @@ fun <T : Any> LunimaryPagingContent(
         color = color,
         checkLoginState = checkLoginState
     ) {
-        val state = rememberPullToRefreshState()
+        val state = rememberPullToRefreshState { refreshEnabled }
         val scaleFraction = if (state.isRefreshing) 1f else
             LinearOutSlowInEasing.transform(state.progress).coerceIn(0f, 1f)
         if (state.isRefreshing) {
-            LaunchedEffect(key1 = Unit, block = { items.refresh() })
+            LaunchedEffect(key1 = state.isRefreshing, block = { items.refresh() })
         }
         val isNotLoading = items.loadState.refresh is LoadState.NotLoading
         val isError = items.loadState.refresh is LoadState.Error

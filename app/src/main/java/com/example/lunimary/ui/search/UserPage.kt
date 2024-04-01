@@ -10,15 +10,13 @@ import com.example.lunimary.ui.common.UserItem
 fun UserPage(
     userItems: LazyPagingItems<User>,
     onItemClick: (User) -> Unit,
-    viewModel: SearchViewModel
 ) {
     LunimaryPagingContent(
         items = userItems,
         key = { userItems[it]?.id!! },
         shimmer = false,
         searchEmptyEnabled = true,
-        viewModel = viewModel,
-        pagingKey = "UserPage_SearchViewModel"
+        refreshEnabled = false
     ) {
         UserItem(
             user = it,

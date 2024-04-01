@@ -9,22 +9,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.User
+import com.example.lunimary.models.ext.FollowersInfo
 
 @Composable
 fun FollowersPage(
     relationViewModel: RelationViewModel,
-    onItemClick: (User) -> Unit
+    onItemClick: (User) -> Unit,
+    followers: LazyPagingItems<FollowersInfo>
 ) {
-    val followers = relationViewModel.followers.collectAsLazyPagingItems()
     LunimaryPagingContent(
         items = followers,
-        topItem = { Spacer(modifier = Modifier.height(16.dp)) },
-        viewModel = relationViewModel,
-        pagingKey = "FollowersPage"
+        topItem = { Spacer(modifier = Modifier.height(16.dp)) }
     ) {
         Column {
             val state: MutableState<NetworkResult<Unit>> = remember {

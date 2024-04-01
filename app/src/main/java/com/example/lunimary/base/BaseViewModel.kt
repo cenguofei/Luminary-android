@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.network.NetworkMonitor
 import com.example.lunimary.base.network.NetworkMonitorImpl
@@ -91,17 +92,34 @@ open class BaseViewModel : ViewModel() {
         key: String,
         noNetToHaveNet: () -> Unit
     ) {
-        "set noNetToHaveNet".logd("noNetToHaveNet")
         if (onSwitchToHaveNetMap.containsKey(key)) {
             return
         }
+        "registerOnHaveNetwork:$key".logd("pagingKey")
         onSwitchToHaveNetMap[key] = noNetToHaveNet
     }
 
     fun unregisterOnHaveNetwork(key: String) {
         if (onSwitchToHaveNetMap.containsKey(key)) {
+            "unregisterOnHaveNetwork:$key".logd("pagingKey")
             onSwitchToHaveNetMap.remove(key)
         }
+    }
+
+    fun <T : Any> registerOnHaveNetwork(
+        keys: List<Pair<String, LazyPagingItems<T>>>
+    ) {
+        keys.forEach {
+            val key = it.first
+            val items = it.second
+            registerOnHaveNetwork(key) {
+                items.retry()
+            }
+        }
+    }
+
+    fun unregisterOnHaveNetwork(vararg keys: String) {
+        keys.forEach { unregisterOnHaveNetwork(it) }
     }
 
     private fun dispatchOnHaveNetEvent() {

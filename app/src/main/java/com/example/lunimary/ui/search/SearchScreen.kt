@@ -20,6 +20,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -119,6 +120,21 @@ fun SearchScreen(
 
         val articleItems = searchViewModel.searchArticles.collectAsLazyPagingItems()
         val userItems = searchViewModel.searchUsers.collectAsLazyPagingItems()
+        DisposableEffect(
+            key1 = Unit,
+            effect = {
+                searchViewModel.registerOnHaveNetwork("ArticlePage") {
+                    articleItems.retry()
+                }
+                searchViewModel.registerOnHaveNetwork("UserPage") {
+                    userItems.retry()
+                }
+                onDispose {
+                    searchViewModel.unregisterOnHaveNetwork("ArticlePage")
+                    searchViewModel.unregisterOnHaveNetwork("UserPage")
+                }
+            }
+        )
         HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) {
             when(tabs[it]) {
                 SearchType.Article -> {
@@ -126,7 +142,6 @@ fun SearchScreen(
                     ArticlePage(
                         onItemClick = { a -> appState.navToBrowse(a) },
                         articleItems = articleItems,
-                        viewModel = searchViewModel
                     )
                 }
                 SearchType.User -> {
@@ -134,7 +149,6 @@ fun SearchScreen(
                     UserPage(
                         userItems = userItems,
                         onItemClick = { u -> appState.navToViewUser(u, Screens.Search.route) },
-                        viewModel = searchViewModel
                     )
                 }
             }

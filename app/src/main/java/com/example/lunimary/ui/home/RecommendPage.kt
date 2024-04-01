@@ -1,7 +1,7 @@
 package com.example.lunimary.ui.home
 
 import androidx.compose.runtime.Composable
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
 
@@ -9,13 +9,11 @@ import com.example.lunimary.models.Article
 fun RecommendPage(
     recommendViewModel: RecommendViewModel,
     onItemClick: (Article) -> Unit,
+    articles: LazyPagingItems<Article>,
 ) {
-    val articles = recommendViewModel.recommendArticles.collectAsLazyPagingItems()
     LunimaryPagingContent(
         items = articles,
-        key = { articles[it]?.id!! },
-        viewModel = recommendViewModel,
-        pagingKey = "RecommendPage"
+        key = { articles[it]?.id!! }
     ) {
         ArticleItem(onItemClick = onItemClick, article = it)
     }

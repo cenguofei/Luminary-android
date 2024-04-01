@@ -6,20 +6,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-class RelationResponse<T> : BaseResponse<RelationData<T>>() {
-    /**
-     * 朋友、关注、或粉丝的数量
-     */
-    fun copy(
-        msg: String = empty,
-        data: RelationData<T>? = null
-    ): RelationResponse<T> {
-        this.msg = msg
-        this.data = data
-        return this
-    }
-}
-
+class RelationResponse<T> : BaseResponse<RelationData<T>>()
 @Serializable
 data class RelationData<T>(
     val num: Int = 0,

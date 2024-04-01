@@ -3,7 +3,7 @@ package com.example.lunimary.ui.user
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
 import com.example.lunimary.ui.home.ArticleItem
@@ -11,17 +11,14 @@ import com.example.lunimary.ui.home.ArticleItemContainerColor
 
 @Composable
 fun CollectPage(
-    userDetailViewModel: UserDetailViewModel,
     modifier: Modifier,
-    onItemClick: (Article) -> Unit
+    onItemClick: (Article) -> Unit,
+    collectsOfUser: LazyPagingItems<Article>
 ) {
-    val collectsOfUser = userDetailViewModel.collectsOfUser.collectAsLazyPagingItems()
     LunimaryPagingContent(
         modifier = modifier,
         items = collectsOfUser,
-        key = { collectsOfUser[it]?.id!! },
-        viewModel = userDetailViewModel,
-        pagingKey = "CollectPage_UserDetailViewModel"
+        key = { collectsOfUser[it]?.id!! }
     ) {
         ArticleItem(
             onItemClick = onItemClick,

@@ -11,6 +11,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.design.BackButton
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
@@ -74,26 +76,51 @@ fun RelationScreen(
                 tint = MaterialTheme.colorScheme.onSurface
             )
         }
+        val friends = relationViewModel.friends.collectAsLazyPagingItems()
+        val followings = relationViewModel.followings.collectAsLazyPagingItems()
+        val followers = relationViewModel.followers.collectAsLazyPagingItems()
+
+        DisposableEffect(
+            key1 = Unit,
+            effect = {
+                relationViewModel.registerOnHaveNetwork("FriendsPage") {
+                    friends.retry()
+                }
+                relationViewModel.registerOnHaveNetwork("FollowPage") {
+                    followings.retry()
+                }
+                relationViewModel.registerOnHaveNetwork("FollowersPage") {
+                    followers.retry()
+                }
+                onDispose {
+                    relationViewModel.unregisterOnHaveNetwork("FriendsPage")
+                    relationViewModel.unregisterOnHaveNetwork("FollowPage")
+                    relationViewModel.unregisterOnHaveNetwork("FollowersPage")
+                }
+            }
+        )
         HorizontalPager(state = pagerState) {
             when (tabs[it]) {
                 RelationPageType.Friends -> {
                     FriendsPage(
-                        relationViewModel = relationViewModel,
-                        onItemClick = onItemClick
+                        onItemClick = onItemClick,
+                        friends = friends
                     )
                 }
 
                 RelationPageType.Follow -> {
                     FollowPage(
-                        relationViewModel = relationViewModel,
-                        onItemClick = onItemClick
+                        onItemClick = onItemClick,
+                        followings = followings,
+                        relationViewModel = relationViewModel
                     )
                 }
 
                 RelationPageType.Followers -> {
                     FollowersPage(
-                        relationViewModel = relationViewModel,
-                        onItemClick = onItemClick
+                        followers = followers,
+                        onItemClick = onItemClick,
+                        relationViewModel = relationViewModel
                     )
                 }
             }

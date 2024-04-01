@@ -10,15 +10,13 @@ import com.example.lunimary.ui.home.ArticleItem
 fun ArticlePage(
     onItemClick: (Article) -> Unit,
     articleItems: LazyPagingItems<Article>,
-    viewModel: SearchViewModel,
 ) {
     LunimaryPagingContent(
         items = articleItems,
         key = { articleItems[it]?.id!! },
         shimmer = false,
         searchEmptyEnabled = true,
-        viewModel = viewModel,
-        pagingKey = "ArticlePage_SearchViewModel"
+        refreshEnabled = false
     ) {
         ArticleItem(onItemClick = onItemClick, article = it)
     }

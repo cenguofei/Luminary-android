@@ -2,6 +2,7 @@ package com.example.lunimary.ui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -134,7 +135,6 @@ private fun LunimaryNavHost(
 //        "navBackStackEntry toString=$navBackStackEntry".logd("visibleEntries")
         "route=${destination.route}, arguments=$arguments ".logd("visibleEntries")
     }
-
     NavHost(
         navController = navController,
         startDestination = startScreen.route,

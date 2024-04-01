@@ -4,7 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
@@ -16,13 +16,12 @@ import com.example.lunimary.ui.user.draft.DraftItem
 
 @Composable
 fun PublicPage(
-    userDetailViewModel: UserDetailViewModel,
     onItemClick: (Article) -> Unit,
     modifier: Modifier,
-    onDraftClick: () -> Unit
+    onDraftClick: () -> Unit,
+    compositionsState: LazyPagingItems<Article>
 ) {
     val drafts = articleDao.findArticlesByUsername(currentUser.username).observeAsState()
-    val compositionsState = userDetailViewModel.publicArticles.collectAsLazyPagingItems()
     LunimaryPagingContent(
         modifier = modifier,
         items = compositionsState,
@@ -35,9 +34,7 @@ fun PublicPage(
                     showDraftLabel = true
                 )
             }
-        },
-        viewModel = userDetailViewModel,
-        pagingKey = "PublicPage_userDetailViewModel"
+        }
     ) {
         ArticleItem(
             onItemClick = onItemClick,

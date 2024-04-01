@@ -2,7 +2,9 @@ package com.example.lunimary.ui.user
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.models.Article
 import com.example.lunimary.ui.home.bottomBarHeight
 
@@ -14,11 +16,32 @@ fun ArticlesTypeList(
     onDraftClick: () -> Unit,
     onItemClick: (Article) -> Unit
 ) {
+    val likesOfUser = userDetailViewModel.likesOfUser.collectAsLazyPagingItems()
+    val collectsOfUser = userDetailViewModel.collectsOfUser.collectAsLazyPagingItems()
+    val privacyArticlesState = userDetailViewModel.privacyArticles.collectAsLazyPagingItems()
+    val compositionsState = userDetailViewModel.publicArticles.collectAsLazyPagingItems()
+    DisposableEffect(
+        key1 = Unit,
+        effect = {
+            userDetailViewModel.registerOnHaveNetwork(
+                listOf(
+                    "PublicPage" to compositionsState,
+                    "PrivacyPage" to privacyArticlesState,
+                    "CollectPage" to collectsOfUser,
+                    "LikePage" to likesOfUser,
+                )
+            )
+            onDispose {
+                userDetailViewModel.unregisterOnHaveNetwork("PublicPage", "PrivacyPage", "CollectPage", "LikePage")
+            }
+        }
+    )
+
     val modifier = Modifier.padding(bottom = bottomBarHeight)
     when (tabs[index]) {
         ArticlesType.Composition -> {
             PublicPage(
-                userDetailViewModel = userDetailViewModel,
+                compositionsState = compositionsState,
                 onItemClick = onItemClick,
                 modifier = modifier,
                 onDraftClick = onDraftClick
@@ -27,7 +50,7 @@ fun ArticlesTypeList(
 
         ArticlesType.Privacy -> {
             PrivacyPage(
-                userDetailViewModel = userDetailViewModel,
+                privacyArticlesState = privacyArticlesState,
                 modifier = modifier,
                 onItemClick = onItemClick
             )
@@ -35,7 +58,7 @@ fun ArticlesTypeList(
 
         ArticlesType.Collect -> {
             CollectPage(
-                userDetailViewModel = userDetailViewModel,
+                collectsOfUser = collectsOfUser,
                 modifier = modifier,
                 onItemClick = onItemClick
             )
@@ -43,7 +66,7 @@ fun ArticlesTypeList(
 
         ArticlesType.Like -> {
             LikePage(
-                userDetailViewModel = userDetailViewModel,
+                likesOfUser = likesOfUser,
                 modifier = modifier,
                 onItemClick = onItemClick
             )

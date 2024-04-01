@@ -1,5 +1,7 @@
 package com.example.lunimary.base
 
+import com.example.lunimary.models.responses.RelationData
+import com.example.lunimary.models.responses.RelationResponse
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import io.ktor.client.statement.HttpResponse
@@ -26,9 +28,21 @@ open class BaseResponse<T> {
 
     fun isSuccess(): Boolean = code in (200 until 300)
 
+    fun copy(
+        msg: String = empty,
+        data: T? = null
+    ): BaseResponse<T> {
+        this.msg = msg
+        this.data = data
+        return this
+    }
+
     inline fun <reified R> init(response: HttpResponse): R {
         "code=${response.status}, ${response.request.url}".logd()
         code = response.status.value
+        if (response.headers["Network-Status"] == "off") {
+            msg = "没有网络，请联网后重试！"
+        }
         return this as R
     }
 }

@@ -3,6 +3,7 @@ package com.example.lunimary.base.ktor
 import com.example.lunimary.LunimaryApplication.Companion.applicationContext
 import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.models.responses.DataResponse
+import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -37,9 +38,10 @@ fun buildNetworkErrorResponse(request: Request): Response {
         .request(request)
         .code(LUNIMARY_NO_NETWORK_CODE)
         .header(NO_NET_HEADER_KEY, "true")
-        .message("Ã»ÓÐÍøÂç£¡")
+        .message(empty)
         .protocol(Protocol.HTTP_1_1)
         .header("Content-Type", "application/json")
+        .header("Network-Status", "off")
         .body(
             Json.encodeToString(DataResponse<Unit>())
                 .toResponseBody("application/json".toMediaType())
