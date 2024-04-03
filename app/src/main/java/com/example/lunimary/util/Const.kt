@@ -45,6 +45,7 @@ inline val privacyArticlesOfUserPath: String get() = "$articlesRootPath/user/pri
 inline val getAllArticlesOfUserCollectedPath: String get() = "$articlesRootPath/user_collected"
 inline val getAllArticlesOfUserLikedPath: String get() = "$articlesRootPath/user_liked"
 inline val whenBrowseArticlePath: String get() = "$articlesRootPath/when_browse_article"
+inline val interactionDataPath: String get() = "/users/interaction_data"
 
 
 

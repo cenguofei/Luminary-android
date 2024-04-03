@@ -54,7 +54,6 @@ import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.navToLogin
 import com.example.lunimary.util.empty
-import com.example.lunimary.util.logd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

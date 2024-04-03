@@ -1,7 +1,5 @@
 package com.example.lunimary.base
 
-import com.example.lunimary.models.responses.RelationData
-import com.example.lunimary.models.responses.RelationResponse
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import io.ktor.client.statement.HttpResponse

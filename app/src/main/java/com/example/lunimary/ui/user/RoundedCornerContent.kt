@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.models.Article
-import com.example.lunimary.util.notNull
+import com.example.lunimary.models.ext.InteractionData
 
 @Composable
 fun RoundedCornerContent(
-    uiState: State<UserUiState?>,
+    uiState: InteractionData,
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
     onItemClick: (Article) -> Unit,
@@ -35,7 +34,7 @@ fun RoundedCornerContent(
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(8.dp))
         UserData(
-            uiState = uiState.value.notNull,
+            uiState = uiState,
             onItemClick = onRelationClick
         )
         AboutArticles(
@@ -49,18 +48,18 @@ fun RoundedCornerContent(
 
 @Composable
 fun UserData(
-    uiState: UserUiState,
+    uiState: InteractionData,
     onItemClick: (UserDataType) -> Unit
 ) {
     Row(modifier = Modifier.padding(start = 20.dp)) {
         Item(
-            num = uiState.likesOfUserArticles.toString(),
+            num = uiState.likeNum.toString(),
             text = stringResource(id = R.string.likes_of_articles),
             onClick = { onItemClick(UserDataType.Likes) }
         )
         Spacer(modifier = Modifier.width(12.dp))
         Item(
-            num = uiState.friendsNum.toString(),
+            num = uiState.friendNum.toString(),
             text = stringResource(id = R.string.friends),
             onClick = { onItemClick(UserDataType.Friends) }
         )
@@ -72,7 +71,7 @@ fun UserData(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Item(
-            num = uiState.followersNum.toString(),
+            num = uiState.followerNum.toString(),
             text = stringResource(id = R.string.followers),
             onClick = { onItemClick(UserDataType.Followers) }
         )

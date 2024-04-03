@@ -40,7 +40,6 @@ import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowersInfo
-import com.example.lunimary.ui.common.signatures
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -81,9 +80,8 @@ fun FollowerItem(
                 overflow = TextOverflow.Ellipsis,
             )
             Spacer(modifier = Modifier.height(4.dp))
-            val sig = remember { signatures.random() }
             Text(
-                text = sig,
+                text = user.signature,
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.W400,

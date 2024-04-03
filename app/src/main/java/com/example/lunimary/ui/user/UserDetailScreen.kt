@@ -86,7 +86,7 @@ fun UserDetailScreen(
     }
     ShowLikesDialog(
         showLikesDialog = showLikesDialog,
-        likes = userDetailViewModel.uiState.value!!.likesOfUserArticles
+        likes = userDetailViewModel.uiState.value!!.likeNum
     )
 }
 

@@ -2,7 +2,6 @@ package com.example.lunimary.design
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -63,27 +62,30 @@ fun LinearButton(
 }
 
 @Composable
-fun Button(
+fun SmallButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.shape,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
+    shape: Shape = ButtonDefaults.textShape,
+    horizontalPadding: Dp = 8.dp,
     text: String
 ) {
-    androidx.compose.material3.Button(
+    val textStyle = MaterialTheme.typography.labelMedium
+    Surface(
+        modifier = modifier.height(23.dp),
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onSurface
-        ),
-        shape = shape,
-        contentPadding = contentPadding,
+        color = MaterialTheme.colorScheme.primary,
         enabled = enabled,
-        modifier = modifier
+        shape = shape
     ) {
-        Text(text = text, style = textStyle)
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = text,
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+                color = Color.White,
+                style = textStyle,
+            )
+        }
     }
 }
 

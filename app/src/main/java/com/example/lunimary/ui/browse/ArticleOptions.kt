@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lunimary.R
 import com.example.lunimary.base.DataState
 import com.example.lunimary.design.LunimaryDialog
@@ -110,21 +111,20 @@ fun ArticleOptions(uiState: UiState, browseViewModel: BrowseViewModel, onArticle
             Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
         }
     }
-    when(val state = browseViewModel.updateArticleState.value) {
+    val state = browseViewModel.updateArticleState.collectAsStateWithLifecycle()
+    when(state.value) {
         is DataState.Success -> {
-            ShowSnackbar(message = state.message)
+            ShowSnackbar(message = (state.value as DataState.Success).message)
             if (browseViewModel.uiState.value!!.articleDeleted) {
                 LaunchedEffect(
                     key1 = Unit,
                     block = { onArticleDeleted() }
                 )
             }
-            browseViewModel.finish()
         }
 
         is DataState.Failed -> {
-            ShowSnackbar(message = state.message)
-            browseViewModel.finish()
+            ShowSnackbar(message = (state.value as DataState.Failed).message)
         }
 
         is DataState.None -> {}

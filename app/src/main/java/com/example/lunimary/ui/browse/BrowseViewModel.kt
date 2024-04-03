@@ -8,7 +8,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.DataState
@@ -25,8 +24,8 @@ import com.example.lunimary.models.source.remote.repository.CommentRepository
 import com.example.lunimary.models.source.remote.repository.FriendRepository
 import com.example.lunimary.models.source.remote.repository.LikeRepository
 import com.example.lunimary.models.source.remote.repository.UserRepository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class BrowseViewModel : BaseViewModel() {
     private val userRepository = UserRepository()
@@ -266,8 +265,8 @@ class BrowseViewModel : BaseViewModel() {
         return flatComments
     }
 
-    private val _updateArticleState: MutableState<DataState> = mutableStateOf(DataState.None)
-    val updateArticleState: State<DataState> get() = _updateArticleState
+    private val _updateArticleState: MutableStateFlow<DataState> = MutableStateFlow(DataState.None)
+    val updateArticleState: StateFlow<DataState> get() = _updateArticleState
     fun copyLink() {
         val clipboard = LunimaryApplication.applicationContext
             .getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return
@@ -322,10 +321,6 @@ class BrowseViewModel : BaseViewModel() {
         newState: DataState
     ) {
         _updateArticleState.value = newState
-    }
-
-    fun finish() {
-        _updateArticleState.value = DataState.None
     }
 }
 

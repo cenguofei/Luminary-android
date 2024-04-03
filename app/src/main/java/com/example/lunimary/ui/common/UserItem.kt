@@ -59,9 +59,8 @@ fun UserItem(
                 overflow = TextOverflow.Ellipsis,
             )
             Spacer(modifier = Modifier.height(4.dp))
-            val sig = remember { signatures.random() }
             Text(
-                text = sig,
+                text = user.signature,
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.W400,
@@ -77,13 +76,3 @@ fun UserItem(
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
-
-val signatures = listOf(
-    "每天都要开心",
-    "世界很大，我要去走走",
-    "我真的栓q",
-    "夜未央，天微亮",
-    "又是一个安静的晚上",
-    "炊烟袅袅升起",
-    "如传世的青花瓷，自顾自美丽，你眼带笑意"
-)

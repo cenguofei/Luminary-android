@@ -2,7 +2,6 @@ package com.example.lunimary.ui.edit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.lunimary.R
-import com.example.lunimary.design.Button
+import com.example.lunimary.design.SmallButton
 import com.example.lunimary.util.empty
 
 @Composable
@@ -91,22 +90,23 @@ fun AddLinkDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        Button(
+                        SmallButton(
                             onClick = { showDialog.value = false },
                             text = stringResource(id = R.string.cancel),
-                            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                            horizontalPadding = 12.dp
                         )
                         Spacer(modifier = Modifier.width(16.dp))
-                        Button(
+                        SmallButton(
                             onClick = {
                                 showDialog.value = false
                                 onFinish(name, link)
                             },
                             text = stringResource(id = R.string.finish),
-                            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                            horizontalPadding = 12.dp
                         )
+                        Spacer(modifier = Modifier.width(16.dp))
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

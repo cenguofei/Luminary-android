@@ -1,7 +1,6 @@
 package com.example.lunimary.models.responses
 
 import com.example.lunimary.base.BaseResponse
-import com.example.lunimary.util.empty
 import kotlinx.serialization.Serializable
 
 

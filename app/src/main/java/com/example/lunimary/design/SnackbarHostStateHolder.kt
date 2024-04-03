@@ -18,7 +18,8 @@ val LocalSnackbarHostState = staticCompositionLocalOf { SnackbarHostStateHolder(
 fun ShowSnackbar(
     message: String,
     duration: SnackbarDuration = SnackbarDuration.Short,
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    onShowEnd: () -> Unit = {}
 ) {
     val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
     coroutineScope.launch {
@@ -26,5 +27,6 @@ fun ShowSnackbar(
             message = message,
             duration = duration
         )
+        onShowEnd()
     }
 }
