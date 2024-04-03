@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,6 +15,7 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowInfo
+import com.example.lunimary.util.logi
 
 @Composable
 fun FollowPage(
@@ -21,28 +23,35 @@ fun FollowPage(
     followings: LazyPagingItems<FollowInfo>,
     relationViewModel: RelationViewModel
 ) {
+    LaunchedEffect(
+        key1 = Unit,
+        block = {
+            followings.refresh()
+            "followings.refresh".logi("relation_refresh")
+        }
+    )
     LunimaryPagingContent(
         items = followings,
         topItem = { Spacer(modifier = Modifier.height(16.dp)) },
-    ) {
+    ) { _, item ->
         Column {
             val state: MutableState<NetworkResult<Unit>> = remember {
                 mutableStateOf(NetworkResult.None())
             }
             FollowItem(
                 followInfoData = FollowItemData(
-                    followInfo = it,
+                    followInfo = item,
                     cancelFollow = false
                 ),
                 onMoreClick = {},
                 onFollowClick = {
-                    relationViewModel.onFollowClick(it.myFollow.id, state)
+                    relationViewModel.onFollowClick(item.myFollow.id, state)
                 },
                 onCancelFollowClick = {
-                    relationViewModel.onUnfollowClick(it.myFollow.id, state)
+                    relationViewModel.onUnfollowClick(item.myFollow.id, state)
                 },
                 state = state,
-                onItemClick = onItemClick
+                onItemClick = onItemClick,
             )
             Spacer(modifier = Modifier.height(8.dp))
         }

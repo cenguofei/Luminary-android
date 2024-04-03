@@ -25,8 +25,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +43,17 @@ import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowersInfo
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+private val Saver = Saver<MutableState<FollowersInfo>, String>(
+    save = {
+        Json.encodeToString(it.value)
+    },
+    restore = {
+        mutableStateOf(Json.decodeFromString(it))
+    }
+)
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -50,9 +64,9 @@ fun FollowerItem(
     onCancelFollowClick: () -> Unit,
     state: MutableState<NetworkResult<Unit>>,
     clickEnabled: Boolean = true,
-    onItemClick: (User) -> Unit = {}
+    onItemClick: (User) -> Unit = {},
 ) {
-    val followersInfoState = remember { mutableStateOf(followersInfo) }
+    val followersInfoState = rememberSaveable(saver = Saver) { mutableStateOf(followersInfo) }
     val user = followersInfoState.value.follower
     Row(
         modifier = Modifier
@@ -100,10 +114,10 @@ fun FollowerItem(
             is NetworkResult.Success -> {
                 enabled.value = true
                 LaunchedEffect(
-                    key1 = Unit,
+                    key1 = state.value,
                     block = {
-                        followersInfoState.value =
-                            followersInfoState.value.copy(alsoFollow = !followersInfoState.value.alsoFollow)
+                        val newState = !followersInfoState.value.alsoFollow
+                        followersInfoState.value = followersInfoState.value.copy(alsoFollow = newState)
                     }
                 )
             }
@@ -127,13 +141,15 @@ fun FollowerItem(
                 },
                 enabled = enabled.value
             ) {
+                var textColor = MaterialTheme.colorScheme.onSurface
                 Text(
-                    text = if (alsoFollow) stringResource(id = R.string.mutual_follow) else stringResource(
-                        id = R.string.return_follow
-                    ),
+                    text = if (alsoFollow) stringResource(id = R.string.mutual_follow) else {
+                        textColor = Color.White
+                        stringResource(id = R.string.return_follow)
+                    },
                     modifier = Modifier.padding(horizontal = 8.dp),
                     fontSize = 10.sp,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = textColor,
                     fontWeight = FontWeight.W500
                 )
             }

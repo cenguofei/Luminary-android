@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FollowInfo(
     val myFollow: User,
-    val alsoFollowMe: Boolean
+    var alsoFollowMe: Boolean
 )

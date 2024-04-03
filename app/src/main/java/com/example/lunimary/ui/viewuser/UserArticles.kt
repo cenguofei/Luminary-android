@@ -24,10 +24,10 @@ fun UserArticles(
         key = { userArticles[it]?.id ?: UUID.randomUUID() },
         viewModel = viewModel,
         pagingKey = "UserArticles_ViewUserViewModel"
-    ) {
+    ) { _, item ->
         ArticleItem(
             onItemClick = onItemClick,
-            article = it,
+            article = item,
             containerColor = ArticleItemContainerColor.Default.copy(
                 normalColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
             )

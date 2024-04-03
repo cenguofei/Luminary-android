@@ -17,9 +17,9 @@ fun UserPage(
         shimmer = false,
         searchEmptyEnabled = true,
         refreshEnabled = false
-    ) {
+    ) { _, item ->
         UserItem(
-            user = it,
+            user = item,
             onItemClick = onItemClick
         )
     }

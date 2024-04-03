@@ -13,7 +13,7 @@ fun FriendsArticlePage(
     LunimaryPagingContent(
         items = friendsArticles,
         key = { friendsArticles[it]?.id!! },
-    ) {
-        ArticleItem(onItemClick = onItemClick, article = it)
+    ) { _, item ->
+        ArticleItem(onItemClick = onItemClick, article = item)
     }
 }

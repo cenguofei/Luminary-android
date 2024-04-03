@@ -17,9 +17,9 @@ fun LikeMessagePage(likesMessage: LazyPagingItems<LikeMessage>) {
     LunimaryPagingContent(
         items = likesMessage,
         topItem = { Spacer(modifier = Modifier.height(16.dp)) },
-    ) {
+    ) { _, item ->
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-            LikeItem(it)
+            LikeItem(item)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

@@ -7,18 +7,28 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.surfaceColorAtElevation
@@ -32,9 +42,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -74,7 +86,7 @@ fun <T : Any> LunimaryPagingContent(
     viewModel: BaseViewModel = ScopeViewModel,
     pagingKey: String? = null,
     refreshEnabled: Boolean = true,
-    itemContent: @Composable (T) -> Unit
+    itemContent: @Composable (index: Int, item: T) -> Unit
 ) {
     pagingKey?.let {
         DisposableEffect(
@@ -100,43 +112,49 @@ fun <T : Any> LunimaryPagingContent(
     val showEmpty = loadState.refresh is LoadState.NotLoading && items.isEmpty()
     val hasNetwork = LocalContext.current.isCurrentlyConnected()
     val showNetworkError = !hasNetwork && items.isEmpty()
-    LunimaryStateContent(
-        modifier = modifier,
-        error = showError, // 没有数据并且出错才展示空页面
-        errorMsg = showErrorMsg,
-        onErrorClick = { items.refresh() },
-        empty = showEmpty,
-        networkState = if (showNetworkError) NetworkState(
-            msg = stringResource(id = R.string.not_connected),
-            networkError = true
-        ) else NetworkState.Default,
-        shimmer = showShimmer,
-        searchEmpty = if (searchEmptyEnabled) showEmpty else false,
-        snackbarData = snackbarData,
-        openLoadingWheelDialog = openLoadingWheelDialog,
-        coroutine = coroutine,
-        color = color,
-        checkLoginState = checkLoginState
-    ) {
-        val state = rememberPullToRefreshState { refreshEnabled }
-        val scaleFraction = if (state.isRefreshing) 1f else
-            LinearOutSlowInEasing.transform(state.progress).coerceIn(0f, 1f)
-        if (state.isRefreshing) {
-            LaunchedEffect(key1 = state.isRefreshing, block = { items.refresh() })
-        }
-        val isNotLoading = items.loadState.refresh is LoadState.NotLoading
-        val isError = items.loadState.refresh is LoadState.Error
-        if (isNotLoading || isError) {
-            LaunchedEffect(key1 = Unit, block = { state.endRefresh() })
-        }
-        Box(modifier = Modifier
+    val searchEmpty = if (searchEmptyEnabled) showEmpty else false
+
+    val state = rememberPullToRefreshState { refreshEnabled }
+    val scaleFraction = if (state.isRefreshing) 1f else
+        LinearOutSlowInEasing.transform(state.progress).coerceIn(0f, 1f)
+    if (state.isRefreshing) {
+        LaunchedEffect(key1 = state.isRefreshing, block = { items.refresh() })
+    }
+    val isNotLoading = items.loadState.refresh is LoadState.NotLoading
+    val isError = items.loadState.refresh is LoadState.Error
+    if (isNotLoading || isError) {
+        LaunchedEffect(key1 = Unit, block = { state.endRefresh() })
+    }
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(state.nestedScrollConnection)) {
+            .nestedScroll(state.nestedScrollConnection)
+    ) {
+        LunimaryStateContent(
+            modifier = modifier,
+            error = showError, // 没有数据并且出错才展示空页面
+            errorMsg = showErrorMsg,
+            onErrorClick = { items.refresh() },
+            empty = showEmpty,
+            networkState = if (showNetworkError) NetworkState(
+                msg = stringResource(id = R.string.not_connected),
+                networkError = true
+            ) else NetworkState.Default,
+            shimmer = showShimmer,
+            searchEmpty = searchEmpty,
+            snackbarData = snackbarData,
+            openLoadingWheelDialog = openLoadingWheelDialog,
+            coroutine = coroutine,
+            color = color,
+            checkLoginState = checkLoginState,
+            onRefreshClick = { items.refresh() },
+            onRetryClick = { items.retry() }
+        ) {
             LazyColumn(Modifier.fillMaxSize()) {
                 topItem?.let { item { it() } }
                 if (!state.isRefreshing) {
                     items(items.itemCount, key = key) { index ->
-                        items[index]?.let { item -> itemContent(item) }
+                        items[index]?.let { item -> itemContent(index, item) }
                     }
                 }
                 when {
@@ -169,15 +187,16 @@ fun <T : Any> LunimaryPagingContent(
                     }
                 }
             }
-            PullToRefreshContainer(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
-                state = state,
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                contentColor = MaterialTheme.colorScheme.primary
-            )
         }
+
+        PullToRefreshContainer(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
+            state = state,
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.primary
+        )
     }
 }
 
@@ -230,6 +249,8 @@ fun LunimaryStateContent(
     checkLoginState: Boolean = false,
     networkState: NetworkState = NetworkState.Default,
     coroutine: CoroutineScope = rememberCoroutineScope(),
+    onRefreshClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
     if (checkLoginState) {
@@ -270,7 +291,8 @@ fun LunimaryStateContent(
                 ShowReasonForNoContent(
                     id = R.drawable.network_error,
                     description = msg,
-                    modifier = boxModifier
+                    modifier = boxModifier,
+                    refreshEnabled = false
                 )
             }
 
@@ -282,7 +304,9 @@ fun LunimaryStateContent(
                 ShowReasonForNoContent(
                     id = R.drawable.empty_search,
                     description = stringResource(id = R.string.search_empty),
-                    modifier = boxModifier
+                    modifier = boxModifier,
+                    refreshEnabled = true,
+                    onRefreshClick = onRefreshClick
                 )
             }
 
@@ -292,7 +316,10 @@ fun LunimaryStateContent(
                     id = R.drawable.empty,
                     modifier = boxModifier,
                     enabled = true,
-                    onClick = onErrorClick
+                    onClick = onErrorClick,
+                    refreshEnabled = false,
+                    retryEnabled = true,
+                    onRetryClick = onRetryClick
                 )
             }
 
@@ -300,7 +327,9 @@ fun LunimaryStateContent(
                 ShowReasonForNoContent(
                     description = if (emptyMsg.isNullOrEmpty()) stringResource(id = R.string.empty_msg) else emptyMsg,
                     id = R.drawable.empty,
-                    modifier = boxModifier
+                    modifier = boxModifier,
+                    refreshEnabled = true,
+                    onRefreshClick = onRefreshClick
                 )
             }
 
@@ -371,11 +400,15 @@ private fun ShowReasonForNoContent(
     description: String = empty,
     @DrawableRes id: Int,
     onClick: () -> Unit = {},
-    enabled: Boolean = false
+    enabled: Boolean = false,
+    refreshEnabled: Boolean = true,
+    onRefreshClick: () -> Unit = {},
+    retryEnabled: Boolean = false,
+    onRetryClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
-            .size(height = 250.dp, width = 200.dp)
+            .size(height = 300.dp, width = 200.dp)
             .clickable(
                 role = Role.Button,
                 onClick = onClick,
@@ -395,6 +428,24 @@ private fun ShowReasonForNoContent(
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
             )
+            if (refreshEnabled) {
+                Spacer(modifier = Modifier.height(16.dp))
+                TextButton(onClick = onRefreshClick) {
+                    Text(
+                        text = stringResource(id = R.string.click_refresh),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+            if (retryEnabled) {
+                Spacer(modifier = Modifier.height(16.dp))
+                TextButton(onClick = onRetryClick) {
+                    Text(
+                        text = stringResource(id = R.string.click_retry),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         }
     }
 }

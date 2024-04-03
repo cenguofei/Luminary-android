@@ -17,7 +17,7 @@ fun ArticlePage(
         shimmer = false,
         searchEmptyEnabled = true,
         refreshEnabled = false
-    ) {
-        ArticleItem(onItemClick = onItemClick, article = it)
+    ) { _, item ->
+        ArticleItem(onItemClick = onItemClick, article = item)
     }
 }

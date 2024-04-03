@@ -113,4 +113,6 @@
     <string name="save">保存</string>
     <string name="privacy_protocol">隐私政策</string>
     <string name="confirm_delete_article">确定要删除该文章吗？删除后将无法恢复！</string>
+    <string name="click_retry">🐇点我重试</string>
+    <string name="click_refresh">🐇点我刷新</string>
 </resources>

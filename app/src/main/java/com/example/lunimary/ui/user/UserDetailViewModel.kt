@@ -11,6 +11,7 @@ import com.example.lunimary.models.source.remote.paging.UserLikedArticleSource
 import com.example.lunimary.models.source.remote.paging.UserPrivacyArticleSource
 import com.example.lunimary.models.source.remote.paging.UserPublicArticleSource
 import com.example.lunimary.models.source.remote.repository.UserDetailRepository
+import com.example.lunimary.util.logi
 
 class UserDetailViewModel : BaseViewModel() {
     private val repository = UserDetailRepository()
@@ -29,10 +30,12 @@ class UserDetailViewModel : BaseViewModel() {
     val likesOfUser = pagerFlow { UserLikedArticleSource }
 
     private fun getUserInteractionData() {
+        "getUserInteractionData".logi("getUserInteractionData")
         fly(FLY_GET_USER_INTERACTION_DATA) {
             request(
                 block = { repository.interactionData() },
                 onSuccess = { data, _ ->
+                    "getUserInteractionData data=$data".logi("getUserInteractionData")
                     data?.let { _uiState.postValue(it) }
                 },
                 onFinish = { land(FLY_GET_USER_INTERACTION_DATA) }

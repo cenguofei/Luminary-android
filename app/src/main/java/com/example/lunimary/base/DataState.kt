@@ -8,7 +8,7 @@ sealed interface DataState {
 
     class Success(val message: String) : DataState
 
-    class Failed(val e: Throwable) : DataState {
+    class Failed(private val e: Throwable) : DataState {
         val message: String get() = e.message ?: unknownErrorMsg
     }
 }

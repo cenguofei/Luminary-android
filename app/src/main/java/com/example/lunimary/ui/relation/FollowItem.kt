@@ -25,8 +25,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -40,10 +43,19 @@ import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowInfo
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
+@Serializable
 data class FollowItemData(
     val followInfo: FollowInfo,
     val cancelFollow: Boolean = false
+)
+
+private val Saver = Saver<MutableState<FollowItemData>, String>(
+    save = { Json.encodeToString(it.value) },
+    restore = { mutableStateOf(Json.decodeFromString(it)) }
 )
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -55,9 +67,11 @@ fun FollowItem(
     onCancelFollowClick: () -> Unit,
     state: MutableState<NetworkResult<Unit>>,
     clickEnabled: Boolean = true,
-    onItemClick: (User) -> Unit = {}
+    onItemClick: (User) -> Unit = {},
 ) {
-    val followInfoState = remember { mutableStateOf(followInfoData) }
+    val followInfoState = rememberSaveable(saver = Saver) {
+        mutableStateOf(followInfoData)
+    }
     val user = followInfoState.value.followInfo.myFollow
     Row(
         modifier = Modifier
@@ -97,26 +111,27 @@ fun FollowItem(
             )
         }
 
-        val enabled = remember { mutableStateOf(true) }
+        val followButtonEnabled = remember { mutableStateOf(true) }
         when (state.value) {
             is NetworkResult.Loading -> {
-                enabled.value = false
+                followButtonEnabled.value = false
             }
 
             is NetworkResult.Success -> {
-                enabled.value = true
+                followButtonEnabled.value = true
                 LaunchedEffect(
-                    key1 = Unit,
+                    key1 = state.value,
                     block = {
+                        val newState = !followInfoState.value.cancelFollow
                         followInfoState.value = followInfoState.value.copy(
-                            cancelFollow = !followInfoState.value.cancelFollow
+                            cancelFollow = newState
                         )
                     }
                 )
             }
 
             else -> {
-                enabled.value = true
+                followButtonEnabled.value = true
             }
         }
         val (showDropdownMenu, setIsOpen) = remember { mutableStateOf(false) }
@@ -141,12 +156,15 @@ fun FollowItem(
                         }
                     }
                 },
-                enabled = enabled.value
+                enabled = followButtonEnabled.value
             ) {
-                val color =  MaterialTheme.colorScheme.onSurface
+                var color = MaterialTheme.colorScheme.onSurface
                 Text(
                     text = when {
-                        cancelFollow -> stringResource(id = R.string.follow)
+                        cancelFollow -> {
+                            color = Color.White
+                            stringResource(id = R.string.follow)
+                        }
                         followInfoState.value.followInfo.alsoFollowMe -> stringResource(id = R.string.mutual_follow)
                         else -> stringResource(id = R.string.already_follow)
                     },

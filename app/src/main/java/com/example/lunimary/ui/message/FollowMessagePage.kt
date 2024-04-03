@@ -19,9 +19,9 @@ fun FollowMessagePage(followMessage: LazyPagingItems<UserFriend>) {
         items = followMessage,
         key = { followMessage[it]?.user?.id ?: UUID.randomUUID() },
         topItem = { Spacer(modifier = Modifier.height(16.dp)) },
-    ) {
+    ) { _, item ->
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-            FollowItem(item = it)
+            FollowItem(item = item)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

@@ -21,12 +21,12 @@ fun CommentMessagePage(
         items = commentsMessage,
         key = { commentsMessage[it]?.comment?.id ?: UUID.randomUUID() },
         topItem = { Spacer(modifier = Modifier.height(16.dp)) },
-    ) {
+    ) { _, item ->
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             CommentItem(
-                user = it.user,
-                article = it.article,
-                comment = it.comment,
+                user = item.user,
+                article = item.article,
+                comment = item.comment,
                 modifier = Modifier
             )
             Spacer(modifier = Modifier.height(8.dp))

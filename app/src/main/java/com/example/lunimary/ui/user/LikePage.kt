@@ -19,10 +19,10 @@ fun LikePage(
         modifier = modifier,
         items = likesOfUser,
         key = { likesOfUser[it]?.id!! },
-    ) {
+    ) { _, item ->
         ArticleItem(
             onItemClick = onItemClick,
-            article = it,
+            article = item,
             containerColor = ArticleItemContainerColor.Default.copy(
                 normalColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
             )

@@ -13,7 +13,7 @@ fun RecommendPage(
     LunimaryPagingContent(
         items = articles,
         key = { articles[it]?.id!! }
-    ) {
-        ArticleItem(onItemClick = onItemClick, article = it)
+    ) { _, item ->
+        ArticleItem(onItemClick = onItemClick, article = item)
     }
 }

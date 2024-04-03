@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,6 +15,7 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowersInfo
+import com.example.lunimary.util.logi
 
 @Composable
 fun FollowersPage(
@@ -21,25 +23,32 @@ fun FollowersPage(
     onItemClick: (User) -> Unit,
     followers: LazyPagingItems<FollowersInfo>
 ) {
+    LaunchedEffect(
+        key1 = Unit,
+        block = {
+            followers.refresh()
+            "followers.refresh".logi("relation_refresh")
+        }
+    )
     LunimaryPagingContent(
         items = followers,
         topItem = { Spacer(modifier = Modifier.height(16.dp)) }
-    ) {
+    ) { _, item ->
         Column {
             val state: MutableState<NetworkResult<Unit>> = remember {
                 mutableStateOf(NetworkResult.None())
             }
             FollowerItem(
-                followersInfo = it,
+                followersInfo = item,
                 onMoreClick = {},
                 onReturnFollowClick = {
-                    relationViewModel.onFollowClick(it.follower.id, state)
+                    relationViewModel.onFollowClick(item.follower.id, state)
                 },
                 state = state,
                 onCancelFollowClick = {
-                    relationViewModel.onUnfollowClick(it.follower.id, state = state)
+                    relationViewModel.onUnfollowClick(item.follower.id, state = state)
                 },
-                onItemClick = onItemClick
+                onItemClick = onItemClick,
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
