@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.ArrowLeft
 import androidx.compose.material.icons.rounded.ArrowRight
 import androidx.compose.material.icons.twotone.Close
 import androidx.compose.material.icons.twotone.DeleteSweep
@@ -207,7 +207,10 @@ fun CascadeHeaderItem(
     onClick: () -> Unit,
 ) {
     CascadeMenuItem(onClick = { onClick() }) {
-        CascadeMenuItemIcon(icon = Icons.Rounded.ArrowLeft, tint = contentColor.copy(alpha = 0.8f))
+        CascadeMenuItemIcon(
+            icon = Icons.AutoMirrored.Rounded.ArrowLeft,
+            tint = contentColor.copy(alpha = 0.8f)
+        )
         Spacer(modifier = Modifier.width(4.dp))
         CascadeMenuItemText(
             modifier = Modifier.weight(1f),

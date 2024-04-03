@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.example.lunimary.design.UserHeadImage
 
 @Composable
-fun AboutUser(
+fun ArticleOwner(
     onFollowClick: () -> Unit,
     onUnfollowClick: () -> Unit,
     uiState: UiState,
@@ -71,7 +71,7 @@ fun AboutUser(
                 )
             }
         }
-        FollowOrUnfollow(
+        FollowSettingButton(
             owner = browseViewModel.articleOwner.value,
             hasFetchedFriendship = uiState.hasFetchedFriendship,
             isFollowByMe = uiState.isFollowByMe,

@@ -132,9 +132,12 @@ private fun LunimaryNavHost(
     visibleEntries.value.forEach { navBackStackEntry ->
         val arguments = navBackStackEntry.arguments
         val destination = navBackStackEntry.destination
-//        "navBackStackEntry toString=$navBackStackEntry".logd("visibleEntries")
         "route=${destination.route}, arguments=$arguments ".logd("visibleEntries")
     }
+    val id = appState.currentDestination?.id
+    val route = appState.currentDestination?.route
+    val arguments = appState.currentDestination?.arguments
+    "currentDestination: id=$id, route=$route, arguments=$arguments".logd("currentDestination")
     NavHost(
         navController = navController,
         startDestination = startScreen.route,

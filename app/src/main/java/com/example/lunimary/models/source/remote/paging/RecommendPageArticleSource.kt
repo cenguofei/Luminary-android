@@ -17,4 +17,6 @@ class RecommendPageArticleSource : PageSource<Article>, BasePageSource by BasePa
             }.init()
         }
     }
+
+    companion object : PageSource<Article> by RecommendPageArticleSource()
 }

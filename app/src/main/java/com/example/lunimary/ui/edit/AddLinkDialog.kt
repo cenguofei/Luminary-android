@@ -2,13 +2,12 @@ package com.example.lunimary.ui.edit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -22,11 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.lunimary.R
-import com.example.lunimary.design.LinearButton
+import com.example.lunimary.design.Button
 import com.example.lunimary.util.empty
 
 @Composable
@@ -37,21 +38,25 @@ fun AddLinkDialog(
     if (showDialog.value) {
         var name by remember { mutableStateOf(empty) }
         var link by remember { mutableStateOf(empty) }
-        Dialog(onDismissRequest = { showDialog.value = false }) {
+        Dialog(
+            onDismissRequest = { showDialog.value = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            val width = LocalConfiguration.current.screenWidthDp * 0.8
             Surface(
-                modifier = Modifier.size(width = 280.dp, height = 200.dp),
+                modifier = Modifier.width(width = width.dp),
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 shape = RoundedCornerShape(8)
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 8.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    val outlineModifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                    val outlineModifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                     val textStyle = MaterialTheme.typography.labelLarge
-
+                    Spacer(modifier = Modifier.height(12.dp))
                     OutlinedTextField(
                         value = name,
                         onValueChange = { name = it },
@@ -86,23 +91,22 @@ fun AddLinkDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        LinearButton(
+                        Button(
                             onClick = { showDialog.value = false },
                             text = stringResource(id = R.string.cancel),
-                            textStyle = MaterialTheme.typography.labelMedium,
-                            height = 25.dp
+                            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                         )
                         Spacer(modifier = Modifier.width(16.dp))
-                        LinearButton(
+                        Button(
                             onClick = {
                                 showDialog.value = false
                                 onFinish(name, link)
                             },
                             text = stringResource(id = R.string.finish),
-                            textStyle = MaterialTheme.typography.labelMedium,
-                            height = 25.dp
+                            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                         )
                     }
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         }

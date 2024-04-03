@@ -33,7 +33,7 @@ data class Article(
 
     val title: String = empty,
 
-    val link: String = empty, // content
+    val link: String = empty, //文章链接
 
     val body: String = empty, // content
 
@@ -112,10 +112,10 @@ data class Article(
     }
 }
 
-enum class VisibleMode {
-    OWN,
-    PUBLIC,
-    FRIEND
+enum class VisibleMode(val modeName: String) {
+    OWN("仅自己可见"),
+    PUBLIC("公开可见"),
+    FRIEND("互关朋友可见")
 }
 
 fun getDaysSinceTimestamp(timestamp: Long): Long {

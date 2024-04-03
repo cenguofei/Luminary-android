@@ -20,4 +20,6 @@ class FriendsPageArticleSource : PageSource<Article>, BasePageSource by BasePage
             }.init()
         }
     }
+
+    companion object : PageSource<Article> by FriendsPageArticleSource()
 }

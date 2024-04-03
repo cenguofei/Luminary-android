@@ -32,6 +32,11 @@ class EditViewModel : BaseViewModel() {
     private val _articleDataState: MutableState<ArticleData> = mutableStateOf(ArticleData())
     val articleDataState: State<ArticleData> get() = _articleDataState
 
+    data class ArticleData(
+        val title: String = empty,
+        val body: String = empty
+    )
+
     var title: String = empty
         set(value) {
             if (field != value) {
@@ -119,7 +124,6 @@ class EditViewModel : BaseViewModel() {
             articleRepository.insertArticle(saveArticle)
         }
     }
-
 
     fun updateDraft() {
         if (isFillByArticle) {
@@ -236,8 +240,7 @@ class EditViewModel : BaseViewModel() {
         _uri.value = uri
     }
 
-    private val _uploadCoverState: MutableState<NetworkResult<UploadData>> = mutableStateOf(
-        NetworkResult.None())
+    private val _uploadCoverState: MutableState<NetworkResult<UploadData>> = mutableStateOf(NetworkResult.None())
     val uploadCoverState: State<NetworkResult<UploadData>> get() = _uploadCoverState
     fun uploadFile(path: String, filename: String) {
         fly(FLY_UPLOAD_FILE) {

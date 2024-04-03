@@ -7,7 +7,6 @@ import com.example.lunimary.models.Article
 
 @Composable
 fun RecommendPage(
-    recommendViewModel: RecommendViewModel,
     onItemClick: (Article) -> Unit,
     articles: LazyPagingItems<Article>,
 ) {

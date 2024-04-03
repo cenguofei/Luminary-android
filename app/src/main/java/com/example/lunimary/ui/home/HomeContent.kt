@@ -37,7 +37,6 @@ fun HomeContent(
         when {
             tabs[it] == HomeCategories.Recommend -> {
                 RecommendPage(
-                    recommendViewModel = recommendViewModel,
                     onItemClick = onItemClick,
                     articles = articles
                 )
@@ -54,7 +53,6 @@ fun HomeContent(
                         recommendViewModel.updateGoToLogin(true)
                     } else {
                         FriendsArticlePage(
-                            recommendViewModel = recommendViewModel,
                             onItemClick = onItemClick,
                             friendsArticles = friendsArticles
                         )

@@ -112,4 +112,5 @@
     <string name="no_save_of_back">资料修改尚未保存，返回后所有资料修改不会生效</string>
     <string name="save">保存</string>
     <string name="privacy_protocol">隐私政策</string>
+    <string name="confirm_delete_article">确定要删除该文章吗？删除后将无法恢复！</string>
 </resources>

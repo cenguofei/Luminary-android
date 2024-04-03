@@ -16,7 +16,7 @@ class RecommendViewModel : BaseViewModel() {
         _goToLogin = goToLogin
     }
 
-    val recommendArticles: Flow<PagingData<Article>> = pagerFlow { RecommendPageArticleSource() }
+    val recommendArticles: Flow<PagingData<Article>> = pagerFlow { RecommendPageArticleSource }
 
-    val friendsArticles: Flow<PagingData<Article>> = pagerFlow { FriendsPageArticleSource() }
+    val friendsArticles: Flow<PagingData<Article>> = pagerFlow { FriendsPageArticleSource }
 }

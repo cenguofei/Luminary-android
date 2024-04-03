@@ -43,7 +43,8 @@ fun BrowseScreenContent(
     browseViewModel: BrowseViewModel,
     onEditCommentClick: () -> Unit,
     onLinkClick: (String) -> Unit,
-    onUserClick: (User) -> Unit
+    onUserClick: (User) -> Unit,
+    onArticleDeleted: () -> Unit
 ) {
     val uiState by browseViewModel.uiState.observeAsState()
     val listState = rememberLazyListState()
@@ -56,7 +57,8 @@ fun BrowseScreenContent(
             listState = listState,
             uiState = uiState!!,
             browseViewModel = browseViewModel,
-            onUserClick = onUserClick
+            onUserClick = onUserClick,
+            onArticleDeleted = onArticleDeleted
         )
         LazyColumn(
             modifier = Modifier
@@ -67,7 +69,7 @@ fun BrowseScreenContent(
         ) {
             item { ArticleTitle(title = uiState!!.article.title) }
             item {
-                AboutUser(
+                ArticleOwner(
                     uiState = uiState!!,
                     onUnfollowClick = onUnfollowClick,
                     onFollowClick = onFollowClick,
