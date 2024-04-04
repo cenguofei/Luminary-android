@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.lunimary.base.notLogin
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
@@ -24,6 +26,14 @@ fun NavGraphBuilder.browseScreen(
     composable(
         route = Screens.BrowseArticle.route
     ) {
+        if (notLogin()) {
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    appState.navToLogin()
+                }
+            )
+        }
         val article = ArticleNavArguments[BROWSE_ARTICLE_KEY]
         if (article == null) {
             appState.navToHome(Screens.BrowseArticle.route)

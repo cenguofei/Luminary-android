@@ -305,8 +305,7 @@ fun LunimaryStateContent(
                     id = R.drawable.empty_search,
                     description = stringResource(id = R.string.search_empty),
                     modifier = boxModifier,
-                    refreshEnabled = true,
-                    onRefreshClick = onRefreshClick
+                    refreshEnabled = false
                 )
             }
 

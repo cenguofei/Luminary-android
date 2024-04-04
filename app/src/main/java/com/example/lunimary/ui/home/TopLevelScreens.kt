@@ -65,7 +65,13 @@ fun TopLevelScreens(appState: LunimaryAppState) {
                     onLoginClick = {
                         appState.navToLogin()
                     },
-                    onItemClick = { appState.navToBrowse(it) }
+                    onItemClick = {
+                        if (notLogin()) {
+                            appState.navToLogin()
+                        } else {
+                            appState.navToBrowse(it)
+                        }
+                    }
                 )
             }
 

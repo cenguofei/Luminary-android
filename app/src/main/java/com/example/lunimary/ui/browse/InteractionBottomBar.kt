@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
+import com.example.lunimary.base.notLogin
 
 @Composable
 fun InteractionBottomBar(
@@ -77,42 +78,44 @@ fun InteractionBottomBar(
                 )
             }
         }
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.End
-        ) {
-            if (browseViewModel.likedTheArticle.value) {
-                IconButton(onClick = browseViewModel::onCancelLike) {
-                    Icon(
-                        imageVector = Icons.Default.ThumbUp,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
+        if (!notLogin()) {
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (browseViewModel.likedTheArticle.value) {
+                    IconButton(onClick = browseViewModel::onCancelLike) {
+                        Icon(
+                            imageVector = Icons.Default.ThumbUp,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                } else {
+                    IconButton(onClick = browseViewModel::onGiveLike) {
+                        Icon(
+                            imageVector = Icons.Default.ThumbUp,
+                            contentDescription = null,
+                            tint = grayTint
+                        )
+                    }
                 }
-            } else {
-                IconButton(onClick = browseViewModel::onGiveLike) {
-                    Icon(
-                        imageVector = Icons.Default.ThumbUp,
-                        contentDescription = null,
-                        tint = grayTint
-                    )
-                }
-            }
-            if (browseViewModel.staredTheArticle.value) {
-                IconButton(onClick = browseViewModel::onCancelStar) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            } else {
-                IconButton(onClick = browseViewModel::onGiveStar) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        tint = grayTint
-                    )
+                if (browseViewModel.staredTheArticle.value) {
+                    IconButton(onClick = browseViewModel::onCancelStar) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                } else {
+                    IconButton(onClick = browseViewModel::onGiveStar) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = grayTint
+                        )
+                    }
                 }
             }
         }

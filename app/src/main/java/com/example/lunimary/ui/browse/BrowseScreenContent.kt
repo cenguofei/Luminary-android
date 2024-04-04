@@ -31,6 +31,7 @@ import com.example.lunimary.R
 import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.notLogin
 import com.example.lunimary.models.User
 import com.example.lunimary.models.checkUserNotNone
 import dev.jeziellago.compose.markdowntext.MarkdownText
@@ -95,6 +96,7 @@ fun BrowseScreenContent(
                                 Color.Blue
                             }
                         }
+
                         systemDarkMode -> MaterialTheme.colorScheme.primary
                         else -> Color.Blue
                     },
@@ -104,9 +106,11 @@ fun BrowseScreenContent(
             }
 
             item {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp, bottom = 25.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 25.dp)
+                ) {
                     Text(
                         text = "评论 ${commentsSize.value}",
                         style = MaterialTheme.typography.titleMedium,
@@ -115,7 +119,7 @@ fun BrowseScreenContent(
                 }
             }
 
-            when(browseViewModel.comments.value) {
+            when (browseViewModel.comments.value) {
                 is NetworkResult.Loading -> {
                     item {
                         Row(
@@ -128,6 +132,7 @@ fun BrowseScreenContent(
                         }
                     }
                 }
+
                 is NetworkResult.Success -> {
                     browseViewModel.comments.value as NetworkResult.Success
                     val data = browseViewModel.comments.value.data ?: return@LazyColumn
@@ -142,6 +147,7 @@ fun BrowseScreenContent(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
+
                 is NetworkResult.Error -> {
                     item {
                         Row(
@@ -157,7 +163,8 @@ fun BrowseScreenContent(
                         }
                     }
                 }
-                else -> { }
+
+                else -> {}
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
