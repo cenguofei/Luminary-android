@@ -5,7 +5,8 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.pager.pagerFlow
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.remote.paging.FriendsPageArticleSource
-import com.example.lunimary.models.source.remote.paging.RecommendPageArticleSource
+import com.example.lunimary.models.source.remote.paging.PageAllArticleSource
+import com.example.lunimary.models.source.remote.paging.RecommendArticlesPageSource
 import kotlinx.coroutines.flow.Flow
 
 class RecommendViewModel : BaseViewModel() {
@@ -16,7 +17,9 @@ class RecommendViewModel : BaseViewModel() {
         _goToLogin = goToLogin
     }
 
-    val recommendArticles: Flow<PagingData<Article>> = pagerFlow { RecommendPageArticleSource }
+    val allArticles: Flow<PagingData<Article>> = pagerFlow { PageAllArticleSource }
 
     val friendsArticles: Flow<PagingData<Article>> = pagerFlow { FriendsPageArticleSource }
+
+    val recommendArticles: Flow<PagingData<Article>> = pagerFlow { RecommendArticlesPageSource }
 }

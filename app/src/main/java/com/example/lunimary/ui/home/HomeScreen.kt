@@ -25,7 +25,9 @@ fun HomeScreen(
     appState: LunimaryAppState,
     onItemClick: (Article) -> Unit
 ) {
-    val tabs = remember { listOf(HomeCategories.Recommend, HomeCategories.Following) }
+    val tabs = remember {
+        listOf(HomeCategories.Recommend, HomeCategories.All, HomeCategories.Following)
+    }
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
     val userState = UserState.currentUserState.observeAsState()

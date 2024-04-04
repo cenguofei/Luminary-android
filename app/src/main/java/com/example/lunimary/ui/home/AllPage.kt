@@ -6,12 +6,12 @@ import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
 
 @Composable
-fun FriendsArticlePage(
+fun AllPage(
     onItemClick: (Article) -> Unit,
-    friendsArticles: LazyPagingItems<Article>
+    articles: LazyPagingItems<Article>,
 ) {
     LunimaryPagingContent(
-        items = friendsArticles
+        items = articles
     ) { _, item ->
         ArticleItem(onItemClick = onItemClick, article = item)
     }

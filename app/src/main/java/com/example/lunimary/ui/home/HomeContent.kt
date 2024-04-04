@@ -23,10 +23,11 @@ fun HomeContent(
     recommendViewModel: RecommendViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val articles = recommendViewModel.recommendArticles.collectAsLazyPagingItems()
+    val allArticles = recommendViewModel.allArticles.collectAsLazyPagingItems()
+    val recommendArticles = recommendViewModel.recommendArticles.collectAsLazyPagingItems()
     val friendsArticles = recommendViewModel.friendsArticles.collectAsLazyPagingItems()
     DisposableEffect(key1 = Unit) {
-        recommendViewModel.registerOnHaveNetwork("RecommendPage") { articles.retry() }
+        recommendViewModel.registerOnHaveNetwork("RecommendPage") { allArticles.retry() }
         recommendViewModel.registerOnHaveNetwork("FriendsArticlePage") { friendsArticles.retry() }
         onDispose {
             recommendViewModel.unregisterOnHaveNetwork("RecommendPage")
@@ -35,10 +36,16 @@ fun HomeContent(
     }
     HorizontalPager(state = pagerState, modifier = modifier) {
         when {
+            tabs[it] == HomeCategories.All -> {
+                AllPage(
+                    onItemClick = onItemClick,
+                    articles = allArticles
+                )
+            }
             tabs[it] == HomeCategories.Recommend -> {
                 RecommendPage(
                     onItemClick = onItemClick,
-                    articles = articles
+                    articles = recommendArticles
                 )
             }
             tabs[it] == HomeCategories.Following -> {

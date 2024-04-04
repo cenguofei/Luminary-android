@@ -9,6 +9,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
@@ -32,10 +33,12 @@ import com.example.lunimary.ui.common.setNavViewUser
 import com.example.lunimary.ui.common.setRelationPage
 import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.util.logd
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun rememberAppState(
     navController: NavHostController = rememberNavController(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     userViewModel: UserViewModel,
     windowSizeClass: WindowSizeClass,
 ): LunimaryAppState {
@@ -48,7 +51,8 @@ fun rememberAppState(
         LunimaryAppState(
             navController = navController,
             windowSizeClass = windowSizeClass,
-            userViewModel = userViewModel
+            userViewModel = userViewModel,
+            coroutineScope = coroutineScope
         )
     }
 }
@@ -57,7 +61,8 @@ fun rememberAppState(
 class LunimaryAppState(
     val navController: NavHostController,
     private val windowSizeClass: WindowSizeClass,
-    val userViewModel: UserViewModel
+    val userViewModel: UserViewModel,
+    val coroutineScope: CoroutineScope
 ) {
     private val _selectedBottomTab = mutableStateOf(TopLevelDestination.Home)
     val selectedBottomTab: State<TopLevelDestination> get() = _selectedBottomTab

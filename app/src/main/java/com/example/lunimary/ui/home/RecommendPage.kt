@@ -11,8 +11,7 @@ fun RecommendPage(
     articles: LazyPagingItems<Article>,
 ) {
     LunimaryPagingContent(
-        items = articles,
-        key = { articles[it]?.id!! }
+        items = articles
     ) { _, item ->
         ArticleItem(onItemClick = onItemClick, article = item)
     }

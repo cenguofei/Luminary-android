@@ -16,6 +16,7 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.Comment
 import com.example.lunimary.models.User
+import com.example.lunimary.models.ViewDurationTemp
 import com.example.lunimary.models.VisibleMode
 import com.example.lunimary.models.ext.CommentsWithUser
 import com.example.lunimary.models.source.remote.repository.ArticleRepository
@@ -23,9 +24,15 @@ import com.example.lunimary.models.source.remote.repository.CollectRepository
 import com.example.lunimary.models.source.remote.repository.CommentRepository
 import com.example.lunimary.models.source.remote.repository.FriendRepository
 import com.example.lunimary.models.source.remote.repository.LikeRepository
+import com.example.lunimary.models.source.remote.repository.RecordViewDurationRepository
 import com.example.lunimary.models.source.remote.repository.UserRepository
+import com.example.lunimary.util.Default
+import com.example.lunimary.util.logi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class BrowseViewModel : BaseViewModel() {
     private val userRepository = UserRepository()
@@ -34,8 +41,10 @@ class BrowseViewModel : BaseViewModel() {
     private val collectRepository = CollectRepository()
     private val articleRepository = ArticleRepository()
     private val commentRepository by lazy { CommentRepository() }
+    private val recordRepository = RecordViewDurationRepository()
 
     private var hasSetArticle = false
+    private var beginTimestamp = Long.Default
     fun setArticle(article: Article) {
         if (hasSetArticle) return
         hasSetArticle = true
@@ -46,6 +55,29 @@ class BrowseViewModel : BaseViewModel() {
         fetchStar(article.id)
         getAllCommentsOfArticle(article.id)
         whenBroseArticle(article.id)
+    }
+
+    fun beginRecord() {
+        "beginRecord".logi("begin_record_time")
+        beginTimestamp = System.currentTimeMillis()
+    }
+
+    fun endRecord(coroutineScope: CoroutineScope) {
+        "endRecord".logi("begin_record_time")
+        val duration = System.currentTimeMillis() - beginTimestamp
+        val tags = uiState.value!!.article.tags.toList()
+        if (duration >= 5000) {
+            coroutineScope.launch(Dispatchers.IO) {
+                recordRepository.record(
+                    ViewDurationTemp(
+                        userId = currentUser.id,
+                        duration = duration,
+                        tags = tags,
+                        timestamp = System.currentTimeMillis()
+                    )
+                )
+            }
+        }
     }
 
     private fun whenBroseArticle(articleId: Long) {

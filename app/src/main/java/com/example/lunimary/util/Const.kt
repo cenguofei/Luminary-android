@@ -32,6 +32,8 @@ inline val pageCommentsPath: String get() = "$commentRootPath$pageRootPath"
 inline val pageMyFriendsPath: String get() = "$friendRootPath$pageRootPath/relation/my_friends"
 inline val pageMyFollowingsPath: String get() = "$friendRootPath$pageRootPath/relation/followings"
 inline val pageMyFollowersPath: String get() = "$friendRootPath$pageRootPath/relation/followers"
+inline val pageRecommendedArticlesPath: String get() = "$articlesRootPath$pageRootPath/recommended"
+
 
 //Article
 inline val articlesRootPath: String get() = "/articles"
@@ -46,6 +48,7 @@ inline val getAllArticlesOfUserCollectedPath: String get() = "$articlesRootPath/
 inline val getAllArticlesOfUserLikedPath: String get() = "$articlesRootPath/user_liked"
 inline val whenBrowseArticlePath: String get() = "$articlesRootPath/when_browse_article"
 inline val interactionDataPath: String get() = "/users/interaction_data"
+inline val viewArticleDurationPath: String get() = "$articlesRootPath/view/duration"
 
 
 

@@ -27,7 +27,7 @@ class AppPagingSource<T : Any>(
                 LoadResult.Page(
                     data = data?.lists ?: emptyList(),
                     prevKey = if (wishPage == 0) null else wishPage - 1,
-                    nextKey = if (wishPage < data?.pageSize!!) wishPage + 1 else null
+                    nextKey = if (wishPage < (data?.pageSize!! - 1)) wishPage + 1 else null
                 )
             } else {
                 LoadResult.Error(Throwable(message = pageResponse.msg))
