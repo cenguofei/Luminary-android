@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
@@ -45,13 +46,14 @@ fun DraftItem(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 4.dp),
+                    .padding(end = 16.dp, bottom = 8.dp),
                 shape = RoundedCornerShape(25)
             ) {
                 Text(
-                    text = stringResource(id = R.string.draft) + " ${articles.size}",
+                    text = stringResource(id = R.string.draft) + "${articles.size}",
                     color = MaterialTheme.colorScheme.surface,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    fontSize = 12.sp
                 )
             }
         }

@@ -25,9 +25,10 @@ import com.example.lunimary.util.logd
 import kotlinx.coroutines.launch
 
 class EditViewModel : BaseViewModel() {
-    private val addArticleRepository = AddArticleRepository()
-    private val tagRepository = LocalTagRepository()
-    private val fileRepository = FileRepository()
+    private val addArticleRepository by lazy { AddArticleRepository() }
+    private val tagRepository by lazy { LocalTagRepository() }
+    private val fileRepository by lazy { FileRepository() }
+    private val localArticleRepository by lazy { LocalArticleRepository() }
 
     private val _articleDataState: MutableState<ArticleData> = mutableStateOf(ArticleData())
     val articleDataState: State<ArticleData> get() = _articleDataState
@@ -73,7 +74,7 @@ class EditViewModel : BaseViewModel() {
     val addArticleState: LiveData<NetworkResult<Unit>> get() = _addArticleState
 
     private var hasPublished = false
-    fun publish() {
+    fun publish(isDraft: Boolean, draftArticle: Article?) {
         if (hasPublished) return
         val newArticle = generateArticle()
         fly(FLY_ADD_ARTICLE) {
@@ -86,6 +87,13 @@ class EditViewModel : BaseViewModel() {
                     hasPublished = true
                     _addArticleState.postValue(NetworkResult.Success())
                     clear()
+                    if (isDraft) {
+                        draftArticle?.let {
+                            viewModelScope.launch {
+                                localArticleRepository.deleteArticle(it)
+                            }
+                        }
+                    }
                 },
                 onFailed = {
                     _addArticleState.postValue(NetworkResult.Error(it))

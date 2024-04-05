@@ -74,7 +74,12 @@ fun NavGraphBuilder.addArticleScreen(
         BackHandler { saveDraft() }
         AddArticleScreen(
             onBack = { saveDraft() },
-            onPublish = { editViewModel.publish() },
+            onPublish = {
+                editViewModel.publish(
+                    isDraft = draftArticle != null,
+                    draftArticle = draftArticle
+                )
+            },
             editViewModel = editViewModel,
             coroutineScope = coroutineScope,
             onFinish = { appState.navToUser(Screens.AddArticle.route) },

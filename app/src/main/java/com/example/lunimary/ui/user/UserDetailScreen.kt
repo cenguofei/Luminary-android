@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -111,7 +112,7 @@ fun ShowLikesDialog(
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(150.dp),
+                            .height(200.dp),
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -137,7 +138,8 @@ fun UserBackground(modifier: Modifier) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(250.dp)
+            .height(250.dp),
+        color = Color.Transparent
     ) {
         AsyncImage(
             model = currentUser.realBackgroundUrl(),

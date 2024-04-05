@@ -52,7 +52,7 @@ fun CommentItem(
                     text = user.username,
                     style = TextStyle(
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.W400
                     ),
                     maxLines = 1,
@@ -99,7 +99,9 @@ fun CommentItem(
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
-                        placeholder = painterResource(id = R.drawable.cover)
+                        placeholder = painterResource(id = R.drawable.cover),
+                        error = painterResource(id = R.drawable.cover),
+                        fallback = painterResource(id = R.drawable.cover),
                     )
                 }
             }

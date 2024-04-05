@@ -1,6 +1,5 @@
 package com.example.lunimary.ui.user
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -10,7 +9,6 @@ import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.local.articleDao
 import com.example.lunimary.ui.home.ArticleItem
-import com.example.lunimary.ui.home.ArticleItemContainerColor
 import com.example.lunimary.ui.user.draft.DraftItem
 
 
@@ -38,10 +36,7 @@ fun PublicPage(
     ) { _, item ->
         ArticleItem(
             onItemClick = onItemClick,
-            article = item,
-            containerColor = ArticleItemContainerColor.Default.copy(
-                normalColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
-            )
+            article = item
         )
     }
 }

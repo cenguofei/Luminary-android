@@ -27,10 +27,7 @@ fun UserArticles(
     ) { _, item ->
         ArticleItem(
             onItemClick = onItemClick,
-            article = item,
-            containerColor = ArticleItemContainerColor.Default.copy(
-                normalColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.15f)
-            )
+            article = item
         )
     }
 }

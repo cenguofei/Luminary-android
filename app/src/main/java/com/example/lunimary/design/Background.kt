@@ -45,6 +45,7 @@ fun LunimaryBackground(
 fun LunimaryGradientBackground(
     modifier: Modifier = Modifier,
     gradientColors: GradientColors = LocalGradientColors.current,
+    shape: Shape = RectangleShape,
     content: @Composable () -> Unit
 ) {
     val currentTopColor by rememberUpdatedState(gradientColors.top)
@@ -55,7 +56,8 @@ fun LunimaryGradientBackground(
         } else {
             gradientColors.container
         },
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        shape = shape
     ) {
         Box(
             modifier = Modifier

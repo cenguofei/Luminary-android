@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
@@ -42,11 +42,9 @@ fun UserDetailContent(
             onClick = onClick
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Surface(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize(),
+        LunimaryGradientBackground(
             shape = RoundedCornerShape(topStartPercent = 8, topEndPercent = 8),
+            modifier = Modifier.weight(1f)
         ) {
             RoundedCornerContent(
                 uiState = uiState.value!!,
@@ -66,7 +64,9 @@ fun UserInformation(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(start = 16.dp).clickable(onClick = onClick)
+        modifier = Modifier
+            .padding(start = 16.dp)
+            .clickable(onClick = onClick)
     ) {
         UserHeadImage(model = user.realHeadUrl())
         Spacer(modifier = Modifier.width(12.dp))

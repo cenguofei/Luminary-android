@@ -1,5 +1,6 @@
 package com.example.lunimary.ui.home
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,8 +44,10 @@ data class ArticleItemContainerColor(
     companion object {
         val Default: ArticleItemContainerColor
             @Composable get() = ArticleItemContainerColor(
-                visitedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                normalColor = MaterialTheme.colorScheme.surface
+                visitedColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                normalColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.secondaryContainer.copy(
+                    alpha = 0.15f
+                ) else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
             )
     }
 }
@@ -72,7 +75,10 @@ fun ArticleItem(
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Title(text = article.title, modifier = Modifier.weight(1f))
                 if (showOptionsIcon) {
                     IconButton(onClick = onOptionsClick) {
@@ -85,9 +91,10 @@ fun ArticleItem(
                 modifier = Modifier
                     .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
-                val contentModifier = if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {
-                    Modifier.weight(1f)
-                } else Modifier.weight(0.6f)
+                val contentModifier =
+                    if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {
+                        Modifier.weight(1f)
+                    } else Modifier.weight(0.6f)
                 Content(content = article.body, modifier = contentModifier)
                 if (article.cover.isNotEmpty() && article.cover.startsWith("res/uploads")) {
                     ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
@@ -126,7 +133,7 @@ fun AboutTheArticle(
         }
         val daysFromToday = article.daysFromToday
         val time = if (daysFromToday > 20) article.niceDate else daysFromToday
-        ArticleSingleAmount(text = "${time}${if (daysFromToday < 20) "天前" else "" }")
+        ArticleSingleAmount(text = "${time}${if (daysFromToday < 20) "天前" else ""}")
     }
 }
 
@@ -151,7 +158,12 @@ fun Labels(
     if (tagWithColor.isEmpty()) return
     LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         itemsIndexed(tagWithColor) { _, item ->
-            Tag(tag = com.example.lunimary.models.source.local.Tag(name = item.first, color = item.second.toArgb()))
+            Tag(
+                tag = com.example.lunimary.models.source.local.Tag(
+                    name = item.first,
+                    color = item.second.toArgb()
+                )
+            )
         }
     }
 }
