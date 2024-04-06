@@ -3,6 +3,8 @@ package com.example.lunimary.ui.home
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,9 +51,9 @@ data class ArticleItemContainerColor(
         val Default: ArticleItemContainerColor
             @Composable get() = ArticleItemContainerColor(
                 visitedColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                normalColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.secondaryContainer.copy(
+                normalColor = /*if (isSystemInDarkTheme()) MaterialTheme.colorScheme.secondaryContainer.copy(
                     alpha = 0.15f
-                ) else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
+                ) else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)*/ MaterialTheme.colorScheme.surface
             )
     }
 }
@@ -63,12 +66,14 @@ fun ArticleItem(
     visited: Boolean = false,
     showOptionsIcon: Boolean = false,
     onOptionsClick: () -> Unit = {},
-    containerColor: ArticleItemContainerColor = ArticleItemContainerColor.Default
+    containerColor: ArticleItemContainerColor = ArticleItemContainerColor.Default,
+    showAboutArticle: Boolean = true
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 8.dp),
+            .padding(top = 8.dp, start = 12.dp, end = 12.dp),
+        shape = RoundedCornerShape(8.dp),
         onClick = { onItemClick(article) },
         color = if (visited) containerColor.visitedColor else containerColor.normalColor
     ) {
@@ -109,19 +114,22 @@ fun ArticleItem(
             val tagWithColor = remember { article.tags.map { it to tagColors.random() } }
             Labels(tagWithColor = tagWithColor)
             Spacer(modifier = Modifier.height(if (article.isLunimaryStation) 4.dp else 12.dp))
-            AboutTheArticle(modifier = Modifier, article)
-            Spacer(modifier = Modifier.height(8.dp))
+            if (showAboutArticle) {
+                AboutTheArticle(modifier = Modifier, article)
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AboutTheArticle(
     modifier: Modifier = Modifier,
     article: Article
 ) {
-    Row(modifier = modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.weight(1f)) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        FlowRow(modifier = modifier.weight(1f)) {
             ArticleSingleAmount(text = article.author)
             ArticleSingleAmount(
                 text = "${article.viewsNum}阅读",
@@ -138,6 +146,7 @@ fun AboutTheArticle(
         }
         val daysFromToday = article.daysFromToday
         val time = if (daysFromToday > 20) article.niceDate else daysFromToday
+        Spacer(modifier = Modifier.width(8.dp))
         ArticleSingleAmount(text = "${time}${if (daysFromToday < 20) "天前" else ""}")
     }
 }

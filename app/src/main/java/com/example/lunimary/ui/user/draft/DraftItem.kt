@@ -40,7 +40,7 @@ fun DraftItem(
     if (articles.isEmpty()) return
     val article = articles[index]
     Box(modifier = modifier) {
-        ArticleItem(onItemClick = onClick, article =article)
+        ArticleItem(onItemClick = onClick, article =article, showAboutArticle = false)
         if (showDraftLabel) {
             Surface(
                 color = MaterialTheme.colorScheme.primary,
