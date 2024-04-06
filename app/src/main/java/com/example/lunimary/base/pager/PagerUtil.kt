@@ -16,7 +16,7 @@ val defaultPagingConfig: PagingConfig get() = PagingConfig(pageSize = 5)
  */
 fun <T: Any> BaseViewModel.pagerFlow(
     sourceFactory: () -> PageSource<T>
-) : Flow<PagingData<T>>  {
+) : Flow<PagingData<PageItem<T>>>  {
     return Pager(defaultPagingConfig) { AppPagingSource(sourceFactory()) }
         .flow.cachedIn(viewModelScope)
 }

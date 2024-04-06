@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowersInfo
@@ -21,7 +22,7 @@ import com.example.lunimary.util.logi
 fun FollowersPage(
     relationViewModel: RelationViewModel,
     onItemClick: (User) -> Unit,
-    followers: LazyPagingItems<FollowersInfo>
+    followers: LazyPagingItems<PageItem<FollowersInfo>>
 ) {
     LaunchedEffect(
         key1 = Unit,
@@ -39,14 +40,14 @@ fun FollowersPage(
                 mutableStateOf(NetworkResult.None())
             }
             FollowerItem(
-                followersInfo = item,
+                followersInfo = item.data,
                 onMoreClick = {},
                 onReturnFollowClick = {
-                    relationViewModel.onFollowClick(item.follower.id, state)
+                    relationViewModel.onFollowClick(item.data.follower.id, state)
                 },
                 state = state,
                 onCancelFollowClick = {
-                    relationViewModel.onUnfollowClick(item.follower.id, state = state)
+                    relationViewModel.onUnfollowClick(item.data.follower.id, state = state)
                 },
                 onItemClick = onItemClick,
             )

@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.models.checkUserNotNone
 
@@ -27,7 +28,7 @@ fun BrowseScreenContent(
     onEditCommentClick: () -> Unit,
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: () -> Unit
+    onArticleDeleted: (Article) -> Unit
 ) {
     val uiState by browseViewModel.uiState.observeAsState()
     val article = uiState!!.article

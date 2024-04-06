@@ -1,6 +1,5 @@
 package com.example.lunimary.ui.home
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -12,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.lunimary.R
+import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.Tag
 import com.example.lunimary.design.tagColors
 import com.example.lunimary.models.Article
@@ -61,20 +64,21 @@ data class ArticleItemContainerColor(
 @Composable
 fun ArticleItem(
     modifier: Modifier = Modifier,
-    onItemClick: (Article) -> Unit,
-    article: Article,
+    onItemClick: (PageItem<Article>) -> Unit,
+    articlePageItem: PageItem<Article>,
     visited: Boolean = false,
     showOptionsIcon: Boolean = false,
     onOptionsClick: () -> Unit = {},
     containerColor: ArticleItemContainerColor = ArticleItemContainerColor.Default,
     showAboutArticle: Boolean = true
 ) {
+    val article = articlePageItem.data
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .padding(top = 8.dp, start = 12.dp, end = 12.dp),
         shape = RoundedCornerShape(8.dp),
-        onClick = { onItemClick(article) },
+        onClick = { onItemClick(articlePageItem) },
         color = if (visited) containerColor.visitedColor else containerColor.normalColor
     ) {
         Column(
@@ -110,10 +114,27 @@ fun ArticleItem(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(if (article.isLunimaryStation) 4.dp else 12.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             val tagWithColor = remember { article.tags.map { it to tagColors.random() } }
             Labels(tagWithColor = tagWithColor)
-            Spacer(modifier = Modifier.height(if (article.isLunimaryStation) 4.dp else 12.dp))
+            Spacer(modifier = Modifier.height(4.dp))
+            if (!article.isLunimaryStation) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = if (article.userId == currentUser.id) "你转发" else "${article.username}转发",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        modifier = Modifier.size(10.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
             if (showAboutArticle) {
                 AboutTheArticle(modifier = Modifier, article)
                 Spacer(modifier = Modifier.height(8.dp))

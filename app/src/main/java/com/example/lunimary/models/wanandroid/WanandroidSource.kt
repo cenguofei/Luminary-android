@@ -10,7 +10,6 @@ import com.example.lunimary.models.VisibleMode
 import com.example.lunimary.util.logd
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.post
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

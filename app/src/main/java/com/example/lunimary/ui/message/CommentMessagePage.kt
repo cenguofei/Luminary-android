@@ -9,24 +9,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.ext.CommentItem
 import java.util.UUID
 
 @Composable
 fun CommentMessagePage(
-    commentsMessage: LazyPagingItems<CommentItem>
+    commentsMessage: LazyPagingItems<PageItem<CommentItem>>
 ) {
     LunimaryPagingContent(
         items = commentsMessage,
-        key = { commentsMessage[it]?.comment?.id ?: UUID.randomUUID() },
+        key = { commentsMessage[it]?.data?.comment?.id ?: UUID.randomUUID() },
         topItem = { Spacer(modifier = Modifier.height(16.dp)) },
     ) { _, item ->
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             CommentItem(
-                user = item.user,
-                article = item.article,
-                comment = item.comment,
+                user = item.data.user,
+                article = item.data.article,
+                comment = item.data.comment,
                 modifier = Modifier
             )
             Spacer(modifier = Modifier.height(8.dp))

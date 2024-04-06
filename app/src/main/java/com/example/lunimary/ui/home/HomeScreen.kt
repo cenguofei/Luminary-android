@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.base.UserState
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
@@ -23,7 +24,7 @@ fun HomeScreen(
     onSearchClick: () -> Unit,
     onLoginClick: () -> Unit,
     appState: LunimaryAppState,
-    onItemClick: (Article) -> Unit
+    onItemClick: (PageItem<Article>) -> Unit
 ) {
     val tabs = remember {
         listOf(HomeCategories.Recommend, HomeCategories.All, HomeCategories.Following)

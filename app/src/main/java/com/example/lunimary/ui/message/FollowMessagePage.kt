@@ -9,19 +9,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.ext.UserFriend
 import java.util.UUID
 
 @Composable
-fun FollowMessagePage(followMessage: LazyPagingItems<UserFriend>) {
+fun FollowMessagePage(followMessage: LazyPagingItems<PageItem<UserFriend>>) {
     LunimaryPagingContent(
         items = followMessage,
-        key = { followMessage[it]?.user?.id ?: UUID.randomUUID() },
+        key = { followMessage[it]?.data?.user?.id ?: UUID.randomUUID() },
         topItem = { Spacer(modifier = Modifier.height(16.dp)) },
     ) { _, item ->
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-            FollowItem(item = item)
+            FollowItem(item = item.data)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

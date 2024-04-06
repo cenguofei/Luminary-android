@@ -10,7 +10,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.lunimary.base.checkLogin
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.ui.HOME_ROOT
 import com.example.lunimary.ui.LunimaryAppState

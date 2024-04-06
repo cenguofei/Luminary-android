@@ -23,6 +23,7 @@ import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.base.notLogin
+import com.example.lunimary.design.ChineseMarkdownWeb
 import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
@@ -34,7 +35,6 @@ import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
-import com.example.lunimary.design.ChineseMarkdownWeb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -89,7 +89,9 @@ fun NavGraphBuilder.addArticleScreen(
             },
             editViewModel = editViewModel,
             coroutineScope = coroutineScope,
-            onFinish = { appState.navToUser(Screens.AddArticle.route) },
+            onFinish = {
+                appState.navToUser(if (draftArticle == null) Screens.AddArticle.route else Screens.Drafts.route)
+            },
             draftArticle = draftArticle,
             onNavToWeb = { appState.navToWeb(ChineseMarkdownWeb) }
         )

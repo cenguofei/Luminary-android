@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowInfo
@@ -20,7 +21,7 @@ import com.example.lunimary.util.logi
 @Composable
 fun FollowPage(
     onItemClick: (User) -> Unit,
-    followings: LazyPagingItems<FollowInfo>,
+    followings: LazyPagingItems<PageItem<FollowInfo>>,
     relationViewModel: RelationViewModel
 ) {
     LaunchedEffect(
@@ -40,15 +41,15 @@ fun FollowPage(
             }
             FollowItem(
                 followInfoData = FollowItemData(
-                    followInfo = item,
+                    followInfo = item.data,
                     cancelFollow = false
                 ),
                 onMoreClick = {},
                 onFollowClick = {
-                    relationViewModel.onFollowClick(item.myFollow.id, state)
+                    relationViewModel.onFollowClick(item.data.myFollow.id, state)
                 },
                 onCancelFollowClick = {
-                    relationViewModel.onUnfollowClick(item.myFollow.id, state)
+                    relationViewModel.onUnfollowClick(item.data.myFollow.id, state)
                 },
                 state = state,
                 onItemClick = onItemClick,

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -20,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.ext.InteractionData
 
@@ -28,7 +28,7 @@ fun RoundedCornerContent(
     uiState: InteractionData,
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
-    onItemClick: (Article) -> Unit,
+    onItemClick: (PageItem<Article>) -> Unit,
     onRelationClick: (UserDataType) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()

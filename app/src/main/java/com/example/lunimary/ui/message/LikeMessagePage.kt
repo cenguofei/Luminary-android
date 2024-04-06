@@ -9,17 +9,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.models.LikeMessage
 
 @Composable
-fun LikeMessagePage(likesMessage: LazyPagingItems<LikeMessage>) {
+fun LikeMessagePage(likesMessage: LazyPagingItems<PageItem<LikeMessage>>) {
     LunimaryPagingContent(
         items = likesMessage,
         topItem = { Spacer(modifier = Modifier.height(16.dp)) },
     ) { _, item ->
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-            LikeItem(item)
+            LikeItem(item.data)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

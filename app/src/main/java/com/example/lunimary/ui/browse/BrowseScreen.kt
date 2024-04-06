@@ -12,11 +12,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.lunimary.base.notLogin
+import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
-import com.example.lunimary.ui.common.ArticleNavArguments
-import com.example.lunimary.ui.common.BROWSE_ARTICLE_KEY
+import com.example.lunimary.ui.common.PAGE_ARTICLE_ITEM_KEY
+import com.example.lunimary.ui.common.PageArticleNavArguments
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 
@@ -34,20 +35,21 @@ fun NavGraphBuilder.browseScreen(
                 }
             )
         }
-        val article = ArticleNavArguments[BROWSE_ARTICLE_KEY]
+        val article = PageArticleNavArguments[PAGE_ARTICLE_ITEM_KEY]
         if (article == null) {
             appState.navToHome(Screens.BrowseArticle.route)
             "nav article = null".logd()
             return@composable
         }
         val browseViewModel: BrowseViewModel = viewModel()
-        browseViewModel.setArticle(article)
+        browseViewModel.setArticle(article.data)
         BrowseScreen(
             onBack = appState::popBackStack,
             browseViewModel = browseViewModel,
             onLinkClick = appState::navToWeb,
             onUserClick = { appState.navToViewUser(it, Screens.BrowseArticle.route) },
             onArticleDeleted = {
+                article.deleted.value = true
                 appState.popBackStack()
             }
         )
@@ -69,7 +71,7 @@ fun BrowseScreen(
     browseViewModel: BrowseViewModel,
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: () -> Unit
+    onArticleDeleted: (Article) -> Unit
 ) {
     val showEditContent = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {

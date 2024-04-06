@@ -10,6 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.base.notLogin
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.util.logi
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ fun HomeContent(
     tabs: List<HomeCategories>,
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    onItemClick: (Article) -> Unit,
+    onItemClick: (PageItem<Article>) -> Unit,
     goToLogin: () -> Unit,
     recommendViewModel: RecommendViewModel
 ) {

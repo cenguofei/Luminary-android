@@ -18,13 +18,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.util.notNull
 
 @Composable
 fun ViewUserRoundedCornerContent(
     viewModel: ViewUserViewModel,
-    onItemClick: (Article) -> Unit,
+    onItemClick: (PageItem<Article>) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(8.dp))

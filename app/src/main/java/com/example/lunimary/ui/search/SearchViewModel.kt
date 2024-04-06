@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.pager.AppPagingSource
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.models.source.remote.paging.SearchArticleSource
@@ -56,7 +57,7 @@ class SearchViewModel : BaseViewModel() {
     private var articleFirst = true
 
     @OptIn(FlowPreview::class)
-    val searchArticles: Flow<PagingData<Article>> = channelFlow {
+    val searchArticles: Flow<PagingData<PageItem<Article>>> = channelFlow {
         searchContent.combine(searchType) { search, type ->
             search to type
         }.onEach {
@@ -83,7 +84,7 @@ class SearchViewModel : BaseViewModel() {
     private var userFirst = true
 
     @OptIn(FlowPreview::class)
-    val searchUsers: Flow<PagingData<User>> = channelFlow {
+    val searchUsers: Flow<PagingData<PageItem<User>>> = channelFlow {
         searchContent.combine(searchType) { search, type ->
             search to type
         }.onEach {

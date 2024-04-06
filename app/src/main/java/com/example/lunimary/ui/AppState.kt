@@ -20,12 +20,14 @@ import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.notLogin
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.common.ArticleNavArguments
-import com.example.lunimary.ui.common.BROWSE_ARTICLE_KEY
 import com.example.lunimary.ui.common.DEFAULT_WEB_URL
 import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
+import com.example.lunimary.ui.common.PAGE_ARTICLE_ITEM_KEY
+import com.example.lunimary.ui.common.PageArticleNavArguments
 import com.example.lunimary.ui.common.RelationPageType
 import com.example.lunimary.ui.common.UrlNavArguments
 import com.example.lunimary.ui.common.WEB_VIEW_URL_KEY
@@ -155,7 +157,7 @@ class LunimaryAppState(
         navController.navToWeb(url)
     }
 
-    fun navToBrowse(article: Article) {
+    fun navToBrowse(article: PageItem<Article>) {
         navController.navToBrowse(article)
     }
 
@@ -270,6 +272,16 @@ private fun NavController.navToHomeWithFrom(from: String) {
             }
         }
 
+
+        Screens.Drafts.route -> {
+            navOptions {
+                popUpTo(Screens.Drafts.route) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
         else -> navOptions { }
     }
     val route = HOME_ROUTE
@@ -287,8 +299,8 @@ private fun NavController.navToInformation() {
     navigate(Screens.Information.route)
 }
 
-private fun NavController.navToBrowse(article: Article) {
-    ArticleNavArguments[BROWSE_ARTICLE_KEY] = article
+private fun NavController.navToBrowse(article: PageItem<Article>) {
+    PageArticleNavArguments[PAGE_ARTICLE_ITEM_KEY] = article
     navigate(BROWSE_ARTICLE_ROOT)
 }
 

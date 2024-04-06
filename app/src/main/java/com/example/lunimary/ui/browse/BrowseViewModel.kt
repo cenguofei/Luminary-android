@@ -28,11 +28,8 @@ import com.example.lunimary.models.source.remote.repository.RecordViewDurationRe
 import com.example.lunimary.models.source.remote.repository.UserRepository
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.logi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class BrowseViewModel : BaseViewModel() {
     private val userRepository = UserRepository()

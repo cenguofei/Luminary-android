@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.Article
@@ -40,7 +41,7 @@ fun DraftItem(
     if (articles.isEmpty()) return
     val article = articles[index]
     Box(modifier = modifier) {
-        ArticleItem(onItemClick = onClick, article =article, showAboutArticle = false)
+        ArticleItem(onItemClick = { onClick(it.data) }, articlePageItem = PageItem(article), showAboutArticle = false)
         if (showDraftLabel) {
             Surface(
                 color = MaterialTheme.colorScheme.primary,

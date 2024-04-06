@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.BackButton
 import com.example.lunimary.design.UserHeadImage
+import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.util.notNull
 
@@ -32,7 +33,7 @@ fun DynamicToolBar(
     uiState: UiState,
     browseViewModel: BrowseViewModel,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: () -> Unit
+    onArticleDeleted: (Article) -> Unit
 ) {
     val article = uiState.article
     val firstVisibleIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ fun AboutArticles(
     coroutineScope: CoroutineScope,
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
-    onItemClick: (Article) -> Unit
+    onItemClick: (PageItem<Article>) -> Unit
 ) {
     val tabs = remember {
         listOf(

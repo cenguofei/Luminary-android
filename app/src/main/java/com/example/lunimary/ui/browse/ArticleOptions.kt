@@ -32,11 +32,16 @@ import com.example.lunimary.design.ShowSnackbar
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.CascadeMenuItem
 import com.example.lunimary.design.cascade.cascadeMenu
+import com.example.lunimary.models.Article
 import com.example.lunimary.models.VisibleMode
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ArticleOptions(uiState: UiState, browseViewModel: BrowseViewModel, onArticleDeleted: () -> Unit) {
+fun ArticleOptions(
+    uiState: UiState,
+    browseViewModel: BrowseViewModel,
+    onArticleDeleted: (Article) -> Unit
+) {
     val shareArticle = remember { mutableStateOf(false) }
     val appName = stringResource(id = R.string.app_name)
     val showOptions = remember { mutableStateOf(false) }
@@ -118,7 +123,7 @@ fun ArticleOptions(uiState: UiState, browseViewModel: BrowseViewModel, onArticle
             if (browseViewModel.uiState.value!!.articleDeleted) {
                 LaunchedEffect(
                     key1 = Unit,
-                    block = { onArticleDeleted() }
+                    block = { onArticleDeleted(uiState.article) }
                 )
             }
         }
