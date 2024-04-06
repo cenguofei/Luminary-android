@@ -32,7 +32,8 @@ fun AddArticleScreenContent(
     onPublish: () -> Unit,
     editViewModel: EditViewModel,
     coroutineScope: CoroutineScope,
-    onNavToWeb: () -> Unit
+    onNavToWeb: () -> Unit,
+    onShowMessage: (String) -> Unit
 ) {
     CheckLoginState()
     val pagers = listOf(stringResource(id = R.string.edit), stringResource(id = R.string.preview))
@@ -84,7 +85,8 @@ fun AddArticleScreenContent(
                         }
                     },
                     coroutineScope = coroutineScope,
-                    onNavToWeb = onNavToWeb
+                    onNavToWeb = onNavToWeb,
+                    onShowMessage = onShowMessage
                 )
             } else {
                 PreviewPage(

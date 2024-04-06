@@ -42,7 +42,8 @@ fun EditPage(
     viewModel: EditViewModel,
     onPreviewClick: () -> Unit,
     coroutineScope: CoroutineScope,
-    onNavToWeb: () -> Unit
+    onNavToWeb: () -> Unit,
+    onShowMessage: (String) -> Unit
 ) {
     val context = LocalContext.current
     val bodyView = remember { LayoutInflater.from(context).inflate(R.layout.body_edit_text, null) }
@@ -140,7 +141,8 @@ fun EditPage(
             bodyEditText = bodyEditText,
             fileViewModel = fileViewModel,
             onPreviewClick = onPreviewClick,
-            showDialog = showDialog
+            showDialog = showDialog,
+            onShowMessage = onShowMessage
         )
         AddLinkDialog(
             showDialog = showDialog,
@@ -160,7 +162,8 @@ fun EditPagePreview() {
                 viewModel = viewModel(),
                 onPreviewClick = {},
                 coroutineScope = rememberCoroutineScope(),
-                onNavToWeb = {}
+                onNavToWeb = {},
+                onShowMessage = {}
             )
         }
     }

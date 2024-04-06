@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
+import com.example.lunimary.base.network.isCurrentlyConnected
+import com.example.lunimary.base.notLogin
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.ui.common.FileViewModel
 
@@ -28,7 +30,8 @@ fun EditBottomOptions(
     bodyEditText: EditText,
     fileViewModel: FileViewModel,
     onPreviewClick: () -> Unit,
-    showDialog: MutableState<Boolean>
+    showDialog: MutableState<Boolean>,
+    onShowMessage: (String) -> Unit
 ) {
     val context = LocalContext.current
     Column(modifier = Modifier
@@ -55,7 +58,17 @@ fun EditBottomOptions(
                     IconButton(
                         onClick = {
                             when(index) {
-                                0 -> { fileViewModel.updateShowImageSelector(true) }
+                                0 -> {
+                                    if (context.isCurrentlyConnected()) {
+                                        if (!notLogin()) {
+                                            fileViewModel.updateShowImageSelector(true)
+                                        } else {
+                                            onShowMessage("当前没有登录，请登录后重试！")
+                                        }
+                                    } else {
+                                        onShowMessage("当前没有联网，请联网后重试！")
+                                    }
+                                }
                                 1 -> { showDialog.value = true }
                             }
                         }

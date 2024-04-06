@@ -55,10 +55,11 @@ fun TopLevelScreens(appState: LunimaryAppState) {
                 HomeScreen(
                     modifier = paddingModifier,
                     onAddClick = {
-                        checkLogin(
-                            isLogin = { appState.navToEdit() },
-                            isLogout = { appState.navToLogin() }
-                        )
+//                        checkLogin(
+//                            isLogin = { appState.navToEdit() },
+//                            isLogout = { appState.navToLogin() }
+//                        )
+                        appState.navToEdit()
                     },
                     onSearchClick = { appState.navToSearch() },
                     appState = appState,

@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
+import com.example.lunimary.base.notLogin
 import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
@@ -75,10 +76,16 @@ fun NavGraphBuilder.addArticleScreen(
         AddArticleScreen(
             onBack = { saveDraft() },
             onPublish = {
-                editViewModel.publish(
-                    isDraft = draftArticle != null,
-                    draftArticle = draftArticle
-                )
+                if (!notLogin()) {
+                    editViewModel.publish(
+                        isDraft = draftArticle != null,
+                        draftArticle = draftArticle
+                    )
+                } else {
+                    coroutineScope.launch {
+                        snackbarHostState?.showSnackbar("您当前为未登录状态，请登录后再进行文章发布！")
+                    }
+                }
             },
             editViewModel = editViewModel,
             coroutineScope = coroutineScope,
@@ -148,7 +155,12 @@ fun AddArticleScreen(
         onPublish = { showBottomDrawer = true },
         editViewModel = editViewModel,
         coroutineScope = coroutineScope,
-        onNavToWeb = onNavToWeb
+        onNavToWeb = onNavToWeb,
+        onShowMessage = {
+            coroutineScope.launch {
+                snackbarHostState?.showSnackbar(message = it)
+            }
+        }
     )
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     if (showBottomDrawer) {
