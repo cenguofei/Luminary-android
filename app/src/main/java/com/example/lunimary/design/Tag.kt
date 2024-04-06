@@ -1,5 +1,6 @@
 package com.example.lunimary.design
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -8,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.theme.Blue40
 import com.example.lunimary.design.theme.DarkGreen40
@@ -25,6 +27,8 @@ val tagColors: List<Color> get() = listOf(
 @Composable
 fun Tag(
     modifier: Modifier = Modifier,
+    padding: PaddingValues = PaddingValues(vertical = 5.dp, horizontal = 8.dp),
+    style: TextStyle = MaterialTheme.typography.labelSmall,
     tag: Tag
 ) {
     Surface(
@@ -35,8 +39,8 @@ fun Tag(
     ) {
         Text(
             text = tag.name,
-            modifier = Modifier.padding(vertical = 5.dp, horizontal = 8.dp),
-            style = MaterialTheme.typography.labelSmall
+            modifier = Modifier.padding(padding),
+            style = style
         )
     }
 }

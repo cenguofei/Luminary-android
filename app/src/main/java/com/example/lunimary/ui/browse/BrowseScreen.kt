@@ -56,7 +56,7 @@ fun NavGraphBuilder.browseScreen(
             effect = {
                 browseViewModel.beginRecord()
                 onDispose {
-                    browseViewModel.endRecord(appState.coroutineScope)
+                    browseViewModel.endRecord()
                 }
             }
         )

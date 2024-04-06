@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ fun DynamicToolBar(
     onUserClick: (User) -> Unit,
     onArticleDeleted: () -> Unit
 ) {
+    val article = uiState.article
     val firstVisibleIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val alphaAnim = animateFloatAsState(
         targetValue = if (firstVisibleIndex.value >= 2) 1f else 0f,
@@ -49,30 +51,39 @@ fun DynamicToolBar(
             onClick = onBack,
             tint = MaterialTheme.colorScheme.onSurface
         )
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp)
-                .alpha(alphaAnim.value)
-        ) {
+        if (article.isLunimaryStation) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp)
+                    .alpha(alphaAnim.value)
             ) {
-                UserHeadImage(
-                    model = browseViewModel.articleOwner.value.realHeadUrl().notNull,
-                    size = 40.dp,
-                    onClick = { onUserClick(browseViewModel.articleOwner.value) }
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                FollowSettingButton(
-                    owner = browseViewModel.articleOwner.value,
-                    hasFetchedFriendship = uiState.hasFetchedFriendship,
-                    isFollowByMe = uiState.isFollowByMe,
-                    onUnfollowClick = onUnfollowClick,
-                    onFollowClick = onFollowClick
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    UserHeadImage(
+                        model = browseViewModel.articleOwner.value.realHeadUrl().notNull,
+                        size = 40.dp,
+                        onClick = { onUserClick(browseViewModel.articleOwner.value) }
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    FollowSettingButton(
+                        owner = browseViewModel.articleOwner.value,
+                        hasFetchedFriendship = uiState.hasFetchedFriendship,
+                        isFollowByMe = uiState.isFollowByMe,
+                        onUnfollowClick = onUnfollowClick,
+                        onFollowClick = onFollowClick
+                    )
+                }
             }
+        } else {
+            Text(
+                text = article.author,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.weight(1f))
         }
         ArticleOptions(
             uiState = uiState,

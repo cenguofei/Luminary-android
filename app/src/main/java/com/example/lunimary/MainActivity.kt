@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -18,6 +19,7 @@ import com.example.lunimary.base.UserState
 import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.theme.LunimaryTheme
+import com.example.lunimary.models.wanandroid.WanandroidViewModel
 import com.example.lunimary.ui.LunimaryApp
 import com.example.lunimary.ui.TopLevelDestination
 import com.example.lunimary.ui.login.UserViewModel
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val userViewModel: UserViewModel = viewModel()
+            val wanandroidViewModel: WanandroidViewModel = viewModel()
             userViewModel.checkLogin(
                 isLogin = { UserState.updateLoginState(true, "onActivityResumed") },
                 logout = { UserState.updateLoginState(false, "onActivityResumed") }

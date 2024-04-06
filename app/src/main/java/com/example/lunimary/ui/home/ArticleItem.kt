@@ -3,6 +3,7 @@ package com.example.lunimary.ui.home
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,9 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.lunimary.R
 import com.example.lunimary.design.Tag
@@ -87,23 +90,25 @@ fun ArticleItem(
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-            ) {
-                val contentModifier =
-                    if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {
-                        Modifier.weight(1f)
-                    } else Modifier.weight(0.6f)
-                Content(content = article.body, modifier = contentModifier)
-                if (article.cover.isNotEmpty() && article.cover.startsWith("res/uploads")) {
-                    ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
+            if (article.isLunimaryStation) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val contentModifier =
+                        if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {
+                            Modifier.weight(1f)
+                        } else Modifier.weight(0.6f)
+                    Content(content = article.body, modifier = contentModifier)
+                    if (article.cover.isNotEmpty() && article.cover.startsWith("res/uploads")) {
+                        ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(if (article.isLunimaryStation) 4.dp else 12.dp))
             val tagWithColor = remember { article.tags.map { it to tagColors.random() } }
             Labels(tagWithColor = tagWithColor)
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(if (article.isLunimaryStation) 4.dp else 12.dp))
             AboutTheArticle(modifier = Modifier, article)
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -162,7 +167,9 @@ fun Labels(
                 tag = com.example.lunimary.models.source.local.Tag(
                     name = item.first,
                     color = item.second.toArgb()
-                )
+                ),
+                padding = PaddingValues(vertical = 3.dp, horizontal = 4.dp),
+                style = TextStyle(fontSize = 8.sp)
             )
         }
     }

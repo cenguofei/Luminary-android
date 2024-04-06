@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.lunimary.design.LunimaryWebView
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.DEFAULT_WEB_URL
@@ -30,8 +31,10 @@ private fun WebViewScreen(url: String, onExit: () -> Unit) {
     if (showWebView.value) {
         LunimaryWebView(
             url = url,
-            showWebView = showWebView,
-            onExit = onExit
+            onExit = {
+                onExit()
+                showWebView.value = !showWebView.value
+            }
         )
     }
 }

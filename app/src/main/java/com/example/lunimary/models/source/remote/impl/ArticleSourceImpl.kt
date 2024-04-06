@@ -4,6 +4,7 @@ import com.example.lunimary.base.ktor.addPagesParam
 import com.example.lunimary.base.ktor.addPathParam
 import com.example.lunimary.base.ktor.init
 import com.example.lunimary.base.ktor.securityDelete
+import com.example.lunimary.base.ktor.securityGet
 import com.example.lunimary.base.ktor.securityPost
 import com.example.lunimary.base.ktor.securityPut
 import com.example.lunimary.base.ktor.setJsonBody
@@ -50,7 +51,7 @@ class ArticleSourceImpl: BaseSourceImpl by BaseSourceImpl(), ArticleSource {
     }
 
     override suspend fun whenBrowseArticle(articleId: Long): DataResponse<Boolean> {
-        return client.get(urlString = whenBrowseArticlePath) {
+        return client.securityGet(urlString = whenBrowseArticlePath) {
             addPathParam(articleId)
         }.init()
     }

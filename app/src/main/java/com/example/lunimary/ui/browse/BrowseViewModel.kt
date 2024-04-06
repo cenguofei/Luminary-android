@@ -53,7 +53,7 @@ class BrowseViewModel : BaseViewModel() {
         existingFriendship(article.userId)
         existsLike(article.id)
         fetchStar(article.id)
-        getAllCommentsOfArticle(article.id)
+        //getAllCommentsOfArticle(article.id)
         whenBroseArticle(article.id)
     }
 
@@ -62,21 +62,23 @@ class BrowseViewModel : BaseViewModel() {
         beginTimestamp = System.currentTimeMillis()
     }
 
-    fun endRecord(coroutineScope: CoroutineScope) {
+    fun endRecord() {
         "endRecord".logi("begin_record_time")
         val duration = System.currentTimeMillis() - beginTimestamp
         val tags = uiState.value!!.article.tags.toList()
         if (duration >= 5000) {
-            coroutineScope.launch(Dispatchers.IO) {
-                recordRepository.record(
-                    ViewDurationTemp(
-                        userId = currentUser.id,
-                        duration = duration,
-                        tags = tags,
-                        timestamp = System.currentTimeMillis()
+            request(
+                block = {
+                    recordRepository.record(
+                        ViewDurationTemp(
+                            userId = currentUser.id,
+                            duration = duration,
+                            tags = tags,
+                            timestamp = System.currentTimeMillis()
+                        )
                     )
-                )
-            }
+                }
+            )
         }
     }
 
@@ -266,7 +268,7 @@ class BrowseViewModel : BaseViewModel() {
     private val _comments: MutableState<NetworkResult<List<CommentsWithUser>>> =
         mutableStateOf(NetworkResult.None())
     val comments: State<NetworkResult<List<CommentsWithUser>>> get() = _comments
-    private fun getAllCommentsOfArticle(articleId: Long) {
+    fun getAllCommentsOfArticle(articleId: Long) {
         fly(FLY_ALL_COMMENTS_OF_ARTICLE) {
             request(
                 block = {

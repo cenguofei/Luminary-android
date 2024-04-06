@@ -33,7 +33,7 @@ import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
-import com.example.lunimary.ui.webview.ChineseMarkdownWeb
+import com.example.lunimary.design.ChineseMarkdownWeb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

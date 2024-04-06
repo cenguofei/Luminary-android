@@ -63,6 +63,9 @@ data class Article(
      * format of publishTime
      */
     val niceDate: String get() = timestamp.niceDateToDay
+
+    val isLunimaryStation: Boolean get() = body.isNotBlank()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
