@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.lunimary.R
-import com.example.lunimary.design.CheckLoginState
 import com.example.lunimary.design.LunimaryDialog
 import com.example.lunimary.design.LunimaryToolbar
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +34,6 @@ fun AddArticleScreenContent(
     onNavToWeb: () -> Unit,
     onShowMessage: (String) -> Unit
 ) {
-    CheckLoginState()
     val pagers = listOf(stringResource(id = R.string.edit), stringResource(id = R.string.preview))
     val pagerState = rememberPagerState { pagers.size }
     val coroutine = rememberCoroutineScope()

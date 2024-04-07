@@ -10,6 +10,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.lunimary.base.checkLogin
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.ui.HOME_ROOT
 import com.example.lunimary.ui.LunimaryAppState
@@ -54,11 +55,10 @@ fun TopLevelScreens(appState: LunimaryAppState) {
                 HomeScreen(
                     modifier = paddingModifier,
                     onAddClick = {
-//                        checkLogin(
-//                            isLogin = { appState.navToEdit() },
-//                            isLogout = { appState.navToLogin() }
-//                        )
-                        appState.navToEdit()
+                        checkLogin(
+                            isLogin = { appState.navToEdit() },
+                            isLogout = { appState.navToLogin() }
+                        )
                     },
                     onSearchClick = { appState.navToSearch() },
                     appState = appState,
