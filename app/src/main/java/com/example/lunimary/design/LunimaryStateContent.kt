@@ -106,7 +106,7 @@ fun <T : Any> LunimaryPagingContent(
     val showNetworkError = !hasNetwork && items.isEmpty()
     val searchEmpty = if (searchEmptyEnabled) showEmpty else false
 
-    val state = rememberPullToRefreshState { refreshEnabled }
+    val state = rememberPullToRefreshState { refreshEnabled && !showShimmer }
     val scaleFraction = if (state.isRefreshing) 1f else
         LinearOutSlowInEasing.transform(state.progress).coerceIn(0f, 1f)
     if (state.isRefreshing) {
