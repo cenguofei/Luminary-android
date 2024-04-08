@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.bottomsheet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.models.VisibleMode
+import com.example.lunimary.ui.edit.EditViewModel
 
 @Composable
 fun ChooseVisibleMode(editViewModel: EditViewModel) {

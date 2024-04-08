@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import com.example.lunimary.R
 import com.example.lunimary.design.LunimaryDialog
 import com.example.lunimary.design.LunimaryToolbar
+import com.example.lunimary.ui.edit.edit.EditPage
+import com.example.lunimary.ui.edit.preview.PreviewPage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

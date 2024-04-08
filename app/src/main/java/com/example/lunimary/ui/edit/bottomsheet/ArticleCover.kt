@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.bottomsheet
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -33,6 +33,7 @@ import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.models.fileBaseUrl
+import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine
 import github.leavesczy.matisse.Matisse

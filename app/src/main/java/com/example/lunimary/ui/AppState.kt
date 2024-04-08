@@ -25,7 +25,8 @@ import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.DEFAULT_WEB_URL
-import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
+import com.example.lunimary.ui.common.EDIT_ARTICLE_KEY
+import com.example.lunimary.ui.common.EDIT_TYPE_KEY
 import com.example.lunimary.ui.common.PAGE_ARTICLE_ITEM_KEY
 import com.example.lunimary.ui.common.PageArticleNavArguments
 import com.example.lunimary.ui.common.RelationPageType
@@ -33,6 +34,7 @@ import com.example.lunimary.ui.common.UrlNavArguments
 import com.example.lunimary.ui.common.WEB_VIEW_URL_KEY
 import com.example.lunimary.ui.common.setNavViewUser
 import com.example.lunimary.ui.common.setRelationPage
+import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.util.logd
 import kotlinx.coroutines.CoroutineScope
@@ -145,8 +147,11 @@ class LunimaryAppState(
         navController.navigate(Screens.Register.route)
     }
 
-    fun navToEdit(draftArticle: Article? = null) {
-        navController.navToEdit(draftArticle)
+    fun navToEdit(
+        draftArticle: Article? = null,
+        editType: EditType = EditType.New
+    ) {
+        navController.navToEdit(draftArticle, editType)
     }
 
     fun navToDraft() {
@@ -313,12 +318,16 @@ private fun NavController.navToRelation(relationPageType: RelationPageType) {
     navigate(Screens.Relation.route)
 }
 
-private fun NavController.navToEdit(draftArticle: Article?) {
-    var article = draftArticle
-    if (draftArticle == null) {
+private fun NavController.navToEdit(
+    theArticle: Article?,
+    editType: EditType
+) {
+    var article = theArticle
+    if (theArticle == null) {
         article = Article(id = -10000)
     }
-    ArticleNavArguments[EDIT_DRAFT_ARTICLE_KEY] = article!!
+    ArticleNavArguments[EDIT_ARTICLE_KEY] = article!!
+    ArticleNavArguments[EDIT_TYPE_KEY] = editType
     navigate(ADD_ARTICLE_ROOT)
 }
 

@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.edit
 
 import android.widget.EditText
 import androidx.compose.foundation.layout.Box

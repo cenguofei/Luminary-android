@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.edit
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -25,6 +25,7 @@ import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.fileBaseUrl
 import com.example.lunimary.ui.common.FileViewModel
+import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine
 import github.leavesczy.matisse.Matisse
@@ -108,11 +109,11 @@ fun EditPage(
     )
 
     LaunchedEffect(
-        key1 = viewModel.articleDataState.value,
+        key1 = Unit,
         block = {
             if (viewModel.isFillByArticle) {
-                titleEditView.setText(viewModel.articleDataState.value.title)
-                bodyEditText.setText(viewModel.articleDataState.value.body)
+                titleEditView.setText(viewModel.title)
+                bodyEditText.setText(viewModel.body)
             }
         }
     )

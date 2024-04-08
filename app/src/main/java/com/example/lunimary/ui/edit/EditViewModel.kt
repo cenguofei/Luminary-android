@@ -22,21 +22,22 @@ import com.example.lunimary.models.source.remote.repository.AddArticleRepository
 import com.example.lunimary.models.source.remote.repository.FileRepository
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
+import com.example.lunimary.util.logi
 import kotlinx.coroutines.launch
+
+data class UiState(
+    val title: String = empty,
+    val body: String = empty,
+    val tags: List<Tag> = emptyList(),
+    val visibleMode: VisibleMode = VisibleMode.PUBLIC,
+    val cover: String = empty,
+)
 
 class EditViewModel : BaseViewModel() {
     private val addArticleRepository by lazy { AddArticleRepository() }
     private val tagRepository by lazy { LocalTagRepository() }
     private val fileRepository by lazy { FileRepository() }
     private val localArticleRepository by lazy { LocalArticleRepository() }
-
-    private val _articleDataState: MutableState<ArticleData> = mutableStateOf(ArticleData())
-    val articleDataState: State<ArticleData> get() = _articleDataState
-
-    data class ArticleData(
-        val title: String = empty,
-        val body: String = empty
-    )
 
     var title: String = empty
         set(value) {
@@ -61,34 +62,38 @@ class EditViewModel : BaseViewModel() {
     private var _cover: MutableState<String> = mutableStateOf(empty)
     val cover: State<String> get() = _cover
 
-    private fun clear() {
-        title = empty
-        body = empty
-        _cover.value = empty
-        _tags.value = emptyList()
-        _visibleMode.value = VisibleMode.PUBLIC
-    }
+    private val _uri = mutableStateOf(Uri.EMPTY)
+    val uri: State<Uri> get() = _uri
 
-    private val _addArticleState: MutableLiveData<NetworkResult<Unit>> =
+    private val _uploadCoverState: MutableState<NetworkResult<UploadData>> =
+        mutableStateOf(NetworkResult.None())
+    val uploadCoverState: State<NetworkResult<UploadData>> get() = _uploadCoverState
+
+    private val _publishArticleState: MutableLiveData<NetworkResult<Unit>> =
         MutableLiveData(NetworkResult.None())
-    val addArticleState: LiveData<NetworkResult<Unit>> get() = _addArticleState
+    val publishArticleState: LiveData<NetworkResult<Unit>> get() = _publishArticleState
+
+    private var editType = EditType.New
+
+    //////////////////////////// UI UnRelative ////////////////////////////////
+    fun canPublish(): Boolean = title.isNotBlank() && body.isNotBlank()
 
     private var hasPublished = false
-    fun publish(isDraft: Boolean, draftArticle: Article?) {
+    fun publish(isDraft: Boolean, theArticle: Article?) {
         if (hasPublished) return
         val newArticle = generateArticle()
         fly(FLY_ADD_ARTICLE) {
             request(
                 block = {
-                    _addArticleState.postValue(NetworkResult.Loading())
+                    _publishArticleState.postValue(NetworkResult.Loading())
                     addArticleRepository.addArticle(newArticle)
                 },
                 onSuccess = { _, _ ->
                     hasPublished = true
-                    _addArticleState.postValue(NetworkResult.Success())
+                    _publishArticleState.postValue(NetworkResult.Success())
                     clear()
                     if (isDraft) {
-                        draftArticle?.let {
+                        theArticle?.let {
                             viewModelScope.launch {
                                 localArticleRepository.deleteArticle(it)
                             }
@@ -96,7 +101,7 @@ class EditViewModel : BaseViewModel() {
                     }
                 },
                 onFailed = {
-                    _addArticleState.postValue(NetworkResult.Error(it))
+                    _publishArticleState.postValue(NetworkResult.Error(it))
                 },
                 onFinish = {
                     land(FLY_ADD_ARTICLE)
@@ -105,12 +110,8 @@ class EditViewModel : BaseViewModel() {
         }
     }
 
-    fun canPublish(): Boolean = title.isNotBlank() && body.isNotBlank()
-
-    fun anyNotEmpty(): Boolean {
-        return title.isNotBlank() || body.isNotBlank() || tags.value.isNotEmpty()
-                || cover.value.isNotBlank()
-    }
+    fun anyNotEmpty(): Boolean =
+        title.isNotBlank() || body.isNotBlank() || tags.value.isNotEmpty() || cover.value.isNotBlank()
 
     fun checkArticleParams(
         success: () -> Unit,
@@ -125,11 +126,13 @@ class EditViewModel : BaseViewModel() {
         }
     }
 
-    private val articleRepository = LocalArticleRepository()
+    private var hasSaveAsDraft = false
     fun saveAsDraft() {
+        if (hasSaveAsDraft) return
+        hasSaveAsDraft = true
         val saveArticle = generateArticle()
         viewModelScope.launch {
-            articleRepository.insertArticle(saveArticle)
+            localArticleRepository.insertArticle(saveArticle)
         }
     }
 
@@ -137,19 +140,21 @@ class EditViewModel : BaseViewModel() {
         if (isFillByArticle) {
             viewModelScope.launch {
                 filledArticle?.let { fill ->
-                    articleRepository.update(fill.copy(
-                        title = title,
-                        body = body,
-                        tags = tags.value.map { it.name }.toTypedArray(),
-                        visibleMode = visibleMode.value,
-                        cover = cover.value
-                    ))
+                    localArticleRepository.update(
+                        fill.copy(
+                            title = title,
+                            body = body,
+                            tags = tags.value.map { it.name }.toTypedArray(),
+                            visibleMode = visibleMode.value,
+                            cover = cover.value
+                        )
+                    )
                 }
             }
         }
     }
 
-    fun draftChanged(): Boolean = (filledArticle?.let {
+    fun theArticleChanged(): Boolean = (filledArticle?.let {
         it.title != title || it.body != body
                 || tags.value.size != it.tags.size
                 || !tags.value.all { t -> t.name in it.tags }
@@ -164,8 +169,11 @@ class EditViewModel : BaseViewModel() {
         if (tag.isBlank() || tag in tags.value.map { it.name }) {
             return
         }
-        val newTag =
-            Tag(name = tag, username = currentUser.username, color = tagColors.random().toArgb())
+        val newTag = Tag(
+            name = tag,
+            username = currentUser.username,
+            color = tagColors.random().toArgb()
+        )
         _tags.value = tags.value + newTag
         viewModelScope.launch {
             tagRepository.createTag(newTag)
@@ -189,67 +197,50 @@ class EditViewModel : BaseViewModel() {
     var isFillByArticle = false
         private set
     private var filledArticle: Article? = null
-    private var hasFilled = false
-    fun fillDraftArticle(draftArticle: Article?) {
-        if (draftArticle == null || hasFilled) return
-        hasFilled = true
+    fun fillArticle(
+        theArticle: Article?,
+        editType: EditType
+    ) {
+        if (theArticle == null) return
         isFillByArticle = true
-        filledArticle = draftArticle
+        filledArticle = theArticle
+        this.editType = editType
         "fillDraftArticle=$filledArticle".logd("live_test")
-        title = draftArticle.title
-        body = draftArticle.body
-        _visibleMode.value = draftArticle.visibleMode
-        _cover.value = draftArticle.cover
-        _articleDataState.value = ArticleData(title = draftArticle.title, body = draftArticle.body)
-    }
-
-    private fun generateArticle(): Article = Article(
-        title = title,
-        body = body,
-        userId = currentUser.id,
-        username = currentUser.username,
-        author = currentUser.username,
-        timestamp = System.currentTimeMillis(),
-        visibleMode = visibleMode.value,
-        tags = tags.value.map { it.name }.toTypedArray(),
-        cover = cover.value
-    )
-
-    fun getHistoryTags(): LiveData<List<Tag>> {
-        return tagRepository.getHistoryTags(currentUser.username)
+        title = theArticle.title
+        body = theArticle.body
+        _visibleMode.value = theArticle.visibleMode
+        _cover.value = theArticle.cover
+        val tags = getHistoryTags().value
+        "tags=$tags".logi("fill_draft_article") //will print null
     }
 
     private var hasUpdate = false
     fun updateTagsAfterGetHistoryTags(liveData: List<Tag>?) {
         if (hasUpdate) return
         hasUpdate = true
-        if (liveData != null) {
-            if (filledArticle != null) {
-                val existTags = liveData.filter { it.name in filledArticle!!.tags }
-                val existTagsName = liveData.map { it.name }
-                val absentTags = filledArticle!!.tags.filter { it !in existTagsName }
-                    .map {
-                        Tag(
-                            name = it,
-                            color = tagColors.random().toArgb(),
-                            username = currentUser.username
-                        )
-                    }
-                _tags.value = existTags + absentTags
-                "tags.value:${_tags.value}".logd("live_test")
+        liveData ?: return; filledArticle ?: return
+        val existTags = liveData.filter { it.name in filledArticle!!.tags }
+        val existTagsName = liveData.map { it.name }
+        val absentTags = filledArticle!!.tags.filter { it !in existTagsName }
+            .map {
+                Tag(
+                    name = it,
+                    color = tagColors.random().toArgb(),
+                    username = currentUser.username
+                )
             }
-        }
+        _tags.value = existTags + absentTags
+        "tags.value:${_tags.value}".logd("live_test")
     }
 
-    private val _uri = mutableStateOf(Uri.EMPTY)
-    val uri: State<Uri> get() = _uri
+    fun getHistoryTags(): LiveData<List<Tag>> {
+        return tagRepository.getHistoryTags(currentUser.username)
+    }
 
     fun updateUri(uri: Uri) {
         _uri.value = uri
     }
 
-    private val _uploadCoverState: MutableState<NetworkResult<UploadData>> = mutableStateOf(NetworkResult.None())
-    val uploadCoverState: State<NetworkResult<UploadData>> get() = _uploadCoverState
     fun uploadFile(path: String, filename: String) {
         fly(FLY_UPLOAD_FILE) {
             request(
@@ -269,8 +260,24 @@ class EditViewModel : BaseViewModel() {
         }
     }
 
-    init {
-        getHistoryTags()
+    private fun generateArticle(): Article = Article(
+        title = title,
+        body = body,
+        userId = currentUser.id,
+        username = currentUser.username,
+        author = currentUser.username,
+        timestamp = System.currentTimeMillis(),
+        visibleMode = visibleMode.value,
+        tags = tags.value.map { it.name }.toTypedArray(),
+        cover = cover.value
+    )
+
+    private fun clear() {
+        title = empty
+        body = empty
+        _cover.value = empty
+        _tags.value = emptyList()
+        _visibleMode.value = VisibleMode.PUBLIC
     }
 }
 

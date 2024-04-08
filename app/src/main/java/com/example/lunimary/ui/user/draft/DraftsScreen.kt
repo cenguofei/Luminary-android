@@ -20,6 +20,7 @@ import com.example.lunimary.design.LunimaryToolbar
 import com.example.lunimary.models.Article
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
+import com.example.lunimary.ui.edit.EditType
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.draftsScreen(
@@ -30,7 +31,7 @@ fun NavGraphBuilder.draftsScreen(
     ) {
         DraftsScreen(
             onBack = { appState.popBackStack() },
-            onEdit = { appState.navToEdit(it) }
+            onEdit = { appState.navToEdit(it, EditType.Draft) }
         )
     }
 }

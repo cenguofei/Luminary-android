@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.preview
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -18,6 +18,7 @@ import com.example.lunimary.R
 import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.design.LinearButton
+import com.example.lunimary.ui.edit.EditViewModel
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable

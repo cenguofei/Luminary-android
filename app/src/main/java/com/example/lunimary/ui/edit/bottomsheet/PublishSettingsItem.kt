@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.bottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

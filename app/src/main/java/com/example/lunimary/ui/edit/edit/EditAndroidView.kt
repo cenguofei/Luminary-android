@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.edit
 
 import android.view.View
 import android.widget.EditText
@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.addTextChangedListener
+import com.example.lunimary.ui.edit.EditViewModel
 
 @Composable
 fun AndroidTitleView(

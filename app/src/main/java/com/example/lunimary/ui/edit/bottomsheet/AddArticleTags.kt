@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.bottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.design.Tag
 import com.example.lunimary.models.source.local.Tag
+import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.empty
 
 @OptIn(ExperimentalLayoutApi::class)

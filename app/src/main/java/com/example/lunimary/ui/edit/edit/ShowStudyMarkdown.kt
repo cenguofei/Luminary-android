@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.edit
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Snackbar

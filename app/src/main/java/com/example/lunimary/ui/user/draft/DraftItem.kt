@@ -40,8 +40,40 @@ fun DraftItem(
 ) {
     if (articles.isEmpty()) return
     val article = articles[index]
+
+    @Composable
+    fun TopEndOptions() {
+        val (showDropdownMenu, setIsOpen) = remember { mutableStateOf(false) }
+        IconButton(onClick = { setIsOpen(!showDropdownMenu) },) {
+            Icon(
+                imageVector = Icons.Default.MoreHoriz,
+                contentDescription = null
+            )
+        }
+        CascadeMenu(
+            isOpen = showDropdownMenu,
+            menu = cascadeMenu {
+                item(id = DraftItemOperations.Remove, title = "删除") {
+                    icon(Icons.Default.Delete)
+                }
+            },
+            onItemSelected = {
+                setIsOpen(false)
+                onItemSelected(it as DraftItemOperations)
+            },
+            onDismiss = { setIsOpen(false) }
+        )
+    }
+
     Box(modifier = modifier) {
-        ArticleItem(onItemClick = { onClick(it.data) }, articlePageItem = PageItem(article), showAboutArticle = false)
+        ArticleItem(
+            onItemClick = { onClick(it.data) },
+            articlePageItem = PageItem(article),
+            showAboutArticle = false,
+            topEndOptions = if (!canOperate) null else {
+                { TopEndOptions() }
+            }
+        )
         if (showDraftLabel) {
             Surface(
                 color = MaterialTheme.colorScheme.primary,
@@ -55,37 +87,6 @@ fun DraftItem(
                     color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.padding(horizontal = 4.dp),
                     fontSize = 12.sp
-                )
-            }
-        }
-
-        if (canOperate) {
-            val (showDropdownMenu, setIsOpen) = remember { mutableStateOf(false) }
-            Box(
-                contentAlignment = Alignment.TopEnd,
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                IconButton(
-                    onClick = { setIsOpen(!showDropdownMenu) },
-                    modifier = Modifier.padding(end = 8.dp, top = 4.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.MoreHoriz,
-                        contentDescription = null
-                    )
-                }
-                CascadeMenu(
-                    isOpen = showDropdownMenu,
-                    menu = cascadeMenu {
-                        item(id = DraftItemOperations.Remove, title = "删除") {
-                            icon(Icons.Default.Delete)
-                        }
-                    },
-                    onItemSelected = {
-                        setIsOpen(false)
-                        onItemSelected(it as DraftItemOperations)
-                    },
-                    onDismiss = { setIsOpen(false) }
                 )
             }
         }

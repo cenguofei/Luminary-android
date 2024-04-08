@@ -34,7 +34,9 @@ import com.example.lunimary.models.Article
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.ArticleNavArguments
-import com.example.lunimary.ui.common.EDIT_DRAFT_ARTICLE_KEY
+import com.example.lunimary.ui.common.EDIT_ARTICLE_KEY
+import com.example.lunimary.ui.common.EDIT_TYPE_KEY
+import com.example.lunimary.ui.edit.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -46,17 +48,19 @@ fun NavGraphBuilder.addArticleScreen(
     composable(
         Screens.AddArticle.route,
     ) {
-        var draftArticle = ArticleNavArguments[EDIT_DRAFT_ARTICLE_KEY]
-        if ((draftArticle?.id ?: -1) < 0) {
-            draftArticle = null
+        var theArticle = ArticleNavArguments[EDIT_ARTICLE_KEY] as? Article
+        val editType = ArticleNavArguments[EDIT_TYPE_KEY] as? EditType ?: EditType.New
+        if ((theArticle?.id ?: -1) < 0) {
+            theArticle = null
         }
         val editViewModel: EditViewModel = viewModel()
+        FillArticleEffect(article = theArticle, editViewModel = editViewModel, editType = editType)
         val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
         val saveMessage = stringResource(id = R.string.auto_save_as_draft)
         val updateMessage = stringResource(id = R.string.updated_draft)
         val saveDraft = {
             if (editViewModel.isFillByArticle) {
-                if (editViewModel.draftChanged()) {
+                if (editViewModel.theArticleChanged()) {
                     coroutineScope.launch {
                         snackbarHostState?.showSnackbar(message = updateMessage)
                     }
@@ -78,8 +82,8 @@ fun NavGraphBuilder.addArticleScreen(
             onPublish = {
                 if (!notLogin()) {
                     editViewModel.publish(
-                        isDraft = draftArticle != null,
-                        draftArticle = draftArticle
+                        isDraft = theArticle != null,
+                        theArticle = theArticle
                     )
                 } else {
                     coroutineScope.launch {
@@ -90,12 +94,25 @@ fun NavGraphBuilder.addArticleScreen(
             editViewModel = editViewModel,
             coroutineScope = coroutineScope,
             onFinish = {
-                appState.navToUser(if (draftArticle == null) Screens.AddArticle.route else Screens.Drafts.route)
+                appState.navToUser(if (theArticle == null) Screens.AddArticle.route else Screens.Drafts.route)
             },
-            draftArticle = draftArticle,
             onNavToWeb = { appState.navToWeb(ChineseMarkdownWeb) }
         )
     }
+}
+
+@Composable
+private fun FillArticleEffect(
+    article: Article?,
+    editViewModel: EditViewModel,
+    editType: EditType
+) {
+    LaunchedEffect(
+        key1 = article,
+        block = {
+            editViewModel.fillArticle(article, editType)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,13 +123,11 @@ fun AddArticleScreen(
     editViewModel: EditViewModel,
     coroutineScope: CoroutineScope,
     onFinish: () -> Unit,
-    draftArticle: Article?,
     onNavToWeb: () -> Unit
 ) {
-    val addArticleState = editViewModel.addArticleState.observeAsState()
-    editViewModel.fillDraftArticle(draftArticle)
-    val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
-    when (addArticleState.value) {
+    val publishArticleState by editViewModel.publishArticleState.observeAsState()
+    val snackbar = LocalSnackbarHostState.current.snackbarHostState
+    when (publishArticleState) {
         is NetworkResult.Loading -> {
             LoadingDialog(description = "上传中...")
         }
@@ -120,24 +135,20 @@ fun AddArticleScreen(
         is NetworkResult.Success -> {
             onFinish()
             LaunchedEffect(
-                key1 = addArticleState.value,
+                key1 = publishArticleState,
                 block = {
-                    coroutineScope.launch {
-                        snackbarHostState?.showSnackbar(
-                            message = "上传成功"
-                        )
-                    }
+                    coroutineScope.launch { snackbar?.showSnackbar(message = "上传成功") }
                 }
             )
         }
 
         is NetworkResult.Error -> {
             LaunchedEffect(
-                key1 = addArticleState.value,
+                key1 = publishArticleState,
                 block = {
                     coroutineScope.launch {
-                        snackbarHostState?.showSnackbar(
-                            message = "上传失败:${addArticleState.value.asError()?.msg}"
+                        snackbar?.showSnackbar(
+                            message = "上传失败:${publishArticleState.asError()?.msg}"
                         )
                     }
                 }
@@ -160,7 +171,7 @@ fun AddArticleScreen(
         onNavToWeb = onNavToWeb,
         onShowMessage = {
             coroutineScope.launch {
-                snackbarHostState?.showSnackbar(message = it)
+                snackbar?.showSnackbar(message = it)
             }
         }
     )
@@ -181,7 +192,6 @@ fun AddArticleScreen(
     }
 }
 
-
 @LightAndDarkPreview
 @Composable
 fun EditScreenPreview() {
@@ -193,7 +203,6 @@ fun EditScreenPreview() {
                 editViewModel = viewModel(),
                 coroutineScope = rememberCoroutineScope(),
                 onFinish = {},
-                draftArticle = null,
                 {}
             )
         }

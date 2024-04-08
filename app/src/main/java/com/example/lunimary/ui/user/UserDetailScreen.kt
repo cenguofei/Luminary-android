@@ -3,16 +3,21 @@ package com.example.lunimary.ui.user
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,9 +47,10 @@ import com.example.lunimary.ui.common.RelationPageType
 
 @Composable
 fun UserDetailScreen(
+    appState: LunimaryAppState,
     onOpenMenu: () -> Unit,
     onDraftClick: () -> Unit,
-    appState: LunimaryAppState,
+    onNavToDraft: () -> Unit
 ) {
     val user = currentUser
     val userDetailViewModel: UserDetailViewModel = viewModel()
@@ -55,12 +61,41 @@ fun UserDetailScreen(
             UserBackground(
                 modifier = Modifier
             )
-            MenuButton(
-                onOpenMenu = onOpenMenu,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .statusBarsPadding()
-            )
+            ) {
+                val contentColor = Color.Black
+                IconButton(
+                    onClick = onNavToDraft,
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        tint = contentColor,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+                IconButton(
+                    onClick = onOpenMenu,
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = null,
+                        tint = contentColor
+                    )
+                }
+                Spacer(modifier = Modifier.width(6.dp))
+            }
         }
         UserDetailContent(
             modifier = Modifier,
@@ -69,17 +104,22 @@ fun UserDetailScreen(
             onDraftClick = onDraftClick,
             appState = appState,
             onRelationClick = {
-                when(it) {
+                when (it) {
                     UserDataType.Friends -> {
                         appState.navToRelation(RelationPageType.Friends)
                     }
+
                     UserDataType.Follow -> {
                         appState.navToRelation(RelationPageType.Follow)
                     }
+
                     UserDataType.Followers -> {
                         appState.navToRelation(RelationPageType.Followers)
                     }
-                    UserDataType.Likes -> { showLikesDialog.value = true }
+
+                    UserDataType.Likes -> {
+                        showLikesDialog.value = true
+                    }
                 }
             },
             onClick = { appState.navToInformation() }
@@ -150,18 +190,5 @@ fun UserBackground(modifier: Modifier) {
             error = painterResource(id = R.drawable.user_background),
             fallback = painterResource(id = R.drawable.user_background)
         )
-    }
-}
-
-@Composable
-private fun MenuButton(
-    onOpenMenu: () -> Unit,
-    modifier: Modifier
-) {
-    IconButton(
-        onClick = onOpenMenu,
-        modifier = modifier
-    ) {
-        Icon(imageVector = Icons.Default.Menu, contentDescription = null)
     }
 }

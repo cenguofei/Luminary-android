@@ -1,6 +1,8 @@
 package com.example.lunimary.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -67,8 +69,7 @@ fun ArticleItem(
     onItemClick: (PageItem<Article>) -> Unit,
     articlePageItem: PageItem<Article>,
     visited: Boolean = false,
-    showOptionsIcon: Boolean = false,
-    onOptionsClick: () -> Unit = {},
+    topEndOptions: (@Composable BoxScope.() -> Unit)? = null,
     containerColor: ArticleItemContainerColor = ArticleItemContainerColor.Default,
     showAboutArticle: Boolean = true
 ) {
@@ -82,62 +83,70 @@ fun ArticleItem(
         color = if (visited) containerColor.visitedColor else containerColor.normalColor
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Title(text = article.title, modifier = Modifier)
+                }
+                if (topEndOptions != null) {
+                    Box(
+                        contentAlignment = Alignment.TopEnd,
+                        content = topEndOptions,
+                        modifier = Modifier.align(Alignment.Top)
+                    )
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             ) {
-                Title(text = article.title, modifier = Modifier.weight(1f))
-                if (showOptionsIcon) {
-                    IconButton(onClick = onOptionsClick) {
-                        Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
+                Spacer(modifier = Modifier.height(4.dp))
+                if (article.isLunimaryStation) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val contentModifier =
+                            if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {
+                                Modifier.weight(1f)
+                            } else Modifier.weight(0.6f)
+                        Content(content = article.body, modifier = contentModifier)
+                        if (article.cover.isNotEmpty() && article.cover.startsWith("res/uploads")) {
+                            ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
+                        }
                     }
                 }
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            if (article.isLunimaryStation) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val contentModifier =
-                        if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {
-                            Modifier.weight(1f)
-                        } else Modifier.weight(0.6f)
-                    Content(content = article.body, modifier = contentModifier)
-                    if (article.cover.isNotEmpty() && article.cover.startsWith("res/uploads")) {
-                        ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
+                Spacer(modifier = Modifier.height(4.dp))
+                val tagWithColor = remember { article.tags.map { it to tagColors.random() } }
+                Labels(tagWithColor = tagWithColor)
+                Spacer(modifier = Modifier.height(4.dp))
+                if (!article.isLunimaryStation) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = if (article.userId == currentUser.id) "你转发" else "${article.username}转发",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Send,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                            modifier = Modifier.size(10.dp)
+                        )
                     }
                 }
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            val tagWithColor = remember { article.tags.map { it to tagColors.random() } }
-            Labels(tagWithColor = tagWithColor)
-            Spacer(modifier = Modifier.height(4.dp))
-            if (!article.isLunimaryStation) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = if (article.userId == currentUser.id) "你转发" else "${article.username}转发",
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Send,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                        modifier = Modifier.size(10.dp)
-                    )
+                Spacer(modifier = Modifier.height(4.dp))
+                if (showAboutArticle) {
+                    AboutTheArticle(modifier = Modifier, article)
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            if (showAboutArticle) {
-                AboutTheArticle(modifier = Modifier, article)
-                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }

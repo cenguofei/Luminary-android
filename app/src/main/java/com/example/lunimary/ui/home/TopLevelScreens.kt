@@ -93,8 +93,9 @@ fun TopLevelScreens(appState: LunimaryAppState) {
                         onOpenMenu = {
                             appState.navToSettings()
                         },
-                        onDraftClick = { appState.navToDraft() },
-                        appState = appState
+                        onDraftClick = appState::navToDraft,
+                        appState = appState,
+                        onNavToDraft = appState::navToDraft
                     )
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.edit
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLink

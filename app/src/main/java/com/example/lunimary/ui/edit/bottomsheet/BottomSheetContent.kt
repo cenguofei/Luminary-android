@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.edit
+package com.example.lunimary.ui.edit.bottomsheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +23,7 @@ import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.ShowSnackbar
 import com.example.lunimary.models.source.local.Tag
+import com.example.lunimary.ui.edit.EditViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
