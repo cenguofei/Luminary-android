@@ -107,17 +107,18 @@ fun ArticleCover(
             shape = RoundedCornerShape(16),
             color = Color.Gray.copy(alpha = 0.1f)
         ) {
+            val uiState = editViewModel.uiState.value
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                if (editViewModel.cover.value.isNotBlank()) {
+                if (uiState.cover.isNotBlank()) {
                     AsyncImage(
-                        model = fileBaseUrl + editViewModel.cover.value,
+                        model = fileBaseUrl + uiState.cover,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
-                } else if (editViewModel.uri.value != Uri.EMPTY && uploadSuccess.value) {
+                } else if (uiState.uri != Uri.EMPTY && uploadSuccess.value) {
                     AsyncImage(
-                        model = editViewModel.uri.value,
+                        model = uiState.uri,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop

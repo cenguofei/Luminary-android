@@ -111,9 +111,9 @@ fun EditPage(
     LaunchedEffect(
         key1 = Unit,
         block = {
-            if (viewModel.isFillByArticle) {
-                titleEditView.setText(viewModel.title)
-                bodyEditText.setText(viewModel.body)
+            if (viewModel.uiState.value.isFillByArticle) {
+                titleEditView.setText(viewModel.uiState.value.title)
+                bodyEditText.setText(viewModel.uiState.value.body)
             }
         }
     )

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.models.checkUserNotNone
+import com.example.lunimary.ui.edit.EditType
 
 @Composable
 fun BrowseScreenContent(
@@ -28,7 +29,8 @@ fun BrowseScreenContent(
     onEditCommentClick: () -> Unit,
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: (Article) -> Unit
+    onArticleDeleted: (Article) -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val uiState by browseViewModel.uiState.observeAsState()
     val article = uiState!!.article
@@ -43,7 +45,8 @@ fun BrowseScreenContent(
             uiState = uiState!!,
             browseViewModel = browseViewModel,
             onUserClick = onUserClick,
-            onArticleDeleted = onArticleDeleted
+            onArticleDeleted = onArticleDeleted,
+            navToEdit = navToEdit
         )
         LazyColumn(
             modifier = Modifier

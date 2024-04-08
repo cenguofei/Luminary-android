@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
+import com.example.lunimary.ui.edit.EditType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -22,7 +23,8 @@ fun AboutArticles(
     coroutineScope: CoroutineScope,
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
-    onItemClick: (PageItem<Article>) -> Unit
+    onItemClick: (PageItem<Article>) -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val tabs = remember {
         listOf(
@@ -61,7 +63,8 @@ fun AboutArticles(
             index = it,
             userDetailViewModel = userDetailViewModel,
             onDraftClick = onDraftClick,
-            onItemClick = onItemClick
+            onItemClick = onItemClick,
+            navToEdit = navToEdit
         )
     }
 }

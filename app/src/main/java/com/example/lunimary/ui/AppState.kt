@@ -148,8 +148,8 @@ class LunimaryAppState(
     }
 
     fun navToEdit(
-        draftArticle: Article? = null,
-        editType: EditType = EditType.New
+        editType: EditType = EditType.New,
+        draftArticle: Article? = null
     ) {
         navController.navToEdit(draftArticle, editType)
     }

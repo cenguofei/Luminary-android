@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
+import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.home.bottomBarHeight
 
 @Composable
@@ -15,7 +16,8 @@ fun ArticlesTypeList(
     index: Int,
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
-    onItemClick: (PageItem<Article>) -> Unit
+    onItemClick: (PageItem<Article>) -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val likesOfUser = userDetailViewModel.likesOfUser.collectAsLazyPagingItems()
     val collectsOfUser = userDetailViewModel.collectsOfUser.collectAsLazyPagingItems()
@@ -45,7 +47,8 @@ fun ArticlesTypeList(
                 compositionsState = compositionsState,
                 onItemClick = onItemClick,
                 modifier = modifier,
-                onDraftClick = onDraftClick
+                onDraftClick = onDraftClick,
+                navToEdit = navToEdit
             )
         }
 

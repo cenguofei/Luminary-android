@@ -16,8 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -67,32 +65,41 @@ fun UserDetailScreen(
                     .align(Alignment.TopEnd)
                     .statusBarsPadding()
             ) {
-                val contentColor = Color.Black
-                IconButton(
+                val contentColor = MaterialTheme.colorScheme.primary
+                Surface(
+                    color = Color.Black.copy(alpha = 0.3f),
                     onClick = onNavToDraft,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    )
+                    shape = RoundedCornerShape(50),
+                    modifier = Modifier.size(35.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null,
-                        tint = contentColor,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = null,
+                            tint = contentColor,
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.width(4.dp))
-                IconButton(
+                Spacer(modifier = Modifier.width(12.dp))
+                Surface(
+                    color = Color.Black.copy(alpha = 0.3f),
                     onClick = onOpenMenu,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    )
+                    shape = RoundedCornerShape(50),
+                    modifier = Modifier.size(35.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = null,
-                        tint = contentColor
-                    )
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = null,
+                            tint = contentColor
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.width(6.dp))
             }
@@ -122,7 +129,8 @@ fun UserDetailScreen(
                     }
                 }
             },
-            onClick = { appState.navToInformation() }
+            onClick = appState::navToInformation,
+            navToEdit = appState::navToEdit
         )
     }
     ShowLikesDialog(

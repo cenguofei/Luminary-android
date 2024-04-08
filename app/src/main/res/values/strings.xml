@@ -70,7 +70,7 @@
     <string name="article_cover_suggestion">*建议尺寸： 1303*734px 封面图仅展示在信息流中</string>
     <string name="add">添加</string>
     <string name="auto_save_as_draft">📢已为您自动保存为草稿</string>
-    <string name="updated_draft">📍已更新草稿</string>
+    <string name="has_updated_draft">📍已更新草稿</string>
     <string name="draft">草稿</string>
     <string name="loading">🏃加载中…</string>
     <string name="load_error_and_retry">🦥加载错误，点击重试</string>
@@ -115,4 +115,8 @@
     <string name="confirm_delete_article">确定要删除该文章吗？删除后将无法恢复！</string>
     <string name="click_retry">🐇点我重试</string>
     <string name="click_refresh">🐇点我刷新</string>
+    <string name="update_of_remote_not_saved">文章更新未保存，是否保存？</string>
+    <string name="update_remote_success">更新成功</string>
+    <string name="update_content">更新内容</string>
+    <string name="updated_draft">更新草稿</string>
 </resources>

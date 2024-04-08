@@ -20,12 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.design.LinearButton
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.ShowSnackbar
 import com.example.lunimary.models.source.local.Tag
+import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.edit.EditViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun BottomSheetContent(
@@ -63,7 +62,6 @@ fun BottomSheetContent(
         BottomButtons(
             editViewModel = editViewModel,
             reallyPublish = reallyPublish,
-            coroutineScope = coroutineScope,
         )
     }
 }
@@ -72,7 +70,6 @@ fun BottomSheetContent(
 private fun BottomButtons(
     editViewModel: EditViewModel,
     reallyPublish: () -> Unit,
-    coroutineScope: CoroutineScope,
 ) {
     val showSnackbar = remember { mutableStateOf(false) }
     if (showSnackbar.value) {
@@ -83,28 +80,60 @@ private fun BottomButtons(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        LinearButton(
-            modifier = Modifier.weight(1f),
-            onClick = { editViewModel.saveAsDraft() },
-            text = stringResource(id = R.string.save_as_draft),
-            height = 40.dp
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
-        LinearButton(
-            modifier = Modifier.weight(1f),
-            onClick = {
-                editViewModel.checkArticleParams(
-                    success = reallyPublish,
-                    problem = {
-                        coroutineScope.launch {
-                            snackbarHostState?.showSnackbar(message = it)
-                        }
+        val uiState = editViewModel.uiState.value
+        when(uiState.editType) {
+            EditType.Edit -> {
+                if (uiState.theArticleChanged()) {
+                    LinearButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = { editViewModel.updateRemoteArticle() },
+                        text = stringResource(id = R.string.update_content),
+                        height = 40.dp
+                    )
+                }
+            }
+            EditType.Draft -> {
+                if (uiState.theArticleChanged()) {
+                    LinearButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = { editViewModel.updateDraft() },
+                        text = stringResource(id = R.string.updated_draft),
+                        height = 40.dp
+                    )
+                    if (uiState.canPublish) {
+                        Spacer(modifier = Modifier.width(12.dp))
                     }
-                )
-            },
-            text = stringResource(id = R.string.publish_content),
-            height = 40.dp
-        )
+                }
+                if (uiState.canPublish) {
+                    LinearButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = reallyPublish,
+                        text = stringResource(id = R.string.publish_content),
+                        height = 40.dp
+                    )
+                }
+            }
+            EditType.New -> {
+                if (uiState.canSaveAsDraft) {
+                    LinearButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = { editViewModel.saveAsDraft() },
+                        text = stringResource(id = R.string.save_as_draft),
+                        height = 40.dp
+                    )
+                    if (uiState.canPublish) {
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                }
+                if (uiState.canPublish) {
+                    LinearButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = reallyPublish,
+                        text = stringResource(id = R.string.publish_content),
+                        height = 40.dp
+                    )
+                }
+            }
+        }
     }
 }

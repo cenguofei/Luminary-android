@@ -22,6 +22,7 @@ import com.example.lunimary.design.BackButton
 import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
+import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.util.notNull
 
 @Composable
@@ -33,7 +34,8 @@ fun DynamicToolBar(
     uiState: UiState,
     browseViewModel: BrowseViewModel,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: (Article) -> Unit
+    onArticleDeleted: (Article) -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val article = uiState.article
     val firstVisibleIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
@@ -89,7 +91,8 @@ fun DynamicToolBar(
         ArticleOptions(
             uiState = uiState,
             browseViewModel = browseViewModel,
-            onArticleDeleted = onArticleDeleted
+            onArticleDeleted = onArticleDeleted,
+            navToEdit = navToEdit
         )
         Spacer(modifier = Modifier.width(16.dp))
     }

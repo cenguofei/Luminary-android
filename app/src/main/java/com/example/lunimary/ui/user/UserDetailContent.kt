@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.UserHeadImage
+import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
+import com.example.lunimary.ui.edit.EditType
 
 @Composable
 fun UserDetailContent(
@@ -29,7 +31,8 @@ fun UserDetailContent(
     onDraftClick: () -> Unit,
     appState: LunimaryAppState,
     onRelationClick: (UserDataType) -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val uiState = userDetailViewModel.uiState.observeAsState()
     Column(
@@ -51,7 +54,8 @@ fun UserDetailContent(
                 userDetailViewModel = userDetailViewModel,
                 onDraftClick = onDraftClick,
                 onItemClick = { appState.navToBrowse(it) },
-                onRelationClick = onRelationClick
+                onRelationClick = onRelationClick,
+                navToEdit = navToEdit
             )
         }
     }

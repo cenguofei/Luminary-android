@@ -82,7 +82,7 @@ fun AddArticleTags(editViewModel: EditViewModel, historyTags: State<List<Tag>?>)
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            editViewModel.tags.value.forEach {
+            editViewModel.uiState.value.tags.forEach {
                 Tag(tag = it)
             }
         }

@@ -30,9 +30,7 @@ fun AndroidTitleView(
                 setHintTextColor(titleColor)
                 requestFocus()
                 addTextChangedListener(
-                    afterTextChanged = {
-                        viewModel.title = text.toString()
-                    }
+                    afterTextChanged = { viewModel.afterTitleChanged(it.toString()) }
                 )
             }
             titleView
@@ -56,7 +54,7 @@ fun AndroidBodyView(
                 setHintTextColor(bodyColor)
                 addTextChangedListener(
                     afterTextChanged = {
-                        viewModel.body = text.toString()
+                       viewModel.afterBodyChanged(it.toString())
                     }
                 )
             }

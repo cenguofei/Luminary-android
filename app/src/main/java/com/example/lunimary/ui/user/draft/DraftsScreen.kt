@@ -31,7 +31,7 @@ fun NavGraphBuilder.draftsScreen(
     ) {
         DraftsScreen(
             onBack = { appState.popBackStack() },
-            onEdit = { appState.navToEdit(it, EditType.Draft) }
+            onEdit = { appState.navToEdit(draftArticle = it, editType = EditType.Draft) }
         )
     }
 }
@@ -56,13 +56,13 @@ fun DraftsScreen(
             modifier = Modifier.statusBarsPadding()
         )
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            drafts.value?.let { articles ->
+            drafts.value?.sortedBy { it.timestamp }?.let { articles ->
                 items(articles.size) {
                     DraftItem(
                         articles = drafts.value ?: emptyList(),
                         onClick = { _ -> onEdit(articles[it]) },
                         onItemSelected = { operation ->
-                            when(operation) {
+                            when (operation) {
                                 DraftItemOperations.Remove -> {
                                     draftsViewModel.remove(articles[it])
                                 }

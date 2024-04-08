@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
@@ -18,6 +19,7 @@ import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.ui.common.PAGE_ARTICLE_ITEM_KEY
 import com.example.lunimary.ui.common.PageArticleNavArguments
+import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 
@@ -51,7 +53,8 @@ fun NavGraphBuilder.browseScreen(
             onArticleDeleted = {
                 article.deleted.value = true
                 appState.popBackStack()
-            }
+            },
+            navToEdit = appState::navToEdit
         )
         DisposableEffect(
             key1 = Unit,
@@ -71,7 +74,8 @@ fun BrowseScreen(
     browseViewModel: BrowseViewModel,
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: (Article) -> Unit
+    onArticleDeleted: (Article) -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val showEditContent = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -83,7 +87,8 @@ fun BrowseScreen(
             onEditCommentClick = { showEditContent.value = true },
             onLinkClick = onLinkClick,
             onUserClick = onUserClick,
-            onArticleDeleted = onArticleDeleted
+            onArticleDeleted = onArticleDeleted,
+            navToEdit = navToEdit
         )
         val commentText = remember { mutableStateOf(empty) }
         if (showEditContent.value) {

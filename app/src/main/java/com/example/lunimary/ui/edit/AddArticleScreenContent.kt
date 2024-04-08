@@ -53,7 +53,7 @@ fun AddArticleScreenContent(
                 end = {
                     TextButton(
                         onClick = {
-                            if(editViewModel.canPublish()) {
+                            if(editViewModel.uiState.value.canPublish) {
                                 onPublish()
                             } else {
                                 showWarnDialog.value = true

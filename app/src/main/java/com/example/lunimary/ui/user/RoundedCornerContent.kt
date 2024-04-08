@@ -22,6 +22,7 @@ import com.example.lunimary.R
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.ext.InteractionData
+import com.example.lunimary.ui.edit.EditType
 
 @Composable
 fun RoundedCornerContent(
@@ -29,7 +30,8 @@ fun RoundedCornerContent(
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
     onItemClick: (PageItem<Article>) -> Unit,
-    onRelationClick: (UserDataType) -> Unit
+    onRelationClick: (UserDataType) -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize()) {
@@ -42,7 +44,8 @@ fun RoundedCornerContent(
             coroutineScope = coroutineScope,
             userDetailViewModel = userDetailViewModel,
             onDraftClick = onDraftClick,
-            onItemClick = onItemClick
+            onItemClick = onItemClick,
+            navToEdit = navToEdit
         )
     }
 }

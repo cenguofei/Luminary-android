@@ -26,14 +26,14 @@ fun PreviewPage(viewModel: EditViewModel, onEditClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp)) {
             Text(
-                text = viewModel.title,
+                text = viewModel.uiState.value.title,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
             )
             val systemDarkMode = isSystemInDarkTheme()
             MarkdownText(
                 modifier = Modifier,
-                markdown = viewModel.body.trimIndent(),
+                markdown = viewModel.uiState.value.body.trimIndent(),
                 linkColor = when  {
                     SettingMMKV.userHasSetTheme -> {
                         if (SettingMMKV.darkThemeSetting == DarkThemeSetting.DarkMode) {

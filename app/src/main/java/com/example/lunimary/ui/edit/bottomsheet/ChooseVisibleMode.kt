@@ -36,14 +36,14 @@ fun ChooseVisibleMode(editViewModel: EditViewModel) {
                             .fillMaxWidth()
                             .height(50.dp)
                             .selectable(
-                                selected = pair.first == editViewModel.visibleMode.value,
+                                selected = pair.first == editViewModel.uiState.value.visibleMode,
                                 onClick = { editViewModel.visibleModeChange(pair.first) },
                                 role = Role.RadioButton
                             ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
-                            selected = pair.first == editViewModel.visibleMode.value,
+                            selected = pair.first == editViewModel.uiState.value.visibleMode,
                             onClick = null,
                             modifier = Modifier.size(15.dp)
                         )

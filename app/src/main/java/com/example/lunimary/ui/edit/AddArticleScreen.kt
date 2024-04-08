@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -27,7 +28,9 @@ import com.example.lunimary.design.ChineseMarkdownWeb
 import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
+import com.example.lunimary.design.LunimaryDialog
 import com.example.lunimary.design.LunimaryGradientBackground
+import com.example.lunimary.design.ShowSnackbar
 import com.example.lunimary.design.myObserveAsState
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.Article
@@ -37,6 +40,7 @@ import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.EDIT_ARTICLE_KEY
 import com.example.lunimary.ui.common.EDIT_TYPE_KEY
 import com.example.lunimary.ui.edit.bottomsheet.BottomSheetContent
+import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -57,34 +61,79 @@ fun NavGraphBuilder.addArticleScreen(
         FillArticleEffect(article = theArticle, editViewModel = editViewModel, editType = editType)
         val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
         val saveMessage = stringResource(id = R.string.auto_save_as_draft)
-        val updateMessage = stringResource(id = R.string.updated_draft)
-        val saveDraft = {
-            if (editViewModel.isFillByArticle) {
-                if (editViewModel.theArticleChanged()) {
-                    coroutineScope.launch {
-                        snackbarHostState?.showSnackbar(message = updateMessage)
+        val updateMessage = stringResource(id = R.string.has_updated_draft)
+        val openDialog = remember { mutableStateOf(false) }
+        val updateArticleState = editViewModel.updateArticleState.collectAsStateWithLifecycle()
+
+        val onBackAction = {
+            when (editType) {
+                EditType.New -> {
+                    if (editViewModel.uiState.value.canSaveAsDraft) {
+                        editViewModel.saveAsDraft()
+                        coroutineScope.launch {
+                            snackbarHostState?.showSnackbar(message = saveMessage)
+                        }
                     }
-                    editViewModel.updateDraft()
+                    appState.popBackStack()
                 }
-            } else {
-                if (editViewModel.anyNotEmpty()) {
-                    editViewModel.saveAsDraft()
-                    coroutineScope.launch {
-                        snackbarHostState?.showSnackbar(message = saveMessage)
+
+                EditType.Draft -> {
+                    if (editViewModel.uiState.value.theArticleChanged()) {
+                        coroutineScope.launch {
+                            snackbarHostState?.showSnackbar(message = updateMessage)
+                        }
+                        editViewModel.updateDraft()
+                    }
+                    appState.popBackStack()
+                }
+
+                EditType.Edit -> {
+                    if (editViewModel.uiState.value.theArticleChanged()) {
+                        openDialog.value = true
+                    } else {
+                        appState.popBackStack()
                     }
                 }
             }
-            appState.popBackStack()
         }
-        BackHandler { saveDraft() }
+        LunimaryDialog(
+            text = stringResource(id = R.string.update_of_remote_not_saved),
+            openDialog = openDialog,
+            onConfirmClick = { editViewModel.updateRemoteArticle() },
+            onCancelClick = { appState.popBackStack() }
+        )
+        when(updateArticleState.value) {
+            is NetworkResult.Loading -> {
+                LoadingDialog()
+            }
+            is NetworkResult.Success -> {
+                ShowSnackbar(
+                    message = stringResource(id = R.string.update_remote_success),
+                    coroutineScope = coroutineScope
+                )
+                LaunchedEffect(
+                    key1 = Unit,
+                    block = { appState.popBackStack() }
+                )
+            }
+            is NetworkResult.Error -> {
+                ShowSnackbar(
+                    message = updateArticleState.value.msg ?: unknownErrorMsg,
+                    coroutineScope = coroutineScope
+                )
+                LaunchedEffect(
+                    key1 = Unit,
+                    block = { appState.popBackStack() }
+                )
+            }
+            else -> { }
+        }
+        BackHandler { onBackAction() }
         AddArticleScreen(
-            onBack = { saveDraft() },
+            onBack = { onBackAction() },
             onPublish = {
                 if (!notLogin()) {
-                    editViewModel.publish(
-                        isDraft = theArticle != null,
-                        theArticle = theArticle
-                    )
+                    editViewModel.publish(theArticle = theArticle)
                 } else {
                     coroutineScope.launch {
                         snackbarHostState?.showSnackbar("您当前为未登录状态，请登录后再进行文章发布！")

@@ -4,6 +4,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Lock
@@ -34,13 +35,15 @@ import com.example.lunimary.design.cascade.CascadeMenuItem
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.VisibleMode
+import com.example.lunimary.ui.edit.EditType
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ArticleOptions(
     uiState: UiState,
     browseViewModel: BrowseViewModel,
-    onArticleDeleted: (Article) -> Unit
+    onArticleDeleted: (Article) -> Unit,
+    navToEdit: (EditType, Article) -> Unit
 ) {
     val shareArticle = remember { mutableStateOf(false) }
     val appName = stringResource(id = R.string.app_name)
@@ -97,6 +100,10 @@ fun ArticleOptions(
             ArticleSettings.Delete.id -> {
                 showAlertDialog.value = true
             }
+
+            ArticleSettings.Edit.id -> {
+                navToEdit(EditType.Edit, uiState.article)
+            }
         }
     }
     Box(contentAlignment = Alignment.TopEnd) {
@@ -149,7 +156,9 @@ enum class ArticleSettings(
     Friend("friend", "互关朋友可见", Icons.Default.Group),
     OWN("Oneself", "仅自己可见", Icons.Default.Lock),
 
-    Delete("delete", "删除", Icons.Default.Delete)
+    Delete("delete", "删除", Icons.Default.Delete),
+
+    Edit("edit", "编辑", Icons.Default.Edit)
 }
 
 private fun buildMenu(isMyArticle: Boolean, currentVisibleMode: VisibleMode): CascadeMenuItem<String> {
@@ -191,6 +200,9 @@ private fun buildMenu(isMyArticle: Boolean, currentVisibleMode: VisibleMode): Ca
         }
         item(ArticleSettings.Delete.id, ArticleSettings.Delete.title) {
             icon(ArticleSettings.Delete.icon)
+        }
+        item(ArticleSettings.Edit.id, ArticleSettings.Edit.title) {
+            icon(ArticleSettings.Edit.icon)
         }
     }
 }

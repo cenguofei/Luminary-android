@@ -3,7 +3,6 @@ package com.example.lunimary.ui.common
 import com.example.lunimary.base.LRUCache
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
-import com.example.lunimary.ui.edit.EditType
 
 object ArticleNavArguments : LRUCache<Any>(capacity = 5)
 

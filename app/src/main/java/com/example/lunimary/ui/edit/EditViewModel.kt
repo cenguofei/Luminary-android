@@ -19,51 +19,21 @@ import com.example.lunimary.models.source.local.LocalArticleRepository
 import com.example.lunimary.models.source.local.LocalTagRepository
 import com.example.lunimary.models.source.local.Tag
 import com.example.lunimary.models.source.remote.repository.AddArticleRepository
+import com.example.lunimary.models.source.remote.repository.ArticleRepository
 import com.example.lunimary.models.source.remote.repository.FileRepository
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.logi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
-data class UiState(
-    val title: String = empty,
-    val body: String = empty,
-    val tags: List<Tag> = emptyList(),
-    val visibleMode: VisibleMode = VisibleMode.PUBLIC,
-    val cover: String = empty,
-)
 
 class EditViewModel : BaseViewModel() {
     private val addArticleRepository by lazy { AddArticleRepository() }
+    private val articleRepository by lazy { ArticleRepository() }
     private val tagRepository by lazy { LocalTagRepository() }
     private val fileRepository by lazy { FileRepository() }
     private val localArticleRepository by lazy { LocalArticleRepository() }
-
-    var title: String = empty
-        set(value) {
-            if (field != value) {
-                field = value
-            }
-        }
-
-    var body: String = empty
-        set(value) {
-            if (field != value) {
-                field = value
-            }
-        }
-
-    private val _tags: MutableState<List<Tag>> = mutableStateOf(emptyList())
-    val tags: State<List<Tag>> get() = _tags
-
-    private var _visibleMode: MutableState<VisibleMode> = mutableStateOf(VisibleMode.PUBLIC)
-    val visibleMode: State<VisibleMode> get() = _visibleMode
-
-    private var _cover: MutableState<String> = mutableStateOf(empty)
-    val cover: State<String> get() = _cover
-
-    private val _uri = mutableStateOf(Uri.EMPTY)
-    val uri: State<Uri> get() = _uri
 
     private val _uploadCoverState: MutableState<NetworkResult<UploadData>> =
         mutableStateOf(NetworkResult.None())
@@ -73,100 +43,109 @@ class EditViewModel : BaseViewModel() {
         MutableLiveData(NetworkResult.None())
     val publishArticleState: LiveData<NetworkResult<Unit>> get() = _publishArticleState
 
-    private var editType = EditType.New
+    private val _updateArticleState: MutableStateFlow<NetworkResult<Unit>> = MutableStateFlow(NetworkResult.None())
+    val updateArticleState: StateFlow<NetworkResult<Unit>> get() = _updateArticleState
+
+    private val _uiState: MutableState<UiState> = mutableStateOf(UiState())
+    val uiState: State<UiState> get() = _uiState
 
     //////////////////////////// UI UnRelative ////////////////////////////////
-    fun canPublish(): Boolean = title.isNotBlank() && body.isNotBlank()
-
     private var hasPublished = false
-    fun publish(isDraft: Boolean, theArticle: Article?) {
-        if (hasPublished) return
-        val newArticle = generateArticle()
-        fly(FLY_ADD_ARTICLE) {
-            request(
-                block = {
-                    _publishArticleState.postValue(NetworkResult.Loading())
-                    addArticleRepository.addArticle(newArticle)
-                },
-                onSuccess = { _, _ ->
-                    hasPublished = true
-                    _publishArticleState.postValue(NetworkResult.Success())
-                    clear()
-                    if (isDraft) {
-                        theArticle?.let {
-                            viewModelScope.launch {
-                                localArticleRepository.deleteArticle(it)
+    fun publish(theArticle: Article?) {
+        val newArticle = uiState.value.generateArticle()
+        if (!hasPublished) {
+            fly(FLY_ADD_ARTICLE) {
+                request(
+                    block = {
+                        _publishArticleState.postValue(NetworkResult.Loading())
+                        addArticleRepository.addArticle(newArticle)
+                    },
+                    onSuccess = { _, _ ->
+                        hasPublished = true
+                        _publishArticleState.postValue(NetworkResult.Success())
+                        clear()
+                        if (uiState.value.editType == EditType.Draft) {
+                            theArticle?.let {
+                                viewModelScope.launch {
+                                    localArticleRepository.deleteArticle(it)
+                                }
                             }
                         }
+                    },
+                    onFailed = {
+                        _publishArticleState.postValue(NetworkResult.Error(it))
+                    },
+                    onFinish = {
+                        land(FLY_ADD_ARTICLE)
                     }
-                },
-                onFailed = {
-                    _publishArticleState.postValue(NetworkResult.Error(it))
-                },
-                onFinish = {
-                    land(FLY_ADD_ARTICLE)
-                }
-            )
-        }
-    }
-
-    fun anyNotEmpty(): Boolean =
-        title.isNotBlank() || body.isNotBlank() || tags.value.isNotEmpty() || cover.value.isNotBlank()
-
-    fun checkArticleParams(
-        success: () -> Unit,
-        problem: (String) -> Unit
-    ) {
-        if (tags.value.isEmpty()) {
-            problem("请添加标签！")
-        } else if (false) {
-
-        } else {
-            success()
-        }
-    }
-
-    private var hasSaveAsDraft = false
-    fun saveAsDraft() {
-        if (hasSaveAsDraft) return
-        hasSaveAsDraft = true
-        val saveArticle = generateArticle()
-        viewModelScope.launch {
-            localArticleRepository.insertArticle(saveArticle)
-        }
-    }
-
-    fun updateDraft() {
-        if (isFillByArticle) {
-            viewModelScope.launch {
-                filledArticle?.let { fill ->
-                    localArticleRepository.update(
-                        fill.copy(
-                            title = title,
-                            body = body,
-                            tags = tags.value.map { it.name }.toTypedArray(),
-                            visibleMode = visibleMode.value,
-                            cover = cover.value
-                        )
-                    )
-                }
+                )
             }
         }
     }
 
-    fun theArticleChanged(): Boolean = (filledArticle?.let {
-        it.title != title || it.body != body
-                || tags.value.size != it.tags.size
-                || !tags.value.all { t -> t.name in it.tags }
-                || visibleMode.value != it.visibleMode
-                || cover.value != it.cover
-    } ?: false).also {
-        "draftChanged:$it, tags=${tags.value}, fillTags=${filledArticle?.tags.toString()}"
-            .logd("live_test")
+    fun afterTitleChanged(title: String) {
+        if (title != uiState.value.title) {
+            _uiState.value = uiState.value.copy(title = title)
+        }
+    }
+
+    fun afterBodyChanged(body: String) {
+        if (body != uiState.value.body) {
+            _uiState.value = uiState.value.copy(
+                body = body,
+            )
+        }
+    }
+
+    private var lastSaveDraft: Article? = null
+    fun saveAsDraft() {
+        val saveArticle = uiState.value.generateArticle()
+        if (lastSaveDraft == null || lastSaveDraft != saveArticle) {
+            lastSaveDraft = saveArticle
+            viewModelScope.launch {
+                localArticleRepository.insertArticle(saveArticle)
+            }
+        } else {
+            "saveAsDraft: 已经更新过".logd("update_test")
+        }
+    }
+
+    fun updateDraft() {
+        viewModelScope.launch {
+            uiState.value.updatedLocalArticle()?.let {
+                localArticleRepository.update(it)
+            }
+        }
+    }
+
+    private var lastUpdateRemoteArticle: Article? = null
+    fun updateRemoteArticle() {
+        val generateArticle = uiState.value.generateArticle()
+        if (lastUpdateRemoteArticle == null || lastUpdateRemoteArticle != generateArticle) {
+            lastUpdateRemoteArticle = generateArticle
+            fly(FLY_UPLOAD_REMOTE_ARTICLE) {
+                request(
+                    block = {
+                        _updateArticleState.value = NetworkResult.Loading()
+                        articleRepository.updateArticle(generateArticle)
+                    },
+                    onFailed = {
+                        _updateArticleState.value = NetworkResult.Error(it)
+                    },
+                    onSuccess = { _, _ ->
+                        _updateArticleState.value = NetworkResult.Success()
+                    },
+                    onFinish = { land(FLY_UPLOAD_REMOTE_ARTICLE) }
+                )
+            }
+        } else {
+            "updateRemoteArticle: 已经更新过".logd("update_test")
+        }
     }
 
     fun addNewTag(tag: String) {
-        if (tag.isBlank() || tag in tags.value.map { it.name }) {
+        val tags = uiState.value.tags
+        if (tag.isBlank() || tag in tags.map { it.name }) {
             return
         }
         val newTag = Tag(
@@ -174,14 +153,19 @@ class EditViewModel : BaseViewModel() {
             username = currentUser.username,
             color = tagColors.random().toArgb()
         )
-        _tags.value = tags.value + newTag
+        _uiState.value = uiState.value.copy(
+            tags = tags + newTag,
+        )
         viewModelScope.launch {
             tagRepository.createTag(newTag)
         }
     }
 
     fun addHistoryTagToArticle(tag: Tag) {
-        _tags.value = tags.value + tag
+        val oldTags = uiState.value.tags
+        _uiState.value = uiState.value.copy(
+            tags = oldTags + tag,
+        )
     }
 
     fun removeHistoryTag(removeTag: Tag) {
@@ -191,25 +175,23 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun visibleModeChange(mode: VisibleMode) {
-        _visibleMode.value = mode
+        _uiState.value = uiState.value.copy(visibleMode = mode)
     }
 
-    var isFillByArticle = false
-        private set
-    private var filledArticle: Article? = null
     fun fillArticle(
         theArticle: Article?,
         editType: EditType
     ) {
         if (theArticle == null) return
-        isFillByArticle = true
-        filledArticle = theArticle
-        this.editType = editType
-        "fillDraftArticle=$filledArticle".logd("live_test")
-        title = theArticle.title
-        body = theArticle.body
-        _visibleMode.value = theArticle.visibleMode
-        _cover.value = theArticle.cover
+        _uiState.value = uiState.value.copy(
+            theArticle = theArticle,
+            editType = editType,
+            title = theArticle.title,
+            body = theArticle.body,
+            visibleMode = theArticle.visibleMode,
+            cover = theArticle.cover,
+            isFillByArticle = true
+        )
         val tags = getHistoryTags().value
         "tags=$tags".logi("fill_draft_article") //will print null
     }
@@ -218,10 +200,11 @@ class EditViewModel : BaseViewModel() {
     fun updateTagsAfterGetHistoryTags(liveData: List<Tag>?) {
         if (hasUpdate) return
         hasUpdate = true
-        liveData ?: return; filledArticle ?: return
-        val existTags = liveData.filter { it.name in filledArticle!!.tags }
+        val theArticle = uiState.value.theArticle
+        liveData ?: return; theArticle ?: return
+        val existTags = liveData.filter { it.name in theArticle.tags }
         val existTagsName = liveData.map { it.name }
-        val absentTags = filledArticle!!.tags.filter { it !in existTagsName }
+        val absentTags = theArticle.tags.filter { it !in existTagsName }
             .map {
                 Tag(
                     name = it,
@@ -229,8 +212,9 @@ class EditViewModel : BaseViewModel() {
                     username = currentUser.username
                 )
             }
-        _tags.value = existTags + absentTags
-        "tags.value:${_tags.value}".logd("live_test")
+        _uiState.value = uiState.value.copy(
+            tags = existTags + absentTags,
+        )
     }
 
     fun getHistoryTags(): LiveData<List<Tag>> {
@@ -238,7 +222,9 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun updateUri(uri: Uri) {
-        _uri.value = uri
+        _uiState.value = uiState.value.copy(
+            uri = uri,
+        )
     }
 
     fun uploadFile(path: String, filename: String) {
@@ -249,7 +235,9 @@ class EditViewModel : BaseViewModel() {
                     fileRepository.uploadFile(path, filename)
                 },
                 onSuccess = { data, msg ->
-                    _cover.value = data?.first() ?: empty
+                    _uiState.value = uiState.value.copy(
+                        cover = data?.first() ?: empty,
+                    )
                     _uploadCoverState.value = NetworkResult.Success(data = data, msg = msg)
                 },
                 onFailed = {
@@ -260,26 +248,17 @@ class EditViewModel : BaseViewModel() {
         }
     }
 
-    private fun generateArticle(): Article = Article(
-        title = title,
-        body = body,
-        userId = currentUser.id,
-        username = currentUser.username,
-        author = currentUser.username,
-        timestamp = System.currentTimeMillis(),
-        visibleMode = visibleMode.value,
-        tags = tags.value.map { it.name }.toTypedArray(),
-        cover = cover.value
-    )
-
     private fun clear() {
-        title = empty
-        body = empty
-        _cover.value = empty
-        _tags.value = emptyList()
-        _visibleMode.value = VisibleMode.PUBLIC
+        _uiState.value = uiState.value.copy(
+            title = empty,
+            body = empty,
+            cover = empty,
+            tags = emptyList(),
+            visibleMode = VisibleMode.PUBLIC,
+        )
     }
 }
 
 const val FLY_ADD_ARTICLE = "fly_add_article"
 const val FLY_UPLOAD_FILE = "fly_upload_file"
+const val FLY_UPLOAD_REMOTE_ARTICLE = "fly_update_remote_article"
