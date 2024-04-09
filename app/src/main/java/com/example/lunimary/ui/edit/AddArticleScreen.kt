@@ -24,6 +24,7 @@ import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.base.notLogin
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.ChineseMarkdownWeb
 import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
@@ -42,7 +43,7 @@ import com.example.lunimary.ui.edit.bottomsheet.BottomSheetContent
 import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
+@Suppress("UNCHECKED_CAST")
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.addArticleScreen(
     appState: LunimaryAppState,
@@ -52,13 +53,13 @@ fun NavGraphBuilder.addArticleScreen(
     composable(
         Screens.AddArticle.route,
     ) {
-        var theArticle = ArticleNavArguments[EDIT_ARTICLE_KEY] as? Article
+        var theArticle = ArticleNavArguments[EDIT_ARTICLE_KEY] as? PageItem<Article>
         val editType = ArticleNavArguments[EDIT_TYPE_KEY] as? EditType ?: EditType.New
-        if ((theArticle?.id ?: -1) < 0) {
+        if ((theArticle?.data?.id ?: -1) < 0) {
             theArticle = null
         }
         val editViewModel: EditViewModel = viewModel()
-        FillArticleEffect(article = theArticle, editViewModel = editViewModel, editType = editType)
+        FillArticleEffect(article = theArticle?.data, editViewModel = editViewModel, editType = editType)
         val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
         val saveMessage = stringResource(id = R.string.auto_save_as_draft)
         val updateMessage = stringResource(id = R.string.has_updated_draft)
@@ -99,7 +100,7 @@ fun NavGraphBuilder.addArticleScreen(
         LunimaryDialog(
             text = stringResource(id = R.string.update_of_remote_not_saved),
             openDialog = openDialog,
-            onConfirmClick = { editViewModel.updateRemoteArticle() },
+            onConfirmClick = { editViewModel.updateRemoteArticle { onUpdateSuccess(it, theArticle) } },
             onCancelClick = { appState.popBackStack() }
         )
         when(updateArticleState.value) {
@@ -137,7 +138,7 @@ fun NavGraphBuilder.addArticleScreen(
             onBack = { onBackAction() },
             onPublish = {
                 if (!notLogin()) {
-                    editViewModel.publish(theArticle = theArticle)
+                    editViewModel.publish(theArticle = theArticle?.data)
                 } else {
                     coroutineScope.launch {
                         snackbarHostState?.showSnackbar("您当前为未登录状态，请登录后再进行文章发布！")
@@ -149,7 +150,8 @@ fun NavGraphBuilder.addArticleScreen(
             onFinish = {
                 appState.navToUser(if (theArticle == null) Screens.AddArticle.route else Screens.Drafts.route)
             },
-            onNavToWeb = { appState.navToWeb(ChineseMarkdownWeb) }
+            onNavToWeb = { appState.navToWeb(ChineseMarkdownWeb) },
+            onUpdateSuccess = { onUpdateSuccess(it, theArticle) }
         )
     }
 }
@@ -176,7 +178,8 @@ fun AddArticleScreen(
     editViewModel: EditViewModel,
     coroutineScope: CoroutineScope,
     onFinish: () -> Unit,
-    onNavToWeb: () -> Unit
+    onNavToWeb: () -> Unit,
+    onUpdateSuccess: (updated: Article) -> Unit
 ) {
     val publishArticleState by editViewModel.publishArticleState.observeAsState()
     val snackbar = LocalSnackbarHostState.current.snackbarHostState
@@ -239,10 +242,15 @@ fun AddArticleScreen(
                 reallyPublish = { onPublish() },
                 editViewModel = editViewModel,
                 coroutineScope = coroutineScope,
-                historyTags = historyTags
+                historyTags = historyTags,
+                onUpdateSuccess = onUpdateSuccess
             )
         }
     }
+}
+
+private fun onUpdateSuccess(updated: Article, theArticle: PageItem<Article>?) {
+    theArticle?.onDataChanged(updated)
 }
 
 @LightAndDarkPreview
@@ -255,8 +263,7 @@ fun EditScreenPreview() {
                 onPublish = {},
                 editViewModel = viewModel(),
                 coroutineScope = rememberCoroutineScope(),
-                onFinish = {},
-                {}
+                 {}, {}, {}
             )
         }
     }

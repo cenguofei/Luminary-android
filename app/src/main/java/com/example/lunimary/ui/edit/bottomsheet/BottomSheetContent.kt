@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.ShowSnackbar
+import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.local.Tag
 import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.edit.EditViewModel
@@ -32,6 +33,7 @@ fun BottomSheetContent(
     editViewModel: EditViewModel,
     coroutineScope: CoroutineScope,
     historyTags: State<List<Tag>?>,
+    onUpdateSuccess: (updated: Article) -> Unit
 ) {
     Column {
         Row(
@@ -62,6 +64,7 @@ fun BottomSheetContent(
         BottomButtons(
             editViewModel = editViewModel,
             reallyPublish = reallyPublish,
+            onUpdateSuccess = onUpdateSuccess
         )
     }
 }
@@ -70,6 +73,7 @@ fun BottomSheetContent(
 private fun BottomButtons(
     editViewModel: EditViewModel,
     reallyPublish: () -> Unit,
+    onUpdateSuccess: (updated: Article) -> Unit
 ) {
     val showSnackbar = remember { mutableStateOf(false) }
     if (showSnackbar.value) {
@@ -86,7 +90,7 @@ private fun BottomButtons(
                 if (uiState.theArticleChanged()) {
                     LinearButton(
                         modifier = Modifier.weight(1f),
-                        onClick = { editViewModel.updateRemoteArticle() },
+                        onClick = { editViewModel.updateRemoteArticle(onUpdateSuccess) },
                         text = stringResource(id = R.string.update_content),
                         height = 40.dp
                     )

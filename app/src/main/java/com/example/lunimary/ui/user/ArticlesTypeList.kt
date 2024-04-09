@@ -17,7 +17,7 @@ fun ArticlesTypeList(
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
     onItemClick: (PageItem<Article>) -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, PageItem<Article>) -> Unit
 ) {
     val likesOfUser = userDetailViewModel.likesOfUser.collectAsLazyPagingItems()
     val collectsOfUser = userDetailViewModel.collectsOfUser.collectAsLazyPagingItems()

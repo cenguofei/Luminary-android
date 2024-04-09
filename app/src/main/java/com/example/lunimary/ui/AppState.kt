@@ -149,9 +149,9 @@ class LunimaryAppState(
 
     fun navToEdit(
         editType: EditType = EditType.New,
-        draftArticle: Article? = null
+        theArticle: PageItem<Article>? = null
     ) {
-        navController.navToEdit(draftArticle, editType)
+        navController.navToEdit(theArticle, editType)
     }
 
     fun navToDraft() {
@@ -319,12 +319,12 @@ private fun NavController.navToRelation(relationPageType: RelationPageType) {
 }
 
 private fun NavController.navToEdit(
-    theArticle: Article?,
+    theArticle: PageItem<Article>?,
     editType: EditType
 ) {
     var article = theArticle
     if (theArticle == null) {
-        article = Article(id = -10000)
+        article = PageItem(Article(id = -10000))
     }
     ArticleNavArguments[EDIT_ARTICLE_KEY] = article!!
     ArticleNavArguments[EDIT_TYPE_KEY] = editType

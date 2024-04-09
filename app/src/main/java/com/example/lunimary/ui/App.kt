@@ -36,7 +36,7 @@ import com.example.lunimary.design.SnackbarHostStateHolder
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.browse.browseScreen
 import com.example.lunimary.ui.edit.addArticleScreen
-import com.example.lunimary.ui.home.topLevelScreens
+import com.example.lunimary.ui.topscreens.topLevelScreens
 import com.example.lunimary.ui.login.loginScreen
 import com.example.lunimary.ui.login.registerScreen
 import com.example.lunimary.ui.privacy.privacyScreen

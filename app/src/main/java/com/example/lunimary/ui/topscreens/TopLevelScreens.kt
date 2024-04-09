@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.home
+package com.example.lunimary.ui.topscreens
 
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
@@ -15,6 +15,8 @@ import com.example.lunimary.base.notLogin
 import com.example.lunimary.ui.HOME_ROOT
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.TopLevelDestination
+import com.example.lunimary.ui.home.HomeBottomAppBar
+import com.example.lunimary.ui.home.HomeScreen
 import com.example.lunimary.ui.message.MessageScreen
 import com.example.lunimary.ui.user.UserDetailScreen
 import kotlinx.coroutines.CoroutineScope
@@ -67,15 +69,13 @@ fun TopLevelScreens(
                     modifier = paddingModifier,
                     onAddClick = {
                         checkLogin(
-                            isLogin = { appState.navToEdit() },
-                            isLogout = { appState.navToLogin() }
+                            isLogin = appState::navToEdit,
+                            isLogout = appState::navToLogin
                         )
                     },
-                    onSearchClick = { appState.navToSearch() },
+                    onSearchClick = appState::navToSearch,
                     appState = appState,
-                    onLoginClick = {
-                        appState.navToLogin()
-                    },
+                    onLoginClick = appState::navToLogin,
                     onItemClick = {
                         if (notLogin()) {
                             appState.navToLogin()
@@ -92,9 +92,7 @@ fun TopLevelScreens(
                 if (notLogin()) {
                     appState.navToLogin(true)
                 } else {
-                    MessageScreen(
-                        modifier = paddingModifier
-                    )
+                    MessageScreen(modifier = paddingModifier)
                 }
             }
 

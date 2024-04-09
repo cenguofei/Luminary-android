@@ -31,7 +31,7 @@ fun PublicPage(
     modifier: Modifier,
     onDraftClick: () -> Unit,
     compositionsState: LazyPagingItems<PageItem<Article>>,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, PageItem<Article>) -> Unit
 ) {
     val drafts = articleDao.findArticlesByUsername(currentUser.username).observeAsState()
     LunimaryPagingContent(
@@ -68,7 +68,7 @@ fun PublicPage(
                     },
                     onItemSelected = {
                         setIsOpen(false)
-                        if (it == "edit") { navToEdit(EditType.Edit, item.data) }
+                        if (it == "edit") { navToEdit(EditType.Edit, item) }
                     },
                     onDismiss = { setIsOpen(false) }
                 )

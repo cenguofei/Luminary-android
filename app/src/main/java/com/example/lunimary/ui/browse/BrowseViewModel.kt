@@ -50,7 +50,6 @@ class BrowseViewModel : BaseViewModel() {
         existingFriendship(article.userId)
         existsLike(article.id)
         fetchStar(article.id)
-        //getAllCommentsOfArticle(article.id)
         whenBroseArticle(article.id)
     }
 

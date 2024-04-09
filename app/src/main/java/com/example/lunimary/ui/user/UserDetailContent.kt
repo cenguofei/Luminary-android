@@ -16,6 +16,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.models.Article
@@ -32,7 +33,7 @@ fun UserDetailContent(
     appState: LunimaryAppState,
     onRelationClick: (UserDataType) -> Unit,
     onClick: () -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, PageItem<Article>) -> Unit
 ) {
     val uiState = userDetailViewModel.uiState.observeAsState()
     Column(

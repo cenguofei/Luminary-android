@@ -31,7 +31,7 @@ fun RoundedCornerContent(
     onDraftClick: () -> Unit,
     onItemClick: (PageItem<Article>) -> Unit,
     onRelationClick: (UserDataType) -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, PageItem<Article>) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxSize()) {

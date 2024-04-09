@@ -1,5 +1,6 @@
 package com.example.lunimary.base.pager
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.lunimary.models.responses.DEFAULT_PER_PAGE_COUNT
@@ -26,7 +27,7 @@ class AppPagingSource<T : Any>(
 //                LoadResult.Error(Throwable(message = pageResponse.msg))
                 LoadResult.Page(
                     data = data?.lists?.map {
-                        PageItem(data = it)
+                        PageItem(it)
                     } ?: emptyList(),
                     prevKey = if (wishPage == 0) null else wishPage - 1,
                     nextKey = if (wishPage < (data?.pageSize!! - 1)) wishPage + 1 else null

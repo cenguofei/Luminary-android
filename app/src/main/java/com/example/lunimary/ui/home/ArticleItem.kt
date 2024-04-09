@@ -107,8 +107,8 @@ fun ArticleItem(
                 Spacer(modifier = Modifier.height(4.dp))
                 if (article.isLunimaryStation) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         val contentModifier =
                             if (article.cover.isEmpty() || !article.cover.startsWith("res/uploads")) {

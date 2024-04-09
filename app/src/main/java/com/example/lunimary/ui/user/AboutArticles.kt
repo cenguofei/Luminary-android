@@ -24,7 +24,7 @@ fun AboutArticles(
     userDetailViewModel: UserDetailViewModel,
     onDraftClick: () -> Unit,
     onItemClick: (PageItem<Article>) -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, PageItem<Article>) -> Unit
 ) {
     val tabs = remember {
         listOf(

@@ -131,7 +131,7 @@ class EditViewModel : BaseViewModel() {
     }
 
     private var lastUpdateRemoteArticle: Article? = null
-    fun updateRemoteArticle() {
+    fun updateRemoteArticle(onUpdateSuccess: (updated: Article) -> Unit) {
         val generateArticle = uiState.value.generateArticle()
         if (lastUpdateRemoteArticle == null || lastUpdateRemoteArticle != generateArticle) {
             lastUpdateRemoteArticle = generateArticle
@@ -145,6 +145,7 @@ class EditViewModel : BaseViewModel() {
                         _updateArticleState.value = NetworkResult.Error(it)
                     },
                     onSuccess = { _, _ ->
+                        onUpdateSuccess(generateArticle)
                         _updateArticleState.value = NetworkResult.Success()
                     },
                     onFinish = { land(FLY_UPLOAD_REMOTE_ARTICLE) }

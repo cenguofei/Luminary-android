@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
@@ -37,24 +36,26 @@ fun NavGraphBuilder.browseScreen(
                 }
             )
         }
-        val article = PageArticleNavArguments[PAGE_ARTICLE_ITEM_KEY]
-        if (article == null) {
+        val articleItem = PageArticleNavArguments[PAGE_ARTICLE_ITEM_KEY]
+        if (articleItem == null) {
             appState.navToHome(Screens.BrowseArticle.route)
             "nav article = null".logd()
             return@composable
         }
         val browseViewModel: BrowseViewModel = viewModel()
-        browseViewModel.setArticle(article.data)
+        browseViewModel.setArticle(articleItem.data)
         BrowseScreen(
             onBack = appState::popBackStack,
             browseViewModel = browseViewModel,
             onLinkClick = appState::navToWeb,
             onUserClick = { appState.navToViewUser(it, Screens.BrowseArticle.route) },
             onArticleDeleted = {
-                article.deleted.value = true
+                articleItem.onDeletedStateChange(true)
                 appState.popBackStack()
             },
-            navToEdit = appState::navToEdit
+            navToEdit = { type, _ ->
+                appState.navToEdit(type, articleItem)
+            }
         )
         DisposableEffect(
             key1 = Unit,
