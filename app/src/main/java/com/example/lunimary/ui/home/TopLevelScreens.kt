@@ -17,8 +17,13 @@ import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.TopLevelDestination
 import com.example.lunimary.ui.message.MessageScreen
 import com.example.lunimary.ui.user.UserDetailScreen
+import kotlinx.coroutines.CoroutineScope
 
-fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
+fun NavGraphBuilder.topLevelScreens(
+    appState: LunimaryAppState,
+    onShowSnackbar: suspend (msg: String, label: String?) -> Boolean,
+    coroutineScope: CoroutineScope
+) {
     composable(
         route = TopLevelDestination.Home.route,
         arguments = listOf(
@@ -29,13 +34,19 @@ fun NavGraphBuilder.topLevelScreens(appState: LunimaryAppState) {
         )
     ) {
         TopLevelScreens(
-            appState = appState
+            appState = appState,
+            onShowSnackbar = onShowSnackbar,
+            coroutineScope = coroutineScope
         )
     }
 }
 
 @Composable
-fun TopLevelScreens(appState: LunimaryAppState) {
+fun TopLevelScreens(
+    appState: LunimaryAppState,
+    onShowSnackbar: suspend (msg: String, label: String?) -> Boolean,
+    coroutineScope: CoroutineScope
+) {
     val selectedBottomTab = appState.selectedBottomTab
     Scaffold(
         modifier = Modifier,
@@ -71,7 +82,9 @@ fun TopLevelScreens(appState: LunimaryAppState) {
                         } else {
                             appState.navToBrowse(it)
                         }
-                    }
+                    },
+                    onShowSnackbar = onShowSnackbar,
+                    coroutineScope = coroutineScope
                 )
             }
 

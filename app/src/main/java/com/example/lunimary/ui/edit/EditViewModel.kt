@@ -98,8 +98,10 @@ class EditViewModel : BaseViewModel() {
     }
 
     private var lastSaveDraft: Article? = null
+    val shouldSaveAsDraft: Boolean get() = lastSaveDraft == null || uiState.value.generateArticle() != lastSaveDraft
     fun saveAsDraft() {
         val saveArticle = uiState.value.generateArticle()
+        "lastSaveDraft != saveArticle = ${lastSaveDraft != saveArticle}".logd("update_test")
         if (lastSaveDraft == null || lastSaveDraft != saveArticle) {
             lastSaveDraft = saveArticle
             viewModelScope.launch {
@@ -110,11 +112,20 @@ class EditViewModel : BaseViewModel() {
         }
     }
 
+    private var lastUpdateDraft: Article? = null
+    val shouldUpdateDraft: Boolean get() = lastUpdateDraft == null || uiState.value.updatedLocalArticle() != lastUpdateDraft
     fun updateDraft() {
-        viewModelScope.launch {
-            uiState.value.updatedLocalArticle()?.let {
-                localArticleRepository.update(it)
+        val saveArticle = uiState.value.updatedLocalArticle()
+        "lastUpdateDraft != saveArticle = ${lastUpdateDraft != saveArticle}".logd("update_test")
+        if (lastUpdateDraft == null || lastUpdateDraft != saveArticle) {
+            viewModelScope.launch {
+                saveArticle?.let {
+                    lastUpdateDraft = saveArticle
+                    localArticleRepository.update(it)
+                }
             }
+        } else {
+            "updateDraft: 已经更新过".logd("update_test")
         }
     }
 

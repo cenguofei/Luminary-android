@@ -7,7 +7,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.base.UserState
@@ -15,6 +14,7 @@ import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -24,13 +24,14 @@ fun HomeScreen(
     onSearchClick: () -> Unit,
     onLoginClick: () -> Unit,
     appState: LunimaryAppState,
-    onItemClick: (PageItem<Article>) -> Unit
+    onItemClick: (PageItem<Article>) -> Unit,
+    onShowSnackbar: suspend (msg: String, label: String?) -> Boolean,
+    coroutineScope: CoroutineScope
 ) {
     val tabs = remember {
         listOf(HomeCategories.Recommend, HomeCategories.All, HomeCategories.Following)
     }
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
-    val coroutineScope = rememberCoroutineScope()
     val userState = UserState.currentUserState.observeAsState()
     val recommendViewModel: RecommendViewModel = viewModel()
 
@@ -40,7 +41,6 @@ fun HomeScreen(
         HomeTopBar(
             tabs = tabs,
             pagerState = pagerState,
-            coroutineScope = coroutineScope,
             onAddClick = onAddClick,
             onSearchClick = onSearchClick
         )
@@ -58,7 +58,9 @@ fun HomeScreen(
             pagerState = pagerState,
             onItemClick = onItemClick,
             goToLogin = { appState.navToLogin(true) },
-            recommendViewModel = recommendViewModel
+            recommendViewModel = recommendViewModel,
+            onShowSnackbar = onShowSnackbar,
+            coroutineScope = coroutineScope
         )
     }
 }

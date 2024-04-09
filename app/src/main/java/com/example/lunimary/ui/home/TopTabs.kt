@@ -17,6 +17,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,10 +30,10 @@ import kotlinx.coroutines.launch
 fun HomeTopBar(
     tabs: List<HomeCategories>,
     pagerState: PagerState,
-    coroutineScope: CoroutineScope,
     onAddClick: () -> Unit,
     onSearchClick: () -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

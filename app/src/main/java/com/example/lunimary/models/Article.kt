@@ -51,7 +51,7 @@ data class Article(
 
     val cover: String = empty,
 
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = Long.Default
 ) : java.io.Serializable, Parcelable {
 
     @Ignore

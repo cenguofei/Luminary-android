@@ -30,7 +30,6 @@ import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryDialog
 import com.example.lunimary.design.LunimaryGradientBackground
-import com.example.lunimary.design.ShowSnackbar
 import com.example.lunimary.design.myObserveAsState
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.Article
@@ -47,7 +46,8 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.addArticleScreen(
     appState: LunimaryAppState,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    onShowSnackbar: suspend (msg: String, label: String?) -> Boolean
 ) {
     composable(
         Screens.AddArticle.route,
@@ -68,19 +68,19 @@ fun NavGraphBuilder.addArticleScreen(
         val onBackAction = {
             when (editType) {
                 EditType.New -> {
-                    if (editViewModel.uiState.value.canSaveAsDraft) {
+                    if (editViewModel.uiState.value.canSaveAsDraft && editViewModel.shouldSaveAsDraft) {
                         editViewModel.saveAsDraft()
                         coroutineScope.launch {
-                            snackbarHostState?.showSnackbar(message = saveMessage)
+                            onShowSnackbar(saveMessage, null)
                         }
                     }
                     appState.popBackStack()
                 }
 
                 EditType.Draft -> {
-                    if (editViewModel.uiState.value.theArticleChanged()) {
+                    if (editViewModel.uiState.value.theArticleChanged() && editViewModel.shouldUpdateDraft) {
                         coroutineScope.launch {
-                            snackbarHostState?.showSnackbar(message = updateMessage)
+                            onShowSnackbar(updateMessage, null)
                         }
                         editViewModel.updateDraft()
                     }
@@ -107,23 +107,27 @@ fun NavGraphBuilder.addArticleScreen(
                 LoadingDialog()
             }
             is NetworkResult.Success -> {
-                ShowSnackbar(
-                    message = stringResource(id = R.string.update_remote_success),
-                    coroutineScope = coroutineScope
-                )
+                val message = stringResource(id = R.string.update_remote_success)
                 LaunchedEffect(
-                    key1 = Unit,
-                    block = { appState.popBackStack() }
+                    key1 = updateArticleState.value,
+                    block = {
+                        appState.popBackStack()
+                        coroutineScope.launch {
+                            onShowSnackbar(message, null)
+                        }
+                    }
                 )
             }
             is NetworkResult.Error -> {
-                ShowSnackbar(
-                    message = updateArticleState.value.msg ?: unknownErrorMsg,
-                    coroutineScope = coroutineScope
-                )
+                val message = updateArticleState.value.msg ?: unknownErrorMsg
                 LaunchedEffect(
-                    key1 = Unit,
-                    block = { appState.popBackStack() }
+                    key1 = updateArticleState.value,
+                    block = {
+                        appState.popBackStack()
+                        coroutineScope.launch {
+                            onShowSnackbar(message, null)
+                        }
+                    }
                 )
             }
             else -> { }

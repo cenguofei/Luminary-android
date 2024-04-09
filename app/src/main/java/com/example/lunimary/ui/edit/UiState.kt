@@ -19,7 +19,6 @@ data class UiState(
     val editType: EditType = EditType.New,
     val theArticle: Article? = null,
     val isFillByArticle: Boolean = false,
-    val preState: UiState? = null
 ) {
     val canSaveAsDraft: Boolean = title.isNotBlank() && body.isNotBlank()
 
@@ -55,7 +54,6 @@ data class UiState(
                 userId = currentUser.id,
                 username = currentUser.username,
                 author = currentUser.username,
-                timestamp = System.currentTimeMillis(),
                 visibleMode = visibleMode,
                 tags = tags.map { it.name }.toTypedArray(),
                 cover = cover
@@ -63,10 +61,6 @@ data class UiState(
             EditType.Edit -> theArticle!!.copy(
                 title = title,
                 body = body,
-                userId = currentUser.id,
-                username = currentUser.username,
-                author = currentUser.username,
-                timestamp = System.currentTimeMillis(),
                 visibleMode = visibleMode,
                 tags = tags.map { it.name }.toTypedArray(),
                 cover = cover

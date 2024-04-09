@@ -117,12 +117,11 @@ private fun LunimaryNavHost(
     val coroutineScope = rememberCoroutineScope()
     val navController = appState.navController
     val userState = UserState.currentUserState.observeAsState()
-    val coroutine = rememberCoroutineScope()
     if (userState.value == User.NONE && UserState.updated) {
         LaunchedEffect(
             key1 = Unit,
             block = {
-                coroutine.launch {
+                coroutineScope.launch {
                     onShowSnackbar("你当前为非登录状态！", null)
                 }
             }
@@ -143,11 +142,11 @@ private fun LunimaryNavHost(
         startDestination = startScreen.route,
         modifier = modifier,
     ) {
-        topLevelScreens(appState = appState)
+        topLevelScreens(appState = appState, onShowSnackbar = onShowSnackbar, coroutineScope = coroutineScope)
         loginScreen(appState = appState, coroutineScope = coroutineScope)
         settingsScreen(appState = appState, coroutineScope = coroutineScope)
         registerScreen(appState = appState, coroutineScope = coroutineScope)
-        addArticleScreen(appState = appState, coroutineScope = coroutineScope)
+        addArticleScreen(appState = appState, coroutineScope = coroutineScope, onShowSnackbar = onShowSnackbar)
         draftsScreen(appState = appState)
         searchScreen(appState = appState)
         webViewScreen(appState = appState)
