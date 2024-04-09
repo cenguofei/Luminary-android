@@ -35,7 +35,8 @@ object UserState {
         "更新登录状态,from=$from isLogin:$isLogin".logd()
         if (isLogin != null) {
             if (!isLogin) {
-                clearUser()
+                //TODO 测试阶段暂时步清空用户，上线后需要改为清空
+                //clearUser()
             }
         }
     }
