@@ -43,7 +43,8 @@ class EditViewModel : BaseViewModel() {
         MutableLiveData(NetworkResult.None())
     val publishArticleState: LiveData<NetworkResult<Unit>> get() = _publishArticleState
 
-    private val _updateArticleState: MutableStateFlow<NetworkResult<Unit>> = MutableStateFlow(NetworkResult.None())
+    private val _updateArticleState: MutableStateFlow<NetworkResult<Unit>> =
+        MutableStateFlow(NetworkResult.None())
     val updateArticleState: StateFlow<NetworkResult<Unit>> get() = _updateArticleState
 
     private val _uiState: MutableState<UiState> = mutableStateOf(UiState())
@@ -52,34 +53,34 @@ class EditViewModel : BaseViewModel() {
     //////////////////////////// UI UnRelative ////////////////////////////////
     private var hasPublished = false
     fun publish(theArticle: Article?) {
-        val newArticle = uiState.value.generateArticle()
-        if (!hasPublished) {
-            fly(FLY_ADD_ARTICLE) {
-                request(
-                    block = {
-                        _publishArticleState.postValue(NetworkResult.Loading())
-                        addArticleRepository.addArticle(newArticle)
-                    },
-                    onSuccess = { _, _ ->
-                        hasPublished = true
-                        _publishArticleState.postValue(NetworkResult.Success())
-                        clear()
-                        if (uiState.value.editType == EditType.Draft) {
-                            theArticle?.let {
-                                viewModelScope.launch {
-                                    localArticleRepository.deleteArticle(it)
-                                }
+        if (hasPublished) return
+        val timestamp = System.currentTimeMillis()
+        val newArticle = uiState.value.generateArticle().copy(timestamp = timestamp)
+        fly(FLY_ADD_ARTICLE) {
+            request(
+                block = {
+                    _publishArticleState.postValue(NetworkResult.Loading())
+                    addArticleRepository.addArticle(newArticle)
+                },
+                onSuccess = { _, _ ->
+                    hasPublished = true
+                    _publishArticleState.postValue(NetworkResult.Success())
+                    clear()
+                    if (uiState.value.editType == EditType.Draft) {
+                        theArticle?.let {
+                            viewModelScope.launch {
+                                localArticleRepository.deleteArticle(it)
                             }
                         }
-                    },
-                    onFailed = {
-                        _publishArticleState.postValue(NetworkResult.Error(it))
-                    },
-                    onFinish = {
-                        land(FLY_ADD_ARTICLE)
                     }
-                )
-            }
+                },
+                onFailed = {
+                    _publishArticleState.postValue(NetworkResult.Error(it))
+                },
+                onFinish = {
+                    land(FLY_ADD_ARTICLE)
+                }
+            )
         }
     }
 
