@@ -32,8 +32,8 @@ fun AddArticleScreenContent(
     onPublish: () -> Unit,
     editViewModel: EditViewModel,
     onNavToWeb: () -> Unit,
-    onShowMessage: (String) -> Unit,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
+    onPublishedArticleDelete: () -> Unit,
 ) {
     val pagers = listOf(stringResource(id = R.string.edit), stringResource(id = R.string.preview))
     val pagerState = rememberPagerState { pagers.size }
@@ -84,8 +84,8 @@ fun AddArticleScreenContent(
                         }
                     },
                     onNavToWeb = onNavToWeb,
-                    onShowMessage = onShowMessage,
-                    onShowSnackbar = onShowSnackbar
+                    onShowSnackbar = onShowSnackbar,
+                    onPublishedArticleDelete = onPublishedArticleDelete,
                 )
             } else {
                 PreviewPage(

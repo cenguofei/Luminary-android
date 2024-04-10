@@ -17,10 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
-import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.design.LunimaryGradientBackground
-import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.fileBaseUrl
 import com.example.lunimary.ui.common.FileViewModel
 import com.example.lunimary.ui.edit.EditViewModel
@@ -39,8 +36,8 @@ fun EditPage(
     viewModel: EditViewModel,
     onPreviewClick: () -> Unit,
     onNavToWeb: () -> Unit,
-    onShowMessage: (String) -> Unit,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
+    onPublishedArticleDelete: () -> Unit,
 ) {
     val context = LocalContext.current
     val bodyView = remember { LayoutInflater.from(context).inflate(R.layout.body_edit_text, null) }
@@ -137,36 +134,22 @@ fun EditPage(
                 )
             }
         }
-        val showDialog = remember { mutableStateOf(false) }
+        val showAddLinkDialog = remember { mutableStateOf(false) }
         EditBottomOptions(
             onNavToWeb = onNavToWeb,
             bodyEditText = bodyEditText,
             fileViewModel = fileViewModel,
             onPreviewClick = onPreviewClick,
-            showDialog = showDialog,
-            onShowMessage = onShowMessage
+            showAddLinkDialog = showAddLinkDialog,
+            viewModel = viewModel,
+            onPublishedArticleDelete = onPublishedArticleDelete,
+            onShowSnackbar = onShowSnackbar,
         )
         AddLinkDialog(
-            showDialog = showDialog,
+            showDialog = showAddLinkDialog,
             onFinish = { name, link ->
                 bodyEditText.insertRow("[$name]($link)")
             }
         )
-    }
-}
-
-@LightAndDarkPreview
-@Composable
-fun EditPagePreview() {
-    LunimaryTheme {
-        LunimaryGradientBackground {
-            EditPage(
-                viewModel = viewModel(),
-                onPreviewClick = {},
-                onNavToWeb = {},
-                onShowMessage = {},
-                onShowSnackbar = { _, _ -> }
-            )
-        }
     }
 }

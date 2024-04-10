@@ -135,7 +135,7 @@ fun SettingsItems(
             )
             LBHorizontalDivider()
             SettingItem(
-                text = stringResource(id = R.string.modifiy_individual_info),
+                text = stringResource(id = R.string.modify_individual_info),
                 icon = Icons.Default.EditNote,
                 onClick = onNavToInfo
             )

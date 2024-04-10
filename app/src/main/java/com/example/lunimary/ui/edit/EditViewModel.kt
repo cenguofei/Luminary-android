@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseViewModel
+import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.tagColors
@@ -21,6 +22,7 @@ import com.example.lunimary.models.source.local.Tag
 import com.example.lunimary.models.source.remote.repository.AddArticleRepository
 import com.example.lunimary.models.source.remote.repository.ArticleRepository
 import com.example.lunimary.models.source.remote.repository.FileRepository
+import com.example.lunimary.ui.browse.FLY_DELETE_ARTICLE
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.logi
@@ -271,6 +273,28 @@ class EditViewModel : BaseViewModel() {
         _uiState.value = uiState.value.copy(
             tags = oldTags.filter { it.id != tag.id }
         )
+    }
+
+    private val _deleteState: MutableStateFlow<NetworkResult<String>> = MutableStateFlow(NetworkResult.None())
+    val deleteState: StateFlow<NetworkResult<String>> get() = _deleteState
+    fun deletePublishedArticle(onDeleteSuccess: () -> Unit) {
+        val article = uiState.value.theArticle ?: return
+        fly(FLY_DELETE_ARTICLE) {
+            request(
+                block = {
+                    _deleteState.value = NetworkResult.Loading()
+                    articleRepository.deleteArticleById(article.id)
+                },
+                onSuccess = { _, msg ->
+                    onDeleteSuccess()
+                    _deleteState.value = NetworkResult.Success(msg)
+                },
+                onFailed = {
+                    _deleteState.value = NetworkResult.Error(it)
+                },
+                onFinish = { land(FLY_DELETE_ARTICLE) }
+            )
+        }
     }
 
     private fun clear() {

@@ -151,6 +151,7 @@ class LunimaryAppState(
         editType: EditType = EditType.New,
         theArticle: PageItem<Article>? = null
     ) {
+        "navToEdit: theArticle=$theArticle".logd("nav_article")
         navController.navToEdit(theArticle, editType)
     }
 
@@ -163,6 +164,7 @@ class LunimaryAppState(
     }
 
     fun navToBrowse(article: PageItem<Article>) {
+        "navToBrowse: article=$article".logd("nav_article")
         navController.navToBrowse(article)
     }
 

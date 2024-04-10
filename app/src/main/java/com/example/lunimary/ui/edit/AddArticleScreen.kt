@@ -35,6 +35,7 @@ import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.EDIT_ARTICLE_KEY
 import com.example.lunimary.ui.common.EDIT_TYPE_KEY
 import com.example.lunimary.ui.edit.bottomsheet.BottomSheetContent
+import com.example.lunimary.util.logd
 import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -145,7 +146,12 @@ fun NavGraphBuilder.addArticleScreen(
             },
             onNavToWeb = { appState.navToWeb(ChineseMarkdownWeb) },
             onUpdateSuccess = { onUpdateSuccess(it, theArticle) },
-            onShowSnackbar = onShowSnackbar
+            onShowSnackbar = onShowSnackbar,
+            onPublishedArticleDelete = {
+                "onPublishedArticleDelete, deleted=${theArticle?.deleted}, data=${theArticle?.data}".logd("delete_remote_article")
+                theArticle?.onDeletedStateChange(true)
+                appState.popBackStack()
+            }
         )
     }
 }
@@ -174,7 +180,8 @@ fun AddArticleScreen(
     onFinish: () -> Unit,
     onNavToWeb: () -> Unit,
     onUpdateSuccess: (updated: Article) -> Unit,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
+    onPublishedArticleDelete: () -> Unit
 ) {
     val publishArticleState by editViewModel.publishArticleState.observeAsState()
     when (publishArticleState) {
@@ -212,8 +219,8 @@ fun AddArticleScreen(
         onPublish = { showBottomDrawer = true },
         editViewModel = editViewModel,
         onNavToWeb = onNavToWeb,
-        onShowMessage = { onShowSnackbar(it, null) },
-        onShowSnackbar = onShowSnackbar
+        onShowSnackbar = onShowSnackbar,
+        onPublishedArticleDelete = onPublishedArticleDelete,
     )
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     if (showBottomDrawer) {

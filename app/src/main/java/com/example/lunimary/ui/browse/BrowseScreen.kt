@@ -38,7 +38,14 @@ fun NavGraphBuilder.browseScreen(
             )
         }
         val articleItem = PageArticleNavArguments[PAGE_ARTICLE_ITEM_KEY]
-        if (articleItem == null) {
+        if (articleItem?.deleted == true) {
+            LaunchedEffect(
+                key1 = articleItem,
+                block = {
+                    appState.popBackStack()
+                }
+            )
+        } else if (articleItem == null) {
             appState.navToHome(Screens.BrowseArticle.route)
             "nav article = null".logd()
             return@composable

@@ -119,5 +119,9 @@
     <string name="update_remote_success">更新成功</string>
     <string name="update_content">更新内容</string>
     <string name="updated_draft">更新草稿</string>
-    <string name="modifiy_individual_info">修改资料</string>
+    <string name="modify_individual_info">修改资料</string>
+    <string name="confirm_delete_published_article">⚠️ 确认删除已发布的文章吗？</string>
+    <string name="confirm_delete_new_article">⚠️ 确认删除新建的文章吗？</string>
+    <string name="confirm_delete_draft">⚠️ 确认删除该草稿吗？</string>
+    <string name="delete_article_success">删除成功！</string>
 </resources>
