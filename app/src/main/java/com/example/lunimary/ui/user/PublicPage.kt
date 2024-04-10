@@ -41,9 +41,10 @@ fun PublicPage(
         topItem = {
             if (drafts.value?.isNotEmpty() == true) {
                 DraftItem(
-                    articles = drafts.value ?: emptyList(),
+                    draftsNum = drafts.value!!.size,
                     onClick = { onDraftClick() },
-                    showDraftLabel = true
+                    showDraftLabel = true,
+                    article = drafts.value!![0]
                 )
             }
         }

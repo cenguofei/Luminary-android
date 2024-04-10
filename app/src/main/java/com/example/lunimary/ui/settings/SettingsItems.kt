@@ -14,6 +14,7 @@ import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.BrightnessMedium
 import androidx.compose.material.icons.filled.Contrast
 import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material3.Icon
@@ -40,7 +41,8 @@ fun SettingsItems(
     modifier: Modifier,
     darkThemeSettingState: State<DarkThemeSetting>,
     onThemeSettingChange: (DarkThemeSetting) -> Unit,
-    onNavToPrivacy: () -> Unit
+    onNavToPrivacy: () -> Unit,
+    onNavToInfo: () -> Unit,
 ) {
     LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
@@ -67,9 +69,7 @@ fun SettingsItems(
                 exit = shrinkOut(shrinkTowards = Alignment.TopCenter) + fadeOut()
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateContentSize()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     LBHorizontalDivider()
                     SettingItem(
@@ -133,6 +133,12 @@ fun SettingsItems(
                 text = stringResource(id = R.string.privacy_protocol),
                 icon = Icons.Default.PrivacyTip,
                 onClick = onNavToPrivacy
+            )
+            LBHorizontalDivider()
+            SettingItem(
+                text = stringResource(id = R.string.modifiy_individual_info),
+                icon = Icons.Default.EditNote,
+                onClick = onNavToInfo
             )
         }
     }

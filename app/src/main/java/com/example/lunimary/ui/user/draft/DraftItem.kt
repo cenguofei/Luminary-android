@@ -33,14 +33,11 @@ fun DraftItem(
     modifier: Modifier = Modifier,
     showDraftLabel: Boolean = false,
     canOperate: Boolean = false,
-    articles: List<Article>,
-    index: Int = 0,
+    article: Article,
+    draftsNum: Int,
     onClick: (Article) -> Unit,
-    onItemSelected: (DraftItemOperations) -> Unit = {}
+    onItemSelected: (DraftItemOperations, Article) -> Unit = { _, _ -> }
 ) {
-    if (articles.isEmpty()) return
-    val article = articles[index]
-
     @Composable
     fun TopEndOptions() {
         val (showDropdownMenu, setIsOpen) = remember { mutableStateOf(false) }
@@ -59,7 +56,7 @@ fun DraftItem(
             },
             onItemSelected = {
                 setIsOpen(false)
-                onItemSelected(it as DraftItemOperations)
+                onItemSelected(it as DraftItemOperations, article)
             },
             onDismiss = { setIsOpen(false) }
         )
@@ -83,7 +80,7 @@ fun DraftItem(
                 shape = RoundedCornerShape(25)
             ) {
                 Text(
-                    text = stringResource(id = R.string.draft) + "${articles.size}",
+                    text = stringResource(id = R.string.draft) + "$draftsNum",
                     color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.padding(horizontal = 4.dp),
                     fontSize = 12.sp

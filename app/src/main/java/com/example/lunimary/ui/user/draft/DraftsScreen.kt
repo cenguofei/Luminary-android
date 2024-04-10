@@ -60,17 +60,17 @@ fun DraftsScreen(
             drafts.value?.sortedBy { it.timestamp }?.let { articles ->
                 items(articles.size) {
                     DraftItem(
-                        articles = drafts.value ?: emptyList(),
                         onClick = { _ -> onEdit(articles[it]) },
-                        onItemSelected = { operation ->
+                        onItemSelected = { operation, selectedArticle ->
                             when (operation) {
                                 DraftItemOperations.Remove -> {
-                                    draftsViewModel.remove(articles[it])
+                                    draftsViewModel.remove(selectedArticle)
                                 }
                             }
                         },
-                        index = it,
-                        canOperate = true
+                        canOperate = true,
+                        draftsNum = articles.size,
+                        article = articles[it]
                     )
                 }
             }

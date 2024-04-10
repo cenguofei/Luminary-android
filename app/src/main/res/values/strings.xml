@@ -119,4 +119,5 @@
     <string name="update_remote_success">更新成功</string>
     <string name="update_content">更新内容</string>
     <string name="updated_draft">更新草稿</string>
+    <string name="modifiy_individual_info">修改资料</string>
 </resources>
