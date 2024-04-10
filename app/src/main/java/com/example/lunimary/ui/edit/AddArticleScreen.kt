@@ -66,9 +66,11 @@ fun NavGraphBuilder.addArticleScreen(
             when (editType) {
                 EditType.New -> {
                     if (editViewModel.uiState.value.canSaveAsDraft && editViewModel.shouldSaveAsDraft) {
-                        editViewModel.saveAsDraft()
-                        coroutineScope.launch {
-                            onShowSnackbar(saveMessage, null)
+                        if (editViewModel.saveAsDraftEnabled) {
+                            editViewModel.saveAsDraft()
+                            coroutineScope.launch {
+                                onShowSnackbar(saveMessage, null)
+                            }
                         }
                     }
                     appState.popBackStack()
@@ -134,7 +136,7 @@ fun NavGraphBuilder.addArticleScreen(
             onBack = { onBackAction() },
             onPublish = {
                 if (!notLogin()) {
-                    editViewModel.publish(theArticle = theArticle?.data)
+                    editViewModel.publish()
                 } else {
                     onShowSnackbar("您当前为未登录状态，请登录后再进行文章发布！", null)
                 }

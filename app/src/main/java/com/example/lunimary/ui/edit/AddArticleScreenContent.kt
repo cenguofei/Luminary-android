@@ -86,6 +86,7 @@ fun AddArticleScreenContent(
                     onNavToWeb = onNavToWeb,
                     onShowSnackbar = onShowSnackbar,
                     onPublishedArticleDelete = onPublishedArticleDelete,
+                    onBack = onBack
                 )
             } else {
                 PreviewPage(

@@ -38,6 +38,7 @@ fun EditPage(
     onNavToWeb: () -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
     onPublishedArticleDelete: () -> Unit,
+    onBack: () -> Unit,
 ) {
     val context = LocalContext.current
     val bodyView = remember { LayoutInflater.from(context).inflate(R.layout.body_edit_text, null) }
@@ -144,6 +145,7 @@ fun EditPage(
             viewModel = viewModel,
             onPublishedArticleDelete = onPublishedArticleDelete,
             onShowSnackbar = onShowSnackbar,
+            onBack = onBack
         )
         AddLinkDialog(
             showDialog = showAddLinkDialog,

@@ -54,7 +54,7 @@ class EditViewModel : BaseViewModel() {
 
     //////////////////////////// UI UnRelative ////////////////////////////////
     private var hasPublished = false
-    fun publish(theArticle: Article?) {
+    fun publish() {
         if (hasPublished) return
         val timestamp = System.currentTimeMillis()
         val newArticle = uiState.value.generateArticle().copy(timestamp = timestamp)
@@ -69,11 +69,7 @@ class EditViewModel : BaseViewModel() {
                     _publishArticleState.postValue(NetworkResult.Success())
                     clear()
                     if (uiState.value.editType == EditType.Draft) {
-                        theArticle?.let {
-                            viewModelScope.launch {
-                                localArticleRepository.deleteArticle(it)
-                            }
-                        }
+                        deleteDraft()
                     }
                 },
                 onFailed = {
@@ -83,6 +79,14 @@ class EditViewModel : BaseViewModel() {
                     land(FLY_ADD_ARTICLE)
                 }
             )
+        }
+    }
+
+    fun deleteDraft() {
+        uiState.value.theArticle?.let {
+            viewModelScope.launch {
+                localArticleRepository.deleteArticle(it)
+            }
         }
     }
 
@@ -102,7 +106,9 @@ class EditViewModel : BaseViewModel() {
 
     private var lastSaveDraft: Article? = null
     val shouldSaveAsDraft: Boolean get() = lastSaveDraft == null || uiState.value.generateArticle() != lastSaveDraft
+    var saveAsDraftEnabled = true
     fun saveAsDraft() {
+        if (!saveAsDraftEnabled) return
         val saveArticle = uiState.value.generateArticle()
         "lastSaveDraft != saveArticle = ${lastSaveDraft != saveArticle}".logd("update_test")
         if (lastSaveDraft == null || lastSaveDraft != saveArticle) {
@@ -180,7 +186,8 @@ class EditViewModel : BaseViewModel() {
         val oldTags = uiState.value.tags
         if (tag in oldTags
             || tag.id in oldTags.map { it.id }
-            || tag.name in oldTags.map { it.name }) {
+            || tag.name in oldTags.map { it.name }
+        ) {
             return
         }
         _uiState.value = uiState.value.copy(
@@ -275,9 +282,10 @@ class EditViewModel : BaseViewModel() {
         )
     }
 
-    private val _deleteState: MutableStateFlow<NetworkResult<String>> = MutableStateFlow(NetworkResult.None())
+    private val _deleteState: MutableStateFlow<NetworkResult<String>> =
+        MutableStateFlow(NetworkResult.None())
     val deleteState: StateFlow<NetworkResult<String>> get() = _deleteState
-    fun deletePublishedArticle(onDeleteSuccess: () -> Unit) {
+    fun deletePublishedArticle() {
         val article = uiState.value.theArticle ?: return
         fly(FLY_DELETE_ARTICLE) {
             request(
@@ -286,8 +294,7 @@ class EditViewModel : BaseViewModel() {
                     articleRepository.deleteArticleById(article.id)
                 },
                 onSuccess = { _, msg ->
-                    onDeleteSuccess()
-                    _deleteState.value = NetworkResult.Success(msg)
+                    _deleteState.value = NetworkResult.Success(msg = msg)
                 },
                 onFailed = {
                     _deleteState.value = NetworkResult.Error(it)

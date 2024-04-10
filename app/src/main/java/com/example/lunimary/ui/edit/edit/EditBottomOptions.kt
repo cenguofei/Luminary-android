@@ -44,6 +44,7 @@ fun EditBottomOptions(
     viewModel: EditViewModel,
     onPublishedArticleDelete: () -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
+    onBack: () -> Unit,
 ) {
     val context = LocalContext.current
     Column(
@@ -70,6 +71,7 @@ fun EditBottomOptions(
                 viewModel = viewModel,
                 onPublishedArticleDelete = onPublishedArticleDelete,
                 onShowSnackbar = onShowSnackbar,
+                onBack = onBack
             )
             LinearButton(
                 modifier = Modifier
@@ -91,6 +93,7 @@ private fun EditOptions(
     showAddLinkDialog: MutableState<Boolean>,
     viewModel: EditViewModel,
     onPublishedArticleDelete: () -> Unit,
+    onBack: () -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
     val context = LocalContext.current
@@ -147,15 +150,15 @@ private fun EditOptions(
         onConfirmClick = {
             when (viewModel.uiState.value.editType) {
                 EditType.Edit -> {
-                    viewModel.deletePublishedArticle(onPublishedArticleDelete)
+                    viewModel.deletePublishedArticle()
                 }
 
                 EditType.New -> {
-
+                    viewModel.saveAsDraftEnabled = false ; onBack()
                 }
 
                 EditType.Draft -> {
-
+                    viewModel.deleteDraft() ; onBack()
                 }
             }
         },
@@ -185,6 +188,7 @@ private fun EditOptions(
                     } else {
                         onShowSnackbar("É¾³ý³É¹¦£¡", null)
                     }
+                    onPublishedArticleDelete()
                 }
             )
         }
