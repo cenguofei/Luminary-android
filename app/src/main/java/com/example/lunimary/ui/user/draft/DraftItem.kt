@@ -25,7 +25,7 @@ import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.models.Article
-import com.example.lunimary.ui.home.ArticleItem
+import com.example.lunimary.ui.common.ArticleItem
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

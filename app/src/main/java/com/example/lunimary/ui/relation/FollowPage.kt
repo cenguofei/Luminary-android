@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.design.LunimaryPagingContent
+import com.example.lunimary.design.nicepage.LunimaryPagingContent
 import com.example.lunimary.models.User
 import com.example.lunimary.models.ext.FollowInfo
 import com.example.lunimary.util.logi

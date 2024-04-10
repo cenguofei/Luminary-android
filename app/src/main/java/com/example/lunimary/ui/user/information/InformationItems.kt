@@ -12,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -22,12 +21,10 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.niceDateToDay
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LoadingWheel
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryDialog
 import com.example.lunimary.models.Sex
 import com.example.lunimary.models.User
 import com.example.lunimary.util.unknownErrorMsg
-import kotlinx.coroutines.launch
 
 @Composable
 fun ColumnScope.InformationItems(
@@ -38,7 +35,8 @@ fun ColumnScope.InformationItems(
     newUser: MutableState<User>,
     initialText: MutableState<Any>,
     editItemType: MutableState<EditItemType>,
-    showBottomDrawer: MutableState<Boolean>
+    showBottomDrawer: MutableState<Boolean>,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val save = remember { mutableStateOf(false) }
     val showDialog = remember { mutableStateOf(false) }
@@ -55,14 +53,6 @@ fun ColumnScope.InformationItems(
             onBack()
         }
     }
-    val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
-    val coroutine = rememberCoroutineScope()
-    fun showSnackbar(text: String) {
-        coroutine.launch {
-            snackbarHostState?.showSnackbar(message = text)
-        }
-    }
-
     Spacer(modifier = Modifier.height(headImageSize / 2))
 
     val modifierUsernameNotAllowed = stringResource(id = R.string.not_allowed_modifier_username)
@@ -70,7 +60,7 @@ fun ColumnScope.InformationItems(
         itemName = stringResource(id = R.string.username),
         itemContent = newUser.value.username,
         onClick = {
-            showSnackbar(modifierUsernameNotAllowed)
+            onShowSnackbar(modifierUsernameNotAllowed, null)
         }
     )
 
@@ -146,8 +136,13 @@ fun ColumnScope.InformationItems(
         }
 
         is NetworkResult.Error -> {
-            val msg = (informationViewModel.updateUserState.value as NetworkResult.Error).msg
-            showSnackbar(msg ?: unknownErrorMsg)
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    val msg = (informationViewModel.updateUserState.value as NetworkResult.Error).msg
+                    onShowSnackbar(msg ?: unknownErrorMsg, null)
+                }
+            )
         }
 
         is NetworkResult.Success -> {

@@ -31,7 +31,6 @@ import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.models.fileBaseUrl
 import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.logd
@@ -41,13 +40,11 @@ import github.leavesczy.matisse.MatisseContract
 import github.leavesczy.matisse.MediaResource
 import github.leavesczy.matisse.MediaStoreCaptureStrategy
 import github.leavesczy.matisse.MediaType
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun ArticleCover(
     editViewModel: EditViewModel,
-    coroutineScope: CoroutineScope
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val showImageSelector = remember { mutableStateOf(false) }
     val uploadSuccess = remember { mutableStateOf(false) }
@@ -76,10 +73,15 @@ fun ArticleCover(
             uploadSuccess.value = true
         }
         is NetworkResult.Error -> {
-            val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
-            coroutineScope.launch {
-                snackbarHostState?.showSnackbar(message = editViewModel.uploadCoverState.value.asError()?.msg.toString())
-            }
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    onShowSnackbar(
+                        editViewModel.uploadCoverState.value.asError()?.msg.toString(),
+                        null
+                    )
+                }
+            )
         }
         else -> { }
     }

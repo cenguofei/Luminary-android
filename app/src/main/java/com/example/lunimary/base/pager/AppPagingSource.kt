@@ -1,6 +1,5 @@
 package com.example.lunimary.base.pager
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.lunimary.models.responses.DEFAULT_PER_PAGE_COUNT

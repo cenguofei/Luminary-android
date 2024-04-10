@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.design.LinearButton
-import com.example.lunimary.design.ShowSnackbar
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.local.Tag
 import com.example.lunimary.ui.edit.EditType
@@ -33,7 +32,8 @@ fun BottomSheetContent(
     editViewModel: EditViewModel,
     coroutineScope: CoroutineScope,
     historyTags: State<List<Tag>?>,
-    onUpdateSuccess: (updated: Article) -> Unit
+    onUpdateSuccess: (updated: Article) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     Column {
         Row(
@@ -58,13 +58,14 @@ fun BottomSheetContent(
                 ChooseVisibleMode(editViewModel = editViewModel)
             }
             item {
-                ArticleCover(editViewModel = editViewModel, coroutineScope = coroutineScope)
+                ArticleCover(editViewModel = editViewModel, onShowSnackbar = onShowSnackbar)
             }
         }
         BottomButtons(
             editViewModel = editViewModel,
             reallyPublish = reallyPublish,
-            onUpdateSuccess = onUpdateSuccess
+            onUpdateSuccess = onUpdateSuccess,
+            onShowSnackbar = onShowSnackbar
         )
     }
 }
@@ -73,11 +74,12 @@ fun BottomSheetContent(
 private fun BottomButtons(
     editViewModel: EditViewModel,
     reallyPublish: () -> Unit,
-    onUpdateSuccess: (updated: Article) -> Unit
+    onUpdateSuccess: (updated: Article) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val showSnackbar = remember { mutableStateOf(false) }
     if (showSnackbar.value) {
-        ShowSnackbar(message = stringResource(id = R.string.auto_save_as_draft))
+        onShowSnackbar(stringResource(id = R.string.auto_save_as_draft), null)
     }
     Row(
         modifier = Modifier

@@ -23,7 +23,8 @@ import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 
 fun NavGraphBuilder.browseScreen(
-    appState: LunimaryAppState
+    appState: LunimaryAppState,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     composable(
         route = Screens.BrowseArticle.route
@@ -55,7 +56,8 @@ fun NavGraphBuilder.browseScreen(
             },
             navToEdit = { type, _ ->
                 appState.navToEdit(type, articleItem)
-            }
+            },
+            onShowSnackbar = onShowSnackbar
         )
         DisposableEffect(
             key1 = Unit,
@@ -76,7 +78,8 @@ fun BrowseScreen(
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
     onArticleDeleted: (Article) -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, Article) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val showEditContent = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -89,7 +92,8 @@ fun BrowseScreen(
             onLinkClick = onLinkClick,
             onUserClick = onUserClick,
             onArticleDeleted = onArticleDeleted,
-            navToEdit = navToEdit
+            navToEdit = navToEdit,
+            onShowSnackbar = onShowSnackbar
         )
         val commentText = remember { mutableStateOf(empty) }
         if (showEditContent.value) {

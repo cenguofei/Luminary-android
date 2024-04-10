@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -29,21 +29,21 @@ import com.example.lunimary.base.network.asError
 import com.example.lunimary.base.network.isError
 import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryToolbar
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.util.logd
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-fun NavGraphBuilder.settingsScreen(appState: LunimaryAppState, coroutineScope: CoroutineScope) {
+fun NavGraphBuilder.settingsScreen(
+    appState: LunimaryAppState,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
+) {
     composable(route = Screens.Settings.route) {
         SettingsScreen(
             appState = appState,
-            coroutineScope = coroutineScope,
-            darkThemeSettingState = appState.darkThemeSettingState
+            darkThemeSettingState = appState.darkThemeSettingState,
+            onShowSnackbar = onShowSnackbar
         )
     }
 }
@@ -51,13 +51,11 @@ fun NavGraphBuilder.settingsScreen(appState: LunimaryAppState, coroutineScope: C
 @Composable
 fun SettingsScreen(
     appState: LunimaryAppState,
-    coroutineScope: CoroutineScope,
     darkThemeSettingState: State<DarkThemeSetting>,
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
     val logoutState by appState.userViewModel.logoutState.observeAsState()
-    val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
     val showLoadingWheel = remember { mutableStateOf(false) }
-
     when (logoutState) {
         is NetworkResult.Loading -> {
             showLoadingWheel.value = true
@@ -66,8 +64,13 @@ fun SettingsScreen(
         is NetworkResult.None -> {}
         is NetworkResult.Success -> {
             showLoadingWheel.value = false
-            appState.userViewModel.reset()
-            appState.navToHome(Screens.Settings.route)
+            LaunchedEffect(
+                key1 = logoutState,
+                block = {
+                    appState.userViewModel.reset()
+                    appState.navToHome(Screens.Settings.route)
+                }
+            )
         }
 
         is NetworkResult.Error -> {
@@ -75,23 +78,13 @@ fun SettingsScreen(
             if (logoutState.isError()) {
                 logoutState.asError()?.msg.let {
                     it.logd()
-                    coroutineScope.launch {
-                        if (it != null) {
-                            snackbarHostState?.showSnackbar(
-                                message = it,
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                    }
+                    it?.let { onShowSnackbar(it, null) }
                 }
             }
         }
 
-        else -> {
-
-        }
+        else -> { }
     }
-
     LoadingDialog(show = showLoadingWheel.value)
     Column(
         modifier = Modifier

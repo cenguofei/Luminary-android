@@ -13,7 +13,6 @@ import com.example.lunimary.base.notLogin
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.util.logi
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -24,9 +23,7 @@ fun HomeContent(
     pagerState: PagerState,
     onItemClick: (PageItem<Article>) -> Unit,
     goToLogin: () -> Unit,
-    recommendViewModel: RecommendViewModel,
-    onShowSnackbar: suspend (msg: String, label: String?) -> Boolean,
-    coroutineScope: CoroutineScope
+    recommendViewModel: RecommendViewModel
 ) {
     val allArticles = recommendViewModel.allArticles.collectAsLazyPagingItems()
     val recommendArticles = recommendViewModel.recommendArticles.collectAsLazyPagingItems()
@@ -41,6 +38,7 @@ fun HomeContent(
             recommendViewModel.unregisterOnHaveNetwork("FriendsArticlePage")
         }
     }
+    val coroutineScope = rememberCoroutineScope()
     if (!pagerState.isScrollInProgress &&
         tabs[pagerState.currentPage] == HomeCategories.Following && notLogin()) {
         LaunchedEffect(

@@ -16,8 +16,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.lunimary.R
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.design.LunimaryStateContent
 import com.example.lunimary.design.LunimaryToolbar
+import com.example.lunimary.design.nicepage.LunimaryStateContent
 import com.example.lunimary.models.Article
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens

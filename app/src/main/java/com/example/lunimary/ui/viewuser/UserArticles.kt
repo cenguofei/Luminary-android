@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.design.LunimaryPagingContent
+import com.example.lunimary.design.nicepage.LunimaryPagingContent
 import com.example.lunimary.models.Article
-import com.example.lunimary.ui.home.ArticleItem
+import com.example.lunimary.ui.common.ArticleItem
 import java.util.UUID
 
 

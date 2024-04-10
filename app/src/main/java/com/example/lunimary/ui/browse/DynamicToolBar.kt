@@ -35,7 +35,8 @@ fun DynamicToolBar(
     browseViewModel: BrowseViewModel,
     onUserClick: (User) -> Unit,
     onArticleDeleted: (Article) -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, Article) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val article = uiState.article
     val firstVisibleIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
@@ -92,7 +93,8 @@ fun DynamicToolBar(
             uiState = uiState,
             browseViewModel = browseViewModel,
             onArticleDeleted = onArticleDeleted,
-            navToEdit = navToEdit
+            navToEdit = navToEdit,
+            onShowSnackbar = onShowSnackbar
         )
         Spacer(modifier = Modifier.width(16.dp))
     }

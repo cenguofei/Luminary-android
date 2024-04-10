@@ -22,8 +22,8 @@ import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.base.network.asSuccess
-import com.example.lunimary.design.LunimaryStateContent
 import com.example.lunimary.design.LunimaryToolbar
+import com.example.lunimary.design.nicepage.LunimaryStateContent
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.util.empty

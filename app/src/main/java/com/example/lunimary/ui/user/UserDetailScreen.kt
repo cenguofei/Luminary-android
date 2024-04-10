@@ -101,7 +101,7 @@ fun UserDetailScreen(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.width(12.dp))
             }
         }
         UserDetailContent(

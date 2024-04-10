@@ -22,16 +22,19 @@ import androidx.navigation.navArgument
 import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
-import com.example.lunimary.design.LocalSnackbarHostState
-import com.example.lunimary.design.LunimaryStateContent
 import com.example.lunimary.design.LunimaryToolbar
+import com.example.lunimary.design.nicepage.LunimaryStateContent
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-fun NavGraphBuilder.loginScreen(appState: LunimaryAppState, coroutineScope: CoroutineScope) {
+fun NavGraphBuilder.loginScreen(
+    appState: LunimaryAppState,
+    coroutineScope: CoroutineScope,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
+) {
     composable(
         Screens.Login.route,
         arguments = listOf(
@@ -62,7 +65,8 @@ fun NavGraphBuilder.loginScreen(appState: LunimaryAppState, coroutineScope: Coro
             },
             coroutineScope = coroutineScope,
             userViewModel = appState.userViewModel,
-            appState = appState
+            appState = appState,
+            onShowSnackbar = onShowSnackbar
         )
     }
 }
@@ -76,9 +80,9 @@ fun LoginScreen(
     coroutineScope: CoroutineScope,
     userViewModel: UserViewModel,
     appState: LunimaryAppState,
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
     val loginState by userViewModel.loginState.observeAsState()
-    val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
     val notConnected = stringResource(id = R.string.not_connected)
     LaunchedEffect(
         key1 = loginState,
@@ -97,7 +101,7 @@ fun LoginScreen(
                                     notConnected
                                 }
                             }
-                            snackbarHostState?.showSnackbar(message = message)
+                            onShowSnackbar(message, null)
                         }
                     }
                 }
@@ -127,13 +131,13 @@ fun LoginScreen(
             LoginOrRegisterScreenContent(
                 username = username,
                 password = password,
-                coroutineScope = coroutineScope,
                 done = { username, password ->
                     userViewModel.login(username, password)
                 },
                 type = stringResource(id = R.string.password_login),
                 buttonText = stringResource(id = R.string.login),
-                onNavToProtocol = appState::navToPrivacy
+                onNavToProtocol = appState::navToPrivacy,
+                onShowSnackbar = onShowSnackbar
             )
         }
     }

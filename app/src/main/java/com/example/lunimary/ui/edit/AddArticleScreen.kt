@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -26,13 +25,9 @@ import com.example.lunimary.base.network.asError
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.ChineseMarkdownWeb
-import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryDialog
-import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.myObserveAsState
-import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.Article
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
@@ -43,12 +38,13 @@ import com.example.lunimary.ui.edit.bottomsheet.BottomSheetContent
 import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 @Suppress("UNCHECKED_CAST")
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.addArticleScreen(
     appState: LunimaryAppState,
     coroutineScope: CoroutineScope,
-    onShowSnackbar: suspend (msg: String, label: String?) -> Boolean
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     composable(
         Screens.AddArticle.route,
@@ -60,7 +56,6 @@ fun NavGraphBuilder.addArticleScreen(
         }
         val editViewModel: EditViewModel = viewModel()
         FillArticleEffect(article = theArticle?.data, editViewModel = editViewModel, editType = editType)
-        val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
         val saveMessage = stringResource(id = R.string.auto_save_as_draft)
         val updateMessage = stringResource(id = R.string.has_updated_draft)
         val openDialog = remember { mutableStateOf(false) }
@@ -140,9 +135,7 @@ fun NavGraphBuilder.addArticleScreen(
                 if (!notLogin()) {
                     editViewModel.publish(theArticle = theArticle?.data)
                 } else {
-                    coroutineScope.launch {
-                        snackbarHostState?.showSnackbar("您当前为未登录状态，请登录后再进行文章发布！")
-                    }
+                    onShowSnackbar("您当前为未登录状态，请登录后再进行文章发布！", null)
                 }
             },
             editViewModel = editViewModel,
@@ -151,7 +144,8 @@ fun NavGraphBuilder.addArticleScreen(
                 appState.navToUser(if (theArticle == null) Screens.AddArticle.route else Screens.Drafts.route)
             },
             onNavToWeb = { appState.navToWeb(ChineseMarkdownWeb) },
-            onUpdateSuccess = { onUpdateSuccess(it, theArticle) }
+            onUpdateSuccess = { onUpdateSuccess(it, theArticle) },
+            onShowSnackbar = onShowSnackbar
         )
     }
 }
@@ -179,10 +173,10 @@ fun AddArticleScreen(
     coroutineScope: CoroutineScope,
     onFinish: () -> Unit,
     onNavToWeb: () -> Unit,
-    onUpdateSuccess: (updated: Article) -> Unit
+    onUpdateSuccess: (updated: Article) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val publishArticleState by editViewModel.publishArticleState.observeAsState()
-    val snackbar = LocalSnackbarHostState.current.snackbarHostState
     when (publishArticleState) {
         is NetworkResult.Loading -> {
             LoadingDialog(description = "上传中...")
@@ -193,7 +187,7 @@ fun AddArticleScreen(
             LaunchedEffect(
                 key1 = publishArticleState,
                 block = {
-                    coroutineScope.launch { snackbar?.showSnackbar(message = "上传成功") }
+                    onShowSnackbar("上传成功", null)
                 }
             )
         }
@@ -201,13 +195,7 @@ fun AddArticleScreen(
         is NetworkResult.Error -> {
             LaunchedEffect(
                 key1 = publishArticleState,
-                block = {
-                    coroutineScope.launch {
-                        snackbar?.showSnackbar(
-                            message = "上传失败:${publishArticleState.asError()?.msg}"
-                        )
-                    }
-                }
+                block = { onShowSnackbar("上传失败:${publishArticleState.asError()?.msg}", null) }
             )
         }
 
@@ -225,11 +213,8 @@ fun AddArticleScreen(
         editViewModel = editViewModel,
         coroutineScope = coroutineScope,
         onNavToWeb = onNavToWeb,
-        onShowMessage = {
-            coroutineScope.launch {
-                snackbar?.showSnackbar(message = it)
-            }
-        }
+        onShowMessage = { onShowSnackbar(it, null) },
+        onShowSnackbar = onShowSnackbar
     )
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     if (showBottomDrawer) {
@@ -243,7 +228,8 @@ fun AddArticleScreen(
                 editViewModel = editViewModel,
                 coroutineScope = coroutineScope,
                 historyTags = historyTags,
-                onUpdateSuccess = onUpdateSuccess
+                onUpdateSuccess = onUpdateSuccess,
+                onShowSnackbar = onShowSnackbar
             )
         }
     }
@@ -251,20 +237,4 @@ fun AddArticleScreen(
 
 private fun onUpdateSuccess(updated: Article, theArticle: PageItem<Article>?) {
     theArticle?.onDataChanged(updated)
-}
-
-@LightAndDarkPreview
-@Composable
-fun EditScreenPreview() {
-    LunimaryTheme {
-        LunimaryGradientBackground {
-            AddArticleScreen(
-                onBack = {},
-                onPublish = {},
-                editViewModel = viewModel(),
-                coroutineScope = rememberCoroutineScope(),
-                 {}, {}, {}
-            )
-        }
-    }
 }

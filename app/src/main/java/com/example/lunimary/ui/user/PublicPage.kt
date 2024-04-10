@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.design.LunimaryPagingContent
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
+import com.example.lunimary.design.nicepage.LunimaryPagingContent
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.local.articleDao
+import com.example.lunimary.ui.common.ArticleItem
 import com.example.lunimary.ui.edit.EditType
-import com.example.lunimary.ui.home.ArticleItem
 import com.example.lunimary.ui.user.draft.DraftItem
 
 

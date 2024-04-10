@@ -1,4 +1,4 @@
-package com.example.lunimary.ui.home
+package com.example.lunimary.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,21 +45,6 @@ import com.example.lunimary.design.Tag
 import com.example.lunimary.design.tagColors
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.fileBaseUrl
-
-data class ArticleItemContainerColor(
-    val visitedColor: Color,
-    val normalColor: Color
-) {
-    companion object {
-        val Default: ArticleItemContainerColor
-            @Composable get() = ArticleItemContainerColor(
-                visitedColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                normalColor = /*if (isSystemInDarkTheme()) MaterialTheme.colorScheme.secondaryContainer.copy(
-                    alpha = 0.15f
-                ) else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)*/ MaterialTheme.colorScheme.surface
-            )
-    }
-}
 
 @Composable
 fun ArticleItem(

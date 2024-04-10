@@ -20,7 +20,6 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LightAndDarkPreview
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryGradientBackground
 import com.example.lunimary.design.theme.LunimaryTheme
 import com.example.lunimary.models.fileBaseUrl
@@ -44,7 +43,8 @@ fun EditPage(
     onPreviewClick: () -> Unit,
     coroutineScope: CoroutineScope,
     onNavToWeb: () -> Unit,
-    onShowMessage: (String) -> Unit
+    onShowMessage: (String) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val context = LocalContext.current
     val bodyView = remember { LayoutInflater.from(context).inflate(R.layout.body_edit_text, null) }
@@ -85,9 +85,11 @@ fun EditPage(
             )
         }
         is NetworkResult.Error -> {
-            val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
             coroutineScope.launch {
-                snackbarHostState?.showSnackbar(message = fileViewModel.uploadState.value.asError()?.msg.toString())
+                onShowSnackbar(
+                    fileViewModel.uploadState.value.asError()?.msg.toString(),
+                    null
+                )
             }
         }
         else -> { }
@@ -164,7 +166,8 @@ fun EditPagePreview() {
                 onPreviewClick = {},
                 coroutineScope = rememberCoroutineScope(),
                 onNavToWeb = {},
-                onShowMessage = {}
+                onShowMessage = {},
+                onShowSnackbar = {_,_ ->}
             )
         }
     }

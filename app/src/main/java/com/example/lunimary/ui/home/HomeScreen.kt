@@ -14,7 +14,6 @@ import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.models.Article
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
-import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -25,8 +24,6 @@ fun HomeScreen(
     onLoginClick: () -> Unit,
     appState: LunimaryAppState,
     onItemClick: (PageItem<Article>) -> Unit,
-    onShowSnackbar: suspend (msg: String, label: String?) -> Boolean,
-    coroutineScope: CoroutineScope
 ) {
     val tabs = remember {
         listOf(HomeCategories.Recommend, HomeCategories.All, HomeCategories.Following)
@@ -59,8 +56,6 @@ fun HomeScreen(
             onItemClick = onItemClick,
             goToLogin = { appState.navToLogin(true) },
             recommendViewModel = recommendViewModel,
-            onShowSnackbar = onShowSnackbar,
-            coroutineScope = coroutineScope
         )
     }
 }

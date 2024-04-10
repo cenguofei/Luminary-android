@@ -30,7 +30,8 @@ fun BrowseScreenContent(
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
     onArticleDeleted: (Article) -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, Article) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val uiState by browseViewModel.uiState.observeAsState()
     val article = uiState!!.article
@@ -46,7 +47,8 @@ fun BrowseScreenContent(
             browseViewModel = browseViewModel,
             onUserClick = onUserClick,
             onArticleDeleted = onArticleDeleted,
-            navToEdit = navToEdit
+            navToEdit = navToEdit,
+            onShowSnackbar = onShowSnackbar
         )
         LazyColumn(
             modifier = Modifier

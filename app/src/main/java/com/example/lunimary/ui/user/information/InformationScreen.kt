@@ -30,7 +30,6 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.BackButton
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
@@ -41,10 +40,10 @@ import github.leavesczy.matisse.MatisseContract
 import github.leavesczy.matisse.MediaResource
 import github.leavesczy.matisse.MediaStoreCaptureStrategy
 import github.leavesczy.matisse.MediaType
-import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.informationScreen(
-    appState: LunimaryAppState
+    appState: LunimaryAppState,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     composable(
         route = Screens.Information.route
@@ -54,7 +53,8 @@ fun NavGraphBuilder.informationScreen(
         InformationScreen(
             onBack = appState::popBackStack,
             informationViewModel = informationViewModel,
-            user = user.value!!
+            user = user.value!!,
+            onShowSnackbar = onShowSnackbar
         )
     }
 }
@@ -65,7 +65,8 @@ val coverHeight = 200.dp
 fun InformationScreen(
     user: User,
     informationViewModel: InformationViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollableState = rememberScrollableState(consumeScrollDelta = { it })
@@ -103,10 +104,13 @@ fun InformationScreen(
         }
 
         is NetworkResult.Error -> {
-            val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
-            coroutineScope.launch {
-                snackbarHostState?.showSnackbar(message = informationViewModel.headUploadState.value.asError()?.msg.toString())
-            }
+            LaunchedEffect(
+                key1 = informationViewModel.headUploadState.value,
+                block = {
+                    val message = informationViewModel.headUploadState.value.asError()?.msg.toString()
+                    onShowSnackbar(message, null)
+                }
+            )
         }
 
         else -> {}
@@ -129,10 +133,13 @@ fun InformationScreen(
         }
 
         is NetworkResult.Error -> {
-            val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
-            coroutineScope.launch {
-                snackbarHostState?.showSnackbar(message = informationViewModel.headUploadState.value.asError()?.msg.toString())
-            }
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    val msg = informationViewModel.headUploadState.value.asError()?.msg.toString()
+                    onShowSnackbar(msg, null)
+                }
+            )
         }
 
         else -> {}
@@ -180,7 +187,8 @@ fun InformationScreen(
                 newUser = newUser,
                 initialText = initialText,
                 editItemType = editItemType,
-                showBottomDrawer = showBottomDrawer
+                showBottomDrawer = showBottomDrawer,
+                onShowSnackbar = onShowSnackbar
             )
         }
 

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -20,20 +19,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.design.LinearButton
-import com.example.lunimary.design.LocalSnackbarHostState
 import com.example.lunimary.design.LunimaryDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginOrRegisterScreenContent(
     username: MutableState<String>,
     password: MutableState<String>,
-    coroutineScope: CoroutineScope,
     type: String,
     buttonText: String,
     done: (username: String, password: String) -> Unit,
-    onNavToProtocol: () -> Unit
+    onNavToProtocol: () -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -59,7 +55,6 @@ fun LoginOrRegisterScreenContent(
             text = stringResource(id = R.string.agree_privacy_before_login_or_register),
             openDialog = openDialog
         )
-        val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
         val message = stringResource(id = R.string.pwd_or_username_cannot_empty)
         LinearButton(
             modifier = Modifier
@@ -69,12 +64,7 @@ fun LoginOrRegisterScreenContent(
                 .height(50.dp),
             onClick = {
                 if (username.value.isEmpty() || password.value.isEmpty()) {
-                    coroutineScope.launch {
-                        snackbarHostState?.showSnackbar(
-                            message = message,
-                            duration = SnackbarDuration.Long
-                        )
-                    }
+                    onShowSnackbar(message, null)
                     return@LinearButton
                 }
                 if (agreement.value) {

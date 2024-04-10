@@ -3,7 +3,6 @@ package com.example.lunimary.ui.login
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,23 +17,23 @@ import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.base.network.asSuccess
-import com.example.lunimary.design.LocalSnackbarHostState
-import com.example.lunimary.design.LunimaryStateContent
 import com.example.lunimary.design.LunimaryToolbar
+import com.example.lunimary.design.nicepage.LunimaryStateContent
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.registerScreen(
     appState: LunimaryAppState,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     composable(route = Screens.Register.route) {
         RegisterScreen(
             appState = appState,
             onBack = { appState.popBackStack() },
             coroutineScope = coroutineScope,
+            onShowSnackbar = onShowSnackbar
         )
     }
 }
@@ -43,40 +42,37 @@ fun NavGraphBuilder.registerScreen(
 fun RegisterScreen(
     appState: LunimaryAppState,
     onBack: () -> Unit,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val userViewModel = appState.userViewModel
     val registerState by userViewModel.registerState.observeAsState()
-    val snackbarHostState = LocalSnackbarHostState.current.snackbarHostState
-    when(registerState) {
-        is NetworkResult.Loading -> { }
+    when (registerState) {
+        is NetworkResult.Loading -> {}
         is NetworkResult.Success -> {
             LaunchedEffect(
                 key1 = registerState,
                 block = {
                     appState.navToLogin()
                     userViewModel.resetRegisterState()
+                    val data = registerState.asSuccess()
+                    data?.msg?.let {
+                        onShowSnackbar(it, null)
+                    }
                 }
             )
-            coroutineScope.launch {
-                val data = registerState.asSuccess()
-                data?.msg?.let {
-                    snackbarHostState?.showSnackbar(
-                        message = it,
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
         }
+
         is NetworkResult.Error -> {
-            coroutineScope.launch {
-                val msg = registerState.asError()?.msg
-                snackbarHostState?.showSnackbar(
-                    message = msg.toString(),
-                    duration = SnackbarDuration.Short
-                )
-            }
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    val msg = registerState.asError()?.msg
+                    onShowSnackbar(msg.toString(), null)
+                }
+            )
         }
+
         else -> {}
     }
     LunimaryStateContent(openLoadingWheelDialog = registerState is NetworkResult.Loading) {
@@ -91,13 +87,13 @@ fun RegisterScreen(
             LoginOrRegisterScreenContent(
                 username = username,
                 password = password,
-                coroutineScope = coroutineScope,
+                type = stringResource(id = R.string.register),
+                buttonText = stringResource(id = R.string.register),
                 done = { username, password ->
                     userViewModel.register(username, password)
                 },
-                type = stringResource(id = R.string.register),
-                buttonText = stringResource(id = R.string.register),
-                onNavToProtocol = appState::navToPrivacy
+                onNavToProtocol = appState::navToPrivacy,
+                onShowSnackbar = onShowSnackbar
             )
         }
     }

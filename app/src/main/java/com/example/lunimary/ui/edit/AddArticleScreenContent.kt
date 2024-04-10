@@ -34,7 +34,8 @@ fun AddArticleScreenContent(
     editViewModel: EditViewModel,
     coroutineScope: CoroutineScope,
     onNavToWeb: () -> Unit,
-    onShowMessage: (String) -> Unit
+    onShowMessage: (String) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val pagers = listOf(stringResource(id = R.string.edit), stringResource(id = R.string.preview))
     val pagerState = rememberPagerState { pagers.size }
@@ -86,7 +87,8 @@ fun AddArticleScreenContent(
                     },
                     coroutineScope = coroutineScope,
                     onNavToWeb = onNavToWeb,
-                    onShowMessage = onShowMessage
+                    onShowMessage = onShowMessage,
+                    onShowSnackbar = onShowSnackbar
                 )
             } else {
                 PreviewPage(

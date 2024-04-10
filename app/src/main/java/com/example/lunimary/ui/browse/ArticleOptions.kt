@@ -29,7 +29,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lunimary.R
 import com.example.lunimary.base.DataState
 import com.example.lunimary.design.LunimaryDialog
-import com.example.lunimary.design.ShowSnackbar
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.CascadeMenuItem
 import com.example.lunimary.design.cascade.cascadeMenu
@@ -43,7 +42,8 @@ fun ArticleOptions(
     uiState: UiState,
     browseViewModel: BrowseViewModel,
     onArticleDeleted: (Article) -> Unit,
-    navToEdit: (EditType, Article) -> Unit
+    navToEdit: (EditType, Article) -> Unit,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val shareArticle = remember { mutableStateOf(false) }
     val appName = stringResource(id = R.string.app_name)
@@ -126,17 +126,24 @@ fun ArticleOptions(
     val state = browseViewModel.updateArticleState.collectAsStateWithLifecycle()
     when(state.value) {
         is DataState.Success -> {
-            ShowSnackbar(message = (state.value as DataState.Success).message)
             if (browseViewModel.uiState.value!!.articleDeleted) {
                 LaunchedEffect(
                     key1 = Unit,
-                    block = { onArticleDeleted(uiState.article) }
+                    block = {
+                        onShowSnackbar((state.value as DataState.Success).message, null)
+                        onArticleDeleted(uiState.article)
+                    }
                 )
             }
         }
 
         is DataState.Failed -> {
-            ShowSnackbar(message = (state.value as DataState.Failed).message)
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    onShowSnackbar((state.value as DataState.Failed).message, null)
+                }
+            )
         }
 
         is DataState.None -> {}
