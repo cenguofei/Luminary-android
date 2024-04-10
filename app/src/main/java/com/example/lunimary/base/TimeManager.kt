@@ -42,6 +42,10 @@ object TimeManager {
         val differenceMillis = currentTime - timestamp
 
         val minutes = TimeUnit.MILLISECONDS.toMinutes(differenceMillis)
+        if (minutes == 0L) {
+            return "现在"
+        }
+
         if (minutes <= 60) {
             return "$minutes 分钟前"
         }

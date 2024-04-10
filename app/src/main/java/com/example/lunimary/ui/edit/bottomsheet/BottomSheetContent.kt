@@ -52,7 +52,7 @@ fun BottomSheetContent(
             .weight(1f)
             .padding(horizontal = 9.dp)) {
             item {
-                AddArticleTags(editViewModel = editViewModel, historyTags = historyTags)
+                ArticleTags(editViewModel = editViewModel, historyTags = historyTags)
             }
             item {
                 ChooseVisibleMode(editViewModel = editViewModel)

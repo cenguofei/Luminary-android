@@ -211,7 +211,6 @@ fun AddArticleScreen(
         onBack = onBack,
         onPublish = { showBottomDrawer = true },
         editViewModel = editViewModel,
-        coroutineScope = coroutineScope,
         onNavToWeb = onNavToWeb,
         onShowMessage = { onShowSnackbar(it, null) },
         onShowSnackbar = onShowSnackbar

@@ -23,7 +23,6 @@ import com.example.lunimary.design.LunimaryDialog
 import com.example.lunimary.design.LunimaryToolbar
 import com.example.lunimary.ui.edit.edit.EditPage
 import com.example.lunimary.ui.edit.preview.PreviewPage
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -32,7 +31,6 @@ fun AddArticleScreenContent(
     onBack: () -> Unit,
     onPublish: () -> Unit,
     editViewModel: EditViewModel,
-    coroutineScope: CoroutineScope,
     onNavToWeb: () -> Unit,
     onShowMessage: (String) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit
@@ -85,7 +83,6 @@ fun AddArticleScreenContent(
                             pagerState.scrollToPage(PREVIEW_PAGE)
                         }
                     },
-                    coroutineScope = coroutineScope,
                     onNavToWeb = onNavToWeb,
                     onShowMessage = onShowMessage,
                     onShowSnackbar = onShowSnackbar

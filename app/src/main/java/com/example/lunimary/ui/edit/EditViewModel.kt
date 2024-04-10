@@ -176,6 +176,11 @@ class EditViewModel : BaseViewModel() {
 
     fun addHistoryTagToArticle(tag: Tag) {
         val oldTags = uiState.value.tags
+        if (tag in oldTags
+            || tag.id in oldTags.map { it.id }
+            || tag.name in oldTags.map { it.name }) {
+            return
+        }
         _uiState.value = uiState.value.copy(
             tags = oldTags + tag,
         )
@@ -259,6 +264,13 @@ class EditViewModel : BaseViewModel() {
                 onFinish = { land(FLY_UPLOAD_FILE) }
             )
         }
+    }
+
+    fun removeAddedTag(tag: Tag) {
+        val oldTags = uiState.value.tags
+        _uiState.value = uiState.value.copy(
+            tags = oldTags.filter { it.id != tag.id }
+        )
     }
 
     private fun clear() {

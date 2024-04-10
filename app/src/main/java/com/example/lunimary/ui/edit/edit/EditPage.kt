@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -32,8 +31,6 @@ import github.leavesczy.matisse.MatisseContract
 import github.leavesczy.matisse.MediaResource
 import github.leavesczy.matisse.MediaStoreCaptureStrategy
 import github.leavesczy.matisse.MediaType
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 @SuppressLint("InflateParams")
@@ -41,7 +38,6 @@ import kotlinx.coroutines.launch
 fun EditPage(
     viewModel: EditViewModel,
     onPreviewClick: () -> Unit,
-    coroutineScope: CoroutineScope,
     onNavToWeb: () -> Unit,
     onShowMessage: (String) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit
@@ -49,7 +45,8 @@ fun EditPage(
     val context = LocalContext.current
     val bodyView = remember { LayoutInflater.from(context).inflate(R.layout.body_edit_text, null) }
     val bodyEditText = remember { bodyView.findViewById<EditText>(R.id.body_markdown_edit) }
-    val titleView = remember { LayoutInflater.from(context).inflate(R.layout.title_edit_text, null) }
+    val titleView =
+        remember { LayoutInflater.from(context).inflate(R.layout.title_edit_text, null) }
     val titleEditView = remember { titleView.findViewById<EditText>(R.id.title_edit) }
 
     val fileViewModel: FileViewModel = viewModel()
@@ -68,15 +65,17 @@ fun EditPage(
             fileViewModel.updateShowImageSelector(false)
         }
     )
-    when(fileViewModel.uploadState.value) {
+    when (fileViewModel.uploadState.value) {
         is NetworkResult.Loading -> {
             LoadingDialog(description = stringResource(id = R.string.uploading))
         }
+
         is NetworkResult.Success -> {
             LaunchedEffect(
                 key1 = fileViewModel.uploadState.value,
                 block = {
-                    val url = (fileViewModel.uploadState.value as NetworkResult.Success).data?.filenames?.firstOrNull()
+                    val url =
+                        (fileViewModel.uploadState.value as NetworkResult.Success).data?.filenames?.firstOrNull()
                     if (url != null) {
                         bodyEditText.insertRow("![Lunimary-Image](${fileBaseUrl + url})")
                     }
@@ -84,15 +83,15 @@ fun EditPage(
                 }
             )
         }
+
         is NetworkResult.Error -> {
-            coroutineScope.launch {
-                onShowSnackbar(
-                    fileViewModel.uploadState.value.asError()?.msg.toString(),
-                    null
-                )
-            }
+            onShowSnackbar(
+                fileViewModel.uploadState.value.asError()?.msg.toString(),
+                null
+            )
         }
-        else -> { }
+
+        else -> {}
     }
     LaunchedEffect(
         key1 = fileViewModel.showImageSelector.value,
@@ -164,10 +163,9 @@ fun EditPagePreview() {
             EditPage(
                 viewModel = viewModel(),
                 onPreviewClick = {},
-                coroutineScope = rememberCoroutineScope(),
                 onNavToWeb = {},
                 onShowMessage = {},
-                onShowSnackbar = {_,_ ->}
+                onShowSnackbar = { _, _ -> }
             )
         }
     }
