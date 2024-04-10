@@ -105,7 +105,9 @@ fun <T : Any> LunimaryPagingContent(
                 if (!state.isRefreshing) {
                     items(items.itemCount, key = key) { index ->
                         items[index]?.let { item ->
-                            itemContent(index, item)
+                            if (!item.deleted) {
+                                itemContent(index, item)
+                            }
                         }
                     }
                 }

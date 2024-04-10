@@ -86,7 +86,7 @@ fun BrowseScreenContent(
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
-                Column(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
                     BodyContent(
                         article = article,
                         onBack = onBack,

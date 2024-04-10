@@ -1,6 +1,5 @@
 package com.example.lunimary.ui.browse
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,17 +18,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
-import com.example.lunimary.base.mmkv.DarkThemeSetting
-import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.design.LunimaryMarkdown
 import com.example.lunimary.design.LunimaryWebView
 import com.example.lunimary.models.Article
 import com.kevinnzou.web.rememberWebViewState
-import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun BodyContent(
@@ -40,25 +35,7 @@ fun BodyContent(
     browseViewModel: BrowseViewModel
 ) {
     if (article.isLunimaryStation) {
-        val systemDarkMode = isSystemInDarkTheme()
-        MarkdownText(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            markdown = article.body,
-            linkColor = when {
-                SettingMMKV.userHasSetTheme -> {
-                    if (SettingMMKV.darkThemeSetting == DarkThemeSetting.DarkMode) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        Color.Blue
-                    }
-                }
-
-                systemDarkMode -> MaterialTheme.colorScheme.primary
-                else -> Color.Blue
-            },
-            style = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
-//                    onLinkClicked = onLinkClick
-        )
+        LunimaryMarkdown(markdown = article.body)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -85,7 +62,9 @@ fun BodyContent(
         )
         if (state.isLoading) {
             Box(Modifier.fillMaxWidth()) {
-                Box(modifier = Modifier.size(40.dp).align(Alignment.Center)) {
+                Box(modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.Center)) {
                     CircularProgressIndicator(modifier = Modifier.fillMaxSize())
                 }
             }

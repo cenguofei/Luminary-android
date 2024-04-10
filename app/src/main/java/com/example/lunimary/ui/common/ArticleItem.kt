@@ -69,10 +69,12 @@ fun ArticleItem(
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .weight(1f)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .weight(1f)
+                ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Title(text = article.title, modifier = Modifier)
                 }
@@ -236,11 +238,42 @@ private fun Content(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = content,
+        text = markdownToPlainText(content),
         modifier = modifier,
         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
         style = MaterialTheme.typography.bodyLarge,
         maxLines = 3,
         overflow = TextOverflow.Ellipsis
     )
+}
+
+fun markdownToPlainText(markdownText: String): String {
+    return try {
+        val boldPattern = "\\*\\*(.*?)\\*\\*".toRegex()
+        val italicPattern = "_([^_]+)_".toRegex()
+        val codePattern = "`([^`]+)`".toRegex()
+        val linkPattern = "\\[([^\\]]+)\\]\\([^)]+\\)".toRegex()
+        val headingPattern = "#+\\s*(.*)".toRegex()
+        val quotePattern = ">\\s*(.*)".toRegex()
+        val listPattern = "([\\-*+])\\s*(.*)".toRegex()
+
+        val needLength = 3 * 25
+        val markdown =
+            if (markdownText.length <= needLength) markdownText else markdownText.substring(0, needLength + 1)
+
+        var plainText = markdown
+
+        plainText = boldPattern.replace(plainText, "$1")
+        plainText = italicPattern.replace(plainText, "$1")
+        plainText = codePattern.replace(plainText, "$1")
+        plainText = linkPattern.replace(plainText, "$1")
+        plainText = headingPattern.replace(plainText, "$1")
+        plainText = quotePattern.replace(plainText, "$1")
+        plainText = listPattern.replace(plainText, "$2")
+
+        plainText
+    } catch (e: Exception) {
+        e.printStackTrace()
+        markdownText
+    }
 }
