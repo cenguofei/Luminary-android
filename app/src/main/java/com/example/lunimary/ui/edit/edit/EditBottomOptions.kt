@@ -125,7 +125,9 @@ private fun EditOptions(
                         }
 
                         EditOption.Delete -> {
-                            showDeleteDialog.value = true
+                            if (viewModel.uiState.value.canSaveAsDraft) {
+                                showDeleteDialog.value = true
+                            }
                         }
                     }
                 }

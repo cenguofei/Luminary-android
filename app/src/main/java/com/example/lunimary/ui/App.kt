@@ -17,7 +17,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -28,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import com.example.lunimary.R
 import com.example.lunimary.base.UserState
-import com.example.lunimary.design.LocalNavNavController
 import com.example.lunimary.models.User
 import com.example.lunimary.ui.browse.browseScreen
 import com.example.lunimary.ui.edit.addArticleScreen
@@ -73,25 +71,21 @@ fun LunimaryApp(
                     ),
                 ),
         ) {
-            CompositionLocalProvider(
-                LocalNavNavController provides appState.navController
-            ) {
-                val coroutineScope = rememberCoroutineScope()
-                LunimaryNavHost(
-                    appState = appState,
-                    startScreen = startScreen,
-                    onShowSnackbar = { message, action ->
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = action,
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                    },
-                    coroutineScope = coroutineScope
-                )
-            }
+            val coroutineScope = rememberCoroutineScope()
+            LunimaryNavHost(
+                appState = appState,
+                startScreen = startScreen,
+                onShowSnackbar = { message, action ->
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = message,
+                            actionLabel = action,
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                },
+                coroutineScope = coroutineScope
+            )
         }
     }
 }
