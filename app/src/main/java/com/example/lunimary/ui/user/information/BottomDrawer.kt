@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import com.example.lunimary.base.niceDateToDay
 import com.example.lunimary.base.niceDateUtilDayToLong
-import com.example.lunimary.models.User
-import com.example.lunimary.models.byText
+import com.example.lunimary.model.User
+import com.example.lunimary.model.byText
 
 @Composable
 fun BottomDrawer(

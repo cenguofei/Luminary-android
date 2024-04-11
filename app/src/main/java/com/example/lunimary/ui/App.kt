@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import com.example.lunimary.R
 import com.example.lunimary.base.UserState
-import com.example.lunimary.models.User
+import com.example.lunimary.model.User
 import com.example.lunimary.ui.browse.browseScreen
 import com.example.lunimary.ui.edit.addArticleScreen
 import com.example.lunimary.ui.login.loginScreen
@@ -117,7 +117,6 @@ private fun LunimaryNavHost(
         )
         registerScreen(
             appState = appState,
-            coroutineScope = coroutineScope,
             onShowSnackbar = onShowSnackbar
         )
         addArticleScreen(

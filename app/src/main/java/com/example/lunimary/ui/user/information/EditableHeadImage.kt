@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
-import com.example.lunimary.design.UserHeadImage
+import com.example.lunimary.design.components.UserHeadImage
 
 @Composable
 fun EditableHeadImage(

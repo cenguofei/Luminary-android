@@ -36,8 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
-import com.example.lunimary.design.Tag
-import com.example.lunimary.models.source.local.Tag
+import com.example.lunimary.design.components.Tag
+import com.example.lunimary.model.source.local.Tag
 import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.empty
 

@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.lunimary.R
-import com.example.lunimary.design.SmallButton
+import com.example.lunimary.design.components.SmallButton
 import com.example.lunimary.util.empty
 
 @Composable

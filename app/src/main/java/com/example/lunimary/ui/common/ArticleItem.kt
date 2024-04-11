@@ -41,10 +41,10 @@ import coil.compose.AsyncImage
 import com.example.lunimary.R
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.design.Tag
-import com.example.lunimary.design.tagColors
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.fileBaseUrl
+import com.example.lunimary.design.components.Tag
+import com.example.lunimary.design.components.tagColors
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.fileBaseUrl
 
 @Composable
 fun ArticleItem(
@@ -186,7 +186,7 @@ fun Labels(
     LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         itemsIndexed(tagWithColor) { _, item ->
             Tag(
-                tag = com.example.lunimary.models.source.local.Tag(
+                tag = com.example.lunimary.model.source.local.Tag(
                     name = item.first,
                     color = item.second.toArgb()
                 ),

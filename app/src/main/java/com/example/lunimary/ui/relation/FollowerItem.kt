@@ -38,11 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
-import com.example.lunimary.design.UserHeadImage
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
-import com.example.lunimary.models.User
-import com.example.lunimary.models.ext.FollowersInfo
+import com.example.lunimary.design.components.UserHeadImage
+import com.example.lunimary.model.User
+import com.example.lunimary.model.ext.FollowersInfo
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

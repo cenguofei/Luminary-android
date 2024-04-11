@@ -37,7 +37,7 @@ fun NavGraphBuilder.topLevelScreens(
 }
 
 @Composable
-fun TopLevelScreens(
+private fun TopLevelScreens(
     appState: LunimaryAppState,
 ) {
     val selectedBottomTab = appState.selectedBottomTab

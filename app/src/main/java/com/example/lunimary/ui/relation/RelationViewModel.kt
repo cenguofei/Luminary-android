@@ -5,10 +5,10 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.pager.pagerFlow
-import com.example.lunimary.models.source.remote.paging.MyFollowersSource
-import com.example.lunimary.models.source.remote.paging.MyFollowingsSource
-import com.example.lunimary.models.source.remote.paging.MyFriendsSource
-import com.example.lunimary.models.source.remote.repository.FriendRepository
+import com.example.lunimary.model.source.remote.paging.MyFollowersSource
+import com.example.lunimary.model.source.remote.paging.MyFollowingsSource
+import com.example.lunimary.model.source.remote.paging.MyFriendsSource
+import com.example.lunimary.model.source.remote.repository.FriendRepository
 
 class RelationViewModel : BaseViewModel() {
     private val friendRepository = FriendRepository()

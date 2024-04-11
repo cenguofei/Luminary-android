@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.design.LunimaryGradientBackground
-import com.example.lunimary.design.UserHeadImage
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.User
+import com.example.lunimary.design.background.LunimaryGradientBackground
+import com.example.lunimary.design.components.UserHeadImage
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.edit.EditType
 

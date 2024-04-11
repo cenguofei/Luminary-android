@@ -13,19 +13,19 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.Comment
-import com.example.lunimary.models.User
-import com.example.lunimary.models.ViewDurationTemp
-import com.example.lunimary.models.VisibleMode
-import com.example.lunimary.models.ext.CommentsWithUser
-import com.example.lunimary.models.source.remote.repository.ArticleRepository
-import com.example.lunimary.models.source.remote.repository.CollectRepository
-import com.example.lunimary.models.source.remote.repository.CommentRepository
-import com.example.lunimary.models.source.remote.repository.FriendRepository
-import com.example.lunimary.models.source.remote.repository.LikeRepository
-import com.example.lunimary.models.source.remote.repository.RecordViewDurationRepository
-import com.example.lunimary.models.source.remote.repository.UserRepository
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.Comment
+import com.example.lunimary.model.User
+import com.example.lunimary.model.ViewDurationTemp
+import com.example.lunimary.model.VisibleMode
+import com.example.lunimary.model.ext.CommentsWithUser
+import com.example.lunimary.model.source.remote.repository.ArticleRepository
+import com.example.lunimary.model.source.remote.repository.CollectRepository
+import com.example.lunimary.model.source.remote.repository.CommentRepository
+import com.example.lunimary.model.source.remote.repository.FriendRepository
+import com.example.lunimary.model.source.remote.repository.LikeRepository
+import com.example.lunimary.model.source.remote.repository.RecordViewDurationRepository
+import com.example.lunimary.model.source.remote.repository.UserRepository
 import com.example.lunimary.util.Default
 import com.example.lunimary.util.logi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,11 +40,8 @@ class BrowseViewModel : BaseViewModel() {
     private val commentRepository by lazy { CommentRepository() }
     private val recordRepository = RecordViewDurationRepository()
 
-    private var hasSetArticle = false
     private var beginTimestamp = Long.Default
     fun setArticle(article: Article) {
-        if (hasSetArticle) return
-        hasSetArticle = true
         _uiState.postValue(uiState.value?.copy(article = article))
         fetchUser(article.userId)
         existingFriendship(article.userId)

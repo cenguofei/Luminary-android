@@ -8,10 +8,10 @@ import androidx.paging.cachedIn
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.pager.AppPagingSource
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.User
-import com.example.lunimary.models.source.remote.paging.SearchArticleSource
-import com.example.lunimary.models.source.remote.paging.SearchUserSource
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.User
+import com.example.lunimary.model.source.remote.paging.SearchArticleSource
+import com.example.lunimary.model.source.remote.paging.SearchUserSource
 import com.example.lunimary.util.logi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow

@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
+import com.example.lunimary.model.Article
 import com.example.lunimary.ui.edit.EditType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

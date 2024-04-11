@@ -7,12 +7,12 @@ import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.UserState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
-import com.example.lunimary.models.UPLOAD_TYPE_USER_BACKGROUND
-import com.example.lunimary.models.UPLOAD_TYPE_USER_HEAD
-import com.example.lunimary.models.UploadData
-import com.example.lunimary.models.User
-import com.example.lunimary.models.source.remote.repository.FileRepository
-import com.example.lunimary.models.source.remote.repository.UserRepository
+import com.example.lunimary.model.UPLOAD_TYPE_USER_BACKGROUND
+import com.example.lunimary.model.UPLOAD_TYPE_USER_HEAD
+import com.example.lunimary.model.UploadData
+import com.example.lunimary.model.User
+import com.example.lunimary.model.source.remote.repository.FileRepository
+import com.example.lunimary.model.source.remote.repository.UserRepository
 
 class InformationViewModel : BaseViewModel() {
     private val fileRepository = FileRepository()

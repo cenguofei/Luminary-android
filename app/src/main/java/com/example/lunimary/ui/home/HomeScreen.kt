@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.base.UserState
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.User
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.User
 import com.example.lunimary.ui.LunimaryAppState
 
 @OptIn(ExperimentalFoundationApi::class)

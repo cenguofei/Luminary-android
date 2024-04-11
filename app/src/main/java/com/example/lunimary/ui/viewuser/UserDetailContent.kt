@@ -15,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.lunimary.design.UserHeadImage
-import com.example.lunimary.models.User
+import com.example.lunimary.design.components.UserHeadImage
+import com.example.lunimary.model.User
 import com.example.lunimary.ui.LunimaryAppState
 
 @Composable

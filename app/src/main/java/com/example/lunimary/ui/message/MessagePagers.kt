@@ -6,6 +6,9 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.lunimary.ui.message.pages.CommentMessagePage
+import com.example.lunimary.ui.message.pages.FollowMessagePage
+import com.example.lunimary.ui.message.pages.LikeMessagePage
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

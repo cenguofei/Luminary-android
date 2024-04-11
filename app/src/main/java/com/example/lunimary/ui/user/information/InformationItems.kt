@@ -19,11 +19,11 @@ import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.niceDateToDay
-import com.example.lunimary.design.LinearButton
-import com.example.lunimary.design.LoadingWheel
+import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LunimaryDialog
-import com.example.lunimary.models.Sex
-import com.example.lunimary.models.User
+import com.example.lunimary.design.components.LinearButton
+import com.example.lunimary.model.Sex
+import com.example.lunimary.model.User
 import com.example.lunimary.util.unknownErrorMsg
 
 @Composable
@@ -132,7 +132,7 @@ fun ColumnScope.InformationItems(
     Spacer(modifier = Modifier.height(32.dp))
     when (informationViewModel.updateUserState.value) {
         is NetworkResult.Loading -> {
-            LoadingWheel()
+            LoadingDialog()
         }
 
         is NetworkResult.Error -> {

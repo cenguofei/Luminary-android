@@ -26,9 +26,9 @@ import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.base.notLogin
-import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.LunimaryDialog
+import com.example.lunimary.design.components.LinearButton
 import com.example.lunimary.ui.common.FileViewModel
 import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.edit.EditViewModel

@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.ext.InteractionData
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.ext.InteractionData
 import com.example.lunimary.ui.edit.EditType
 
 @Composable

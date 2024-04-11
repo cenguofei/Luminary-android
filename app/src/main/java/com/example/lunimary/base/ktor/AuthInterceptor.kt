@@ -2,8 +2,7 @@ package com.example.lunimary.base.ktor
 
 import com.example.lunimary.base.UserState
 import com.example.lunimary.base.storage.refreshToken
-import com.example.lunimary.models.responses.DataResponse
-import com.example.lunimary.util.HttpConst
+import com.example.lunimary.model.responses.DataResponse
 import com.example.lunimary.util.logd
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -36,7 +35,7 @@ class AuthInterceptor: Interceptor {
                         .apply {
                             code(HttpStatusCode.Conflict.value)
                             message("error occur, refresh token failed.")
-                            header(HttpConst.NEED_LOGIN.first, HttpConst.NEED_LOGIN.second)
+                            header("need_login", "true")
                             protocol(Protocol.HTTP_1_1)
                             body(
                                 Json.encodeToString(DataResponse<Unit>())

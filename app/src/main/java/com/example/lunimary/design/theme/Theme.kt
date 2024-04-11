@@ -21,10 +21,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.example.lunimary.design.BackgroundTheme
-import com.example.lunimary.design.GradientColors
-import com.example.lunimary.design.LocalBackgroundTheme
-import com.example.lunimary.design.LocalGradientColors
+import com.example.lunimary.design.background.BackgroundTheme
+import com.example.lunimary.design.background.GradientColors
+import com.example.lunimary.design.background.LocalBackgroundTheme
+import com.example.lunimary.design.background.LocalGradientColors
 
 @VisibleForTesting
 val LightDefaultColorScheme = lightColorScheme(

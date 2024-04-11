@@ -7,7 +7,7 @@ import coil.Coil
 import coil.ImageLoader
 import com.example.lunimary.base.mmkv.boolean
 import com.example.lunimary.base.storage.MMKVKeys
-import com.example.lunimary.models.source.remote.repository.UserRepository
+import com.example.lunimary.model.source.remote.repository.UserRepository
 import com.example.lunimary.util.logv
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.CoroutineScope

@@ -1,7 +1,7 @@
 package com.example.lunimary.ui.common
 
 import com.example.lunimary.base.LRUCache
-import com.example.lunimary.models.User
+import com.example.lunimary.model.User
 
 object UserNavArguments : LRUCache<User>(capacity = 5)
 

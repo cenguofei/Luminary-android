@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.base.niceDateToSecond
-import com.example.lunimary.design.UserHeadImage
-import com.example.lunimary.models.ext.UserFriend
+import com.example.lunimary.design.components.UserHeadImage
+import com.example.lunimary.model.ext.UserFriend
 
 @Composable
 fun FollowItem(item: UserFriend) {

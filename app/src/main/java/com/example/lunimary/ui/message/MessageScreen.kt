@@ -16,7 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lunimary.design.LBHorizontalDivider
+import com.example.lunimary.design.components.LBHorizontalDivider
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
-import com.example.lunimary.design.LinearButton
 import com.example.lunimary.design.LunimaryDialog
+import com.example.lunimary.design.components.LinearButton
 
 @Composable
 fun LoginOrRegisterScreenContent(

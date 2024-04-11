@@ -31,8 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.lunimary.R
 import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.base.mmkv.SettingMMKV.darkThemeSetting
-import com.example.lunimary.design.LBHorizontalDivider
-import com.example.lunimary.design.LunimaryBackground
+import com.example.lunimary.design.background.LunimaryBackground
+import com.example.lunimary.design.components.LBHorizontalDivider
 import com.example.lunimary.design.theme.LunimaryTheme
 
 @Composable

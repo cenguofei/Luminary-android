@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.lunimary.R
-import com.example.lunimary.design.UserHeadImage
-import com.example.lunimary.models.LikeMessage
-import com.example.lunimary.models.fileBaseUrl
+import com.example.lunimary.design.components.UserHeadImage
+import com.example.lunimary.model.LikeMessage
+import com.example.lunimary.model.fileBaseUrl
 
 @Composable
 fun LikeItem(item: LikeMessage) {

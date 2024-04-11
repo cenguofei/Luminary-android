@@ -19,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
-import com.example.lunimary.design.LinearButton
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.source.local.Tag
+import com.example.lunimary.design.components.LinearButton
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.source.local.Tag
 import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.edit.EditViewModel
 

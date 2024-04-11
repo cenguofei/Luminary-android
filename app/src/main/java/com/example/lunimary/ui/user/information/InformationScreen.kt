@@ -28,9 +28,9 @@ import com.example.lunimary.base.UserState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
-import com.example.lunimary.design.BackButton
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.models.User
+import com.example.lunimary.design.components.BackButton
+import com.example.lunimary.model.User
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.util.logd

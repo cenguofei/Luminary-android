@@ -16,9 +16,9 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.base.UserState
 import com.example.lunimary.base.mmkv.DarkThemeSetting
-import com.example.lunimary.design.LunimaryGradientBackground
+import com.example.lunimary.design.background.LunimaryGradientBackground
 import com.example.lunimary.design.theme.LunimaryTheme
-import com.example.lunimary.models.wanandroid.WanandroidViewModel
+import com.example.lunimary.model.wanandroid.WanandroidViewModel
 import com.example.lunimary.ui.LunimaryApp
 import com.example.lunimary.ui.TopLevelDestination
 import com.example.lunimary.ui.login.UserViewModel

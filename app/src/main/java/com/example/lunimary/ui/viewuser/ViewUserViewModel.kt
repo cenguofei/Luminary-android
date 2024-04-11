@@ -5,9 +5,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.pager.pagerFlow
-import com.example.lunimary.models.User
-import com.example.lunimary.models.source.remote.paging.UserPublicArticleSource
-import com.example.lunimary.models.source.remote.repository.UserDetailRepository
+import com.example.lunimary.model.User
+import com.example.lunimary.model.source.remote.paging.UserPublicArticleSource
+import com.example.lunimary.model.source.remote.repository.UserDetailRepository
 
 class ViewUserViewModel : BaseViewModel() {
     private val userDetailRepository = UserDetailRepository()

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
+import com.example.lunimary.model.Article
 import com.example.lunimary.util.notNull
 
 @Composable

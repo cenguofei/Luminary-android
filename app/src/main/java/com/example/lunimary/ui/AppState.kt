@@ -21,8 +21,8 @@ import com.example.lunimary.base.mmkv.DarkThemeSetting
 import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.User
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.User
 import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.DEFAULT_WEB_URL
 import com.example.lunimary.ui.common.EDIT_ARTICLE_KEY

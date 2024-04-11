@@ -2,7 +2,7 @@ package com.example.lunimary.base.ktor
 
 import com.example.lunimary.LunimaryApplication.Companion.applicationContext
 import com.example.lunimary.base.network.isCurrentlyConnected
-import com.example.lunimary.models.responses.DataResponse
+import com.example.lunimary.model.responses.DataResponse
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 import kotlinx.serialization.encodeToString

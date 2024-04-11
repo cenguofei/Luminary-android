@@ -11,8 +11,8 @@ import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.base.storage.refreshToken
 import com.example.lunimary.base.storage.removeSession
 import com.example.lunimary.base.storage.removeToken
-import com.example.lunimary.models.responses.UserData
-import com.example.lunimary.models.source.remote.repository.UserRepository
+import com.example.lunimary.model.responses.UserData
+import com.example.lunimary.model.source.remote.repository.UserRepository
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.unknownErrorMsg
 import kotlinx.coroutines.Dispatchers

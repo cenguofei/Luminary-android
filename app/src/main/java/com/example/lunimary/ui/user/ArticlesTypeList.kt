@@ -6,9 +6,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
+import com.example.lunimary.model.Article
 import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.home.bottomBarHeight
+import com.example.lunimary.ui.user.pages.CollectPage
+import com.example.lunimary.ui.user.pages.LikePage
+import com.example.lunimary.ui.user.pages.PrivacyPage
+import com.example.lunimary.ui.user.pages.PublicPage
 
 @Composable
 fun ArticlesTypeList(

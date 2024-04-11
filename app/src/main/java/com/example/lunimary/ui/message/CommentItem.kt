@@ -24,11 +24,11 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.lunimary.R
 import com.example.lunimary.base.currentUser
-import com.example.lunimary.design.UserHeadImage
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.Comment
-import com.example.lunimary.models.User
-import com.example.lunimary.models.fileBaseUrl
+import com.example.lunimary.design.components.UserHeadImage
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.Comment
+import com.example.lunimary.model.User
+import com.example.lunimary.model.fileBaseUrl
 
 @Composable
 fun CommentItem(

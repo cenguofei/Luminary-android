@@ -5,8 +5,8 @@ import com.example.lunimary.base.ktor.httpClient
 import com.example.lunimary.base.ktor.setSession
 import com.example.lunimary.base.mmkv.decodeParcelable
 import com.example.lunimary.base.mmkv.encodeParcelable
-import com.example.lunimary.models.User
-import com.example.lunimary.models.responses.DataResponse
+import com.example.lunimary.model.User
+import com.example.lunimary.model.responses.DataResponse
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.failed
 import com.example.lunimary.util.logd

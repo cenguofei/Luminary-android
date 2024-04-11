@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
-import com.example.lunimary.models.Sex
+import com.example.lunimary.model.Sex
 import com.example.lunimary.util.logd
 import java.util.Calendar
 

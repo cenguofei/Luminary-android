@@ -4,7 +4,7 @@ import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.storage.MMKVKeys
 import com.example.lunimary.base.storage.loadLocalToken
 import com.example.lunimary.base.storage.loadSession
-import com.example.lunimary.models.User
+import com.example.lunimary.model.User
 import com.example.lunimary.util.logd
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.headers

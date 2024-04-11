@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.pager.pagerFlow
-import com.example.lunimary.models.ext.InteractionData
-import com.example.lunimary.models.source.remote.paging.UserCollectedArticleSource
-import com.example.lunimary.models.source.remote.paging.UserLikedArticleSource
-import com.example.lunimary.models.source.remote.paging.UserPrivacyArticleSource
-import com.example.lunimary.models.source.remote.paging.UserPublicArticleSource
-import com.example.lunimary.models.source.remote.repository.UserDetailRepository
+import com.example.lunimary.model.ext.InteractionData
+import com.example.lunimary.model.source.remote.paging.UserCollectedArticleSource
+import com.example.lunimary.model.source.remote.paging.UserLikedArticleSource
+import com.example.lunimary.model.source.remote.paging.UserPrivacyArticleSource
+import com.example.lunimary.model.source.remote.paging.UserPublicArticleSource
+import com.example.lunimary.model.source.remote.repository.UserDetailRepository
 import com.example.lunimary.util.logi
 
 class UserDetailViewModel : BaseViewModel() {

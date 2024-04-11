@@ -2,9 +2,9 @@ package com.example.lunimary.ui.edit
 
 import android.net.Uri
 import com.example.lunimary.base.currentUser
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.VisibleMode
-import com.example.lunimary.models.source.local.Tag
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.VisibleMode
+import com.example.lunimary.model.source.local.Tag
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
 

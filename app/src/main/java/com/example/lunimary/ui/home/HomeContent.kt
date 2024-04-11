@@ -11,7 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.lunimary.base.notLogin
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.models.Article
+import com.example.lunimary.model.Article
+import com.example.lunimary.ui.home.pages.AllPage
+import com.example.lunimary.ui.home.pages.FriendsArticlePage
+import com.example.lunimary.ui.home.pages.RecommendPage
 import com.example.lunimary.util.logi
 import kotlinx.coroutines.launch
 

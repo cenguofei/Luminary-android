@@ -31,7 +31,7 @@ import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LoadingDialog
-import com.example.lunimary.models.fileBaseUrl
+import com.example.lunimary.model.fileBaseUrl
 import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine

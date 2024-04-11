@@ -23,8 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lunimary.design.UserHeadImage
-import com.example.lunimary.models.User
+import com.example.lunimary.design.components.UserHeadImage
+import com.example.lunimary.model.User
 
 @Composable
 fun UserItem(

@@ -4,10 +4,10 @@ import androidx.paging.PagingData
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.base.pager.pagerFlow
-import com.example.lunimary.models.Article
-import com.example.lunimary.models.source.remote.paging.FriendsPageArticleSource
-import com.example.lunimary.models.source.remote.paging.PageAllArticleSource
-import com.example.lunimary.models.source.remote.paging.RecommendArticlesPageSource
+import com.example.lunimary.model.Article
+import com.example.lunimary.model.source.remote.paging.FriendsPageArticleSource
+import com.example.lunimary.model.source.remote.paging.PageAllArticleSource
+import com.example.lunimary.model.source.remote.paging.RecommendArticlesPageSource
 import kotlinx.coroutines.flow.Flow
 
 class RecommendViewModel : BaseViewModel() {
