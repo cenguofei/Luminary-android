@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,6 +17,7 @@ import com.example.lunimary.model.Article
 import com.example.lunimary.model.User
 import com.example.lunimary.model.checkUserNotNone
 import com.example.lunimary.ui.browse.BrowseViewModel
+import com.example.lunimary.ui.browse.UiState
 import com.example.lunimary.ui.edit.EditType
 
 @Composable
@@ -30,12 +29,11 @@ fun BrowseScreenContent(
     onEditCommentClick: () -> Unit,
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: (Article) -> Unit,
     navToEdit: (EditType, Article) -> Unit,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
+    uiState: UiState
 ) {
-    val uiState by browseViewModel.uiState.observeAsState()
-    val article = uiState!!.article
+    val article = uiState.article
     val listState = rememberLazyListState()
     val commentsSize = remember { mutableStateOf(0) }
     Column(modifier = Modifier.fillMaxSize()) {
@@ -44,10 +42,9 @@ fun BrowseScreenContent(
             onFollowClick = onFollowClick,
             onUnfollowClick = onUnfollowClick,
             listState = listState,
-            uiState = uiState!!,
+            uiState = uiState,
             browseViewModel = browseViewModel,
             onUserClick = onUserClick,
-            onArticleDeleted = onArticleDeleted,
             navToEdit = navToEdit,
             onShowSnackbar = onShowSnackbar
         )
@@ -62,7 +59,7 @@ fun BrowseScreenContent(
                     Column(modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)) {
-                        ArticleTitle(title = uiState!!.article.title)
+                        ArticleTitle(title = uiState.article.title)
                     }
                 }
             }
@@ -72,7 +69,7 @@ fun BrowseScreenContent(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)) {
                         ArticleOwner(
-                            uiState = uiState!!,
+                            uiState = uiState,
                             onUnfollowClick = onUnfollowClick,
                             onFollowClick = onFollowClick,
                             browseViewModel = browseViewModel,

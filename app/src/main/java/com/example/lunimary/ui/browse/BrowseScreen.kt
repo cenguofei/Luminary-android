@@ -3,6 +3,7 @@ package com.example.lunimary.ui.browse
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -26,6 +27,16 @@ fun NavGraphBuilder.browseScreen(
         val articleItem = PageArticleNavArguments[PAGE_ARTICLE_ITEM_KEY]
         ArticleEffect(articleItem = articleItem, appState = appState)
         val browseViewModel: BrowseViewModel = viewModel()
+        val uiState = browseViewModel.uiState.collectAsStateWithLifecycle()
+        if(uiState.value.articleDeleted) {
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    articleItem?.onDeletedStateChange(true)
+                    appState.popBackStack()
+                }
+            )
+        }
         articleItem as PageItem<Article>
         SetArticleEffect(articleItem = articleItem, browseViewModel = browseViewModel)
         BrowseScreenRoute(
@@ -33,14 +44,11 @@ fun NavGraphBuilder.browseScreen(
             browseViewModel = browseViewModel,
             onLinkClick = appState::navToWeb,
             onUserClick = { appState.navToViewUser(it, Screens.BrowseArticle.route) },
-            onArticleDeleted = {
-                articleItem.onDeletedStateChange(true)
-                appState.popBackStack()
-            },
             navToEdit = { type, _ ->
                 appState.navToEdit(type, articleItem)
             },
-            onShowSnackbar = onShowSnackbar
+            onShowSnackbar = onShowSnackbar,
+            uiState = uiState.value
         )
         RecordEffect(browseViewModel = browseViewModel)
     }
@@ -72,14 +80,7 @@ private fun SetArticleEffect(
 
 @Composable
 private fun ArticleEffect(articleItem: PageItem<Article>?, appState: LunimaryAppState) {
-    if (articleItem?.deleted == true) {
-        LaunchedEffect(
-            key1 = articleItem,
-            block = {
-                appState.popBackStack()
-            }
-        )
-    } else if (articleItem == null) {
+    if(articleItem == null) {
         LaunchedEffect(
             key1 = Unit,
             block = {

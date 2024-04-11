@@ -43,7 +43,6 @@ import com.example.lunimary.ui.edit.EditType
 fun ArticleOptions(
     uiState: UiState,
     browseViewModel: BrowseViewModel,
-    onArticleDeleted: (Article) -> Unit,
     navToEdit: (EditType, Article) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
@@ -125,25 +124,21 @@ fun ArticleOptions(
             Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
         }
     }
-    val state = browseViewModel.updateArticleState.collectAsStateWithLifecycle()
-    when(state.value) {
+    when (val state = browseViewModel.updateArticleMessageState) {
         is DataState.Success -> {
-            if (browseViewModel.uiState.value!!.articleDeleted) {
-                LaunchedEffect(
-                    key1 = Unit,
-                    block = {
-                        onShowSnackbar((state.value as DataState.Success).message, null)
-                        onArticleDeleted(uiState.article)
-                    }
-                )
-            }
+            LaunchedEffect(
+                key1 = state.message,
+                block = {
+                    onShowSnackbar(state.message, null)
+                }
+            )
         }
 
         is DataState.Failed -> {
             LaunchedEffect(
-                key1 = Unit,
+                key1 = state.message,
                 block = {
-                    onShowSnackbar((state.value as DataState.Failed).message, null)
+                    onShowSnackbar(state.message, null)
                 }
             )
         }
@@ -170,7 +165,10 @@ enum class ArticleSettings(
     Edit("edit", "±à¼­", Icons.Default.Edit)
 }
 
-private fun buildMenu(isMyArticle: Boolean, currentVisibleMode: VisibleMode): CascadeMenuItem<String> {
+private fun buildMenu(
+    isMyArticle: Boolean,
+    currentVisibleMode: VisibleMode
+): CascadeMenuItem<String> {
     return cascadeMenu {
         item(ArticleSettings.Share.id, ArticleSettings.Share.title) {
             icon(ArticleSettings.Share.icon)

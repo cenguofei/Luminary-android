@@ -36,7 +36,6 @@ fun DynamicToolBar(
     uiState: UiState,
     browseViewModel: BrowseViewModel,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: (Article) -> Unit,
     navToEdit: (EditType, Article) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
@@ -94,7 +93,6 @@ fun DynamicToolBar(
         ArticleOptions(
             uiState = uiState,
             browseViewModel = browseViewModel,
-            onArticleDeleted = onArticleDeleted,
             navToEdit = navToEdit,
             onShowSnackbar = onShowSnackbar
         )

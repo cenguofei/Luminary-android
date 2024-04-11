@@ -6,8 +6,6 @@ import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.DataState
@@ -40,14 +38,31 @@ class BrowseViewModel : BaseViewModel() {
     private val commentRepository by lazy { CommentRepository() }
     private val recordRepository = RecordViewDurationRepository()
 
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> get() = _uiState
+
     private var beginTimestamp = Long.Default
     fun setArticle(article: Article) {
-        _uiState.postValue(uiState.value?.copy(article = article))
+        _uiState.value = uiState.value.copy(article = article)
+        existingArticle(article.id)
         fetchUser(article.userId)
         existingFriendship(article.userId)
         existsLike(article.id)
         fetchStar(article.id)
         whenBroseArticle(article.id)
+    }
+
+    private fun existingArticle(articleId: Long) {
+        request(
+            block = {
+                articleRepository.existing(articleId)
+            },
+            onSuccess = { existing, _ ->
+                if (existing == false) {
+                    _uiState.value = uiState.value.copy(articleDeleted = true)
+                }
+            }
+        )
     }
 
     fun beginRecord() {
@@ -86,11 +101,9 @@ class BrowseViewModel : BaseViewModel() {
                     friendRepository.existingFriendship(currentUser.id, whoId)
                 },
                 onSuccess = { data, _ ->
-                    val newUiState = uiState.value?.copy(hasFetchedFriendship = true)
+                    val newUiState = uiState.value.copy(hasFetchedFriendship = true)
                     if (data != null) {
-                        _uiState.postValue(
-                            newUiState?.copy(isFollowByMe = data.exists)
-                        )
+                        _uiState.value = newUiState.copy(isFollowByMe = data.exists)
                     }
                 },
                 onFinish = { land(FLY_EXISTING_FRIENDSHIP) }
@@ -115,9 +128,6 @@ class BrowseViewModel : BaseViewModel() {
         }
     }
 
-    private val _uiState: MutableLiveData<UiState> = MutableLiveData(UiState())
-    val uiState: LiveData<UiState> get() = _uiState
-
     fun onFollowClick() {
         fly(FLY_FOLLOW_OR_UNFOLLOW) {
             request(
@@ -125,7 +135,7 @@ class BrowseViewModel : BaseViewModel() {
                     friendRepository.follow(currentUser.id, articleOwner.value.id)
                 },
                 onSuccess = { _, _ ->
-                    _uiState.postValue(uiState.value?.copy(isFollowByMe = true))
+                    _uiState.value = uiState.value.copy(isFollowByMe = true)
                 },
                 onFinish = { land(FLY_FOLLOW_OR_UNFOLLOW) }
             )
@@ -139,7 +149,7 @@ class BrowseViewModel : BaseViewModel() {
                     friendRepository.unfollow(articleOwner.value.id)
                 },
                 onSuccess = { _, _ ->
-                    _uiState.postValue(uiState.value?.copy(isFollowByMe = false))
+                    _uiState.value = uiState.value.copy(isFollowByMe = false)
                 },
                 onFinish = { land(FLY_FOLLOW_OR_UNFOLLOW) }
             )
@@ -292,19 +302,19 @@ class BrowseViewModel : BaseViewModel() {
         return flatComments
     }
 
-    private val _updateArticleState: MutableStateFlow<DataState> = MutableStateFlow(DataState.None)
-    val updateArticleState: StateFlow<DataState> get() = _updateArticleState
+    private val _updateArticleMessageState: MutableState<DataState> = mutableStateOf(DataState.None)
+    val updateArticleMessageState: DataState get() = _updateArticleMessageState.value
     fun copyLink() {
         val clipboard = LunimaryApplication.applicationContext
             .getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return
-        ClipData.newPlainText(null, uiState.value?.article?.link).let {
+        ClipData.newPlainText(null, uiState.value.article.link).let {
             clipboard.setPrimaryClip(it)
         }
-        updateArticleModifyState(DataState.Success("已复制:${uiState.value?.article?.link}"))
+        updateArticleModifyState(DataState.Success("已复制:${uiState.value.article.link}"))
     }
 
     fun updateVisibility(mode: VisibleMode) {
-        val article = uiState.value!!.article
+        val article = uiState.value.article
         if (mode == article.visibleMode) {
             return
         }
@@ -318,7 +328,7 @@ class BrowseViewModel : BaseViewModel() {
                 onSuccess = { _, _ ->
                     updateArticleModifyState(DataState.Success("已更新可见范围为：${mode.modeName}"))
                     val newArticle = article.copy(visibleMode = mode)
-                    _uiState.postValue(uiState.value!!.copy(article = newArticle))
+                    _uiState.value = uiState.value.copy(article = newArticle)
                 },
                 onFinish = { land(FLY_UPDATE_ARTICLE_VISIBLE_MODE) }
             )
@@ -334,7 +344,7 @@ class BrowseViewModel : BaseViewModel() {
                 },
                 onSuccess = { _, _ ->
                     updateArticleModifyState(DataState.Success("文章已删除"))
-                    _uiState.postValue(uiState.value!!.copy(articleDeleted = true))
+                    _uiState.value = uiState.value.copy(articleDeleted = true)
                 },
                 onFailed = {
                     updateArticleModifyState(DataState.Failed(Error(it)))
@@ -347,7 +357,7 @@ class BrowseViewModel : BaseViewModel() {
     private fun updateArticleModifyState(
         newState: DataState
     ) {
-        _updateArticleState.value = newState
+        _updateArticleMessageState.value = newState
     }
 }
 
@@ -358,7 +368,7 @@ data class UiState(
      * 是否已经查询到用户和文章所属用户的关系
      */
     val hasFetchedFriendship: Boolean = false,
-    val articleDeleted: Boolean = false
+    val articleDeleted: Boolean = false,
 ) {
     val isMyArticle: Boolean get() = article.userId == currentUser.id
 }

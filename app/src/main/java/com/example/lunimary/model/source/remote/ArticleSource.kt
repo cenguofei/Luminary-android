@@ -20,5 +20,9 @@ interface ArticleSource {
         articleId: Long
     ): DataResponse<Boolean>
 
+    suspend fun existing(
+        articleId: Long
+    ): DataResponse<Boolean>
+
     companion object : ArticleSource by ArticleSourceImpl()
 }

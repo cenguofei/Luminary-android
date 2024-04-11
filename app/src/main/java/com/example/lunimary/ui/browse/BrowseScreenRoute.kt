@@ -19,9 +19,9 @@ internal fun BrowseScreenRoute(
     browseViewModel: BrowseViewModel,
     onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
-    onArticleDeleted: (Article) -> Unit,
     navToEdit: (EditType, Article) -> Unit,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
+    uiState: UiState
 ) {
     val showEditContent = remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxSize()) {
@@ -33,9 +33,9 @@ internal fun BrowseScreenRoute(
             onEditCommentClick = { showEditContent.value = true },
             onLinkClick = onLinkClick,
             onUserClick = onUserClick,
-            onArticleDeleted = onArticleDeleted,
             navToEdit = navToEdit,
-            onShowSnackbar = onShowSnackbar
+            onShowSnackbar = onShowSnackbar,
+            uiState = uiState
         )
         val commentText = remember { mutableStateOf(empty) }
         if (showEditContent.value) {

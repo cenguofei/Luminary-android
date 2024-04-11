@@ -26,4 +26,7 @@ class ArticleRepository : Repository by Repository() {
 
     suspend fun whenBrowseArticle(articleId: Long): DataResponse<Boolean> =
         withDispatcher { articleSource.whenBrowseArticle(articleId) }
+
+    suspend fun existing(articleId: Long): DataResponse<Boolean> =
+        withDispatcher { articleSource.existing(articleId) }
 }

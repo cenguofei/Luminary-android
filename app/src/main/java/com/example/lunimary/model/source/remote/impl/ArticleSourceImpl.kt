@@ -14,6 +14,7 @@ import com.example.lunimary.model.responses.PageResponse
 import com.example.lunimary.model.source.remote.ArticleSource
 import com.example.lunimary.util.articlesRootPath
 import com.example.lunimary.util.createArticlePath
+import com.example.lunimary.util.isArticleDeletedPath
 import com.example.lunimary.util.pageArticlesPath
 import com.example.lunimary.util.updateArticleByIdPath
 import com.example.lunimary.util.whenBrowseArticlePath
@@ -52,6 +53,12 @@ class ArticleSourceImpl: BaseSourceImpl by BaseSourceImpl(), ArticleSource {
 
     override suspend fun whenBrowseArticle(articleId: Long): DataResponse<Boolean> {
         return client.securityGet(urlString = whenBrowseArticlePath) {
+            addPathParam(articleId)
+        }.init()
+    }
+
+    override suspend fun existing(articleId: Long): DataResponse<Boolean> {
+        return client.get(isArticleDeletedPath) {
             addPathParam(articleId)
         }.init()
     }
