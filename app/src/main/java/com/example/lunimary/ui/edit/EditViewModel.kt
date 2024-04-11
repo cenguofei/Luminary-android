@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.tagColors
@@ -49,15 +48,20 @@ class EditViewModel : BaseViewModel() {
         MutableStateFlow(NetworkResult.None())
     val updateArticleState: StateFlow<NetworkResult<Unit>> get() = _updateArticleState
 
+
+    private val _deleteState: MutableStateFlow<NetworkResult<String>> =
+        MutableStateFlow(NetworkResult.None())
+    val deleteState: StateFlow<NetworkResult<String>> get() = _deleteState
+
     private val _uiState: MutableState<UiState> = mutableStateOf(UiState())
-    val uiState: State<UiState> get() = _uiState
+    val uiState: UiState get() = _uiState.value
 
     //////////////////////////// UI UnRelative ////////////////////////////////
     private var hasPublished = false
     fun publish() {
         if (hasPublished) return
         val timestamp = System.currentTimeMillis()
-        val newArticle = uiState.value.generateArticle().copy(timestamp = timestamp)
+        val newArticle = uiState.generateArticle().copy(timestamp = timestamp)
         fly(FLY_ADD_ARTICLE) {
             request(
                 block = {
@@ -68,7 +72,7 @@ class EditViewModel : BaseViewModel() {
                     hasPublished = true
                     _publishArticleState.postValue(NetworkResult.Success())
                     clear()
-                    if (uiState.value.editType == EditType.Draft) {
+                    if (uiState.editType == EditType.Draft) {
                         deleteDraft()
                     }
                 },
@@ -83,7 +87,7 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun deleteDraft() {
-        uiState.value.theArticle?.let {
+        uiState.theArticle?.let {
             viewModelScope.launch {
                 localArticleRepository.deleteArticle(it)
             }
@@ -91,25 +95,25 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun afterTitleChanged(title: String) {
-        if (title != uiState.value.title) {
-            _uiState.value = uiState.value.copy(title = title)
+        if (title != uiState.title) {
+            _uiState.value = uiState.copy(title = title)
         }
     }
 
     fun afterBodyChanged(body: String) {
-        if (body != uiState.value.body) {
-            _uiState.value = uiState.value.copy(
+        if (body != uiState.body) {
+            _uiState.value = uiState.copy(
                 body = body,
             )
         }
     }
 
     private var lastSaveDraft: Article? = null
-    val shouldSaveAsDraft: Boolean get() = lastSaveDraft == null || uiState.value.generateArticle() != lastSaveDraft
+    val shouldSaveAsDraft: Boolean get() = lastSaveDraft == null || uiState.generateArticle() != lastSaveDraft
     var saveAsDraftEnabled = true
     fun saveAsDraft() {
         if (!saveAsDraftEnabled) return
-        val saveArticle = uiState.value.generateArticle()
+        val saveArticle = uiState.generateArticle()
         "lastSaveDraft != saveArticle = ${lastSaveDraft != saveArticle}".logd("update_test")
         if (lastSaveDraft == null || lastSaveDraft != saveArticle) {
             lastSaveDraft = saveArticle
@@ -122,9 +126,9 @@ class EditViewModel : BaseViewModel() {
     }
 
     private var lastUpdateDraft: Article? = null
-    val shouldUpdateDraft: Boolean get() = lastUpdateDraft == null || uiState.value.updatedLocalArticle() != lastUpdateDraft
+    val shouldUpdateDraft: Boolean get() = lastUpdateDraft == null || uiState.updatedLocalArticle() != lastUpdateDraft
     fun updateDraft() {
-        val saveArticle = uiState.value.updatedLocalArticle()
+        val saveArticle = uiState.updatedLocalArticle()
         "lastUpdateDraft != saveArticle = ${lastUpdateDraft != saveArticle}".logd("update_test")
         if (lastUpdateDraft == null || lastUpdateDraft != saveArticle) {
             viewModelScope.launch {
@@ -140,7 +144,7 @@ class EditViewModel : BaseViewModel() {
 
     private var lastUpdateRemoteArticle: Article? = null
     fun updateRemoteArticle(onUpdateSuccess: (updated: Article) -> Unit) {
-        val generateArticle = uiState.value.generateArticle()
+        val generateArticle = uiState.generateArticle()
         if (lastUpdateRemoteArticle == null || lastUpdateRemoteArticle != generateArticle) {
             lastUpdateRemoteArticle = generateArticle
             fly(FLY_UPLOAD_REMOTE_ARTICLE) {
@@ -165,7 +169,7 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun addNewTag(tag: String) {
-        val tags = uiState.value.tags
+        val tags = uiState.tags
         if (tag.isBlank() || tag in tags.map { it.name }) {
             return
         }
@@ -174,7 +178,7 @@ class EditViewModel : BaseViewModel() {
             username = currentUser.username,
             color = tagColors.random().toArgb()
         )
-        _uiState.value = uiState.value.copy(
+        _uiState.value = uiState.copy(
             tags = tags + newTag,
         )
         viewModelScope.launch {
@@ -183,14 +187,14 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun addHistoryTagToArticle(tag: Tag) {
-        val oldTags = uiState.value.tags
+        val oldTags = uiState.tags
         if (tag in oldTags
             || tag.id in oldTags.map { it.id }
             || tag.name in oldTags.map { it.name }
         ) {
             return
         }
-        _uiState.value = uiState.value.copy(
+        _uiState.value = uiState.copy(
             tags = oldTags + tag,
         )
     }
@@ -202,7 +206,7 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun visibleModeChange(mode: VisibleMode) {
-        _uiState.value = uiState.value.copy(visibleMode = mode)
+        _uiState.value = uiState.copy(visibleMode = mode)
     }
 
     fun fillArticle(
@@ -210,7 +214,7 @@ class EditViewModel : BaseViewModel() {
         editType: EditType
     ) {
         if (theArticle == null) return
-        _uiState.value = uiState.value.copy(
+        _uiState.value = uiState.copy(
             theArticle = theArticle,
             editType = editType,
             title = theArticle.title,
@@ -227,7 +231,7 @@ class EditViewModel : BaseViewModel() {
     fun updateTagsAfterGetHistoryTags(liveData: List<Tag>?) {
         if (hasUpdate) return
         hasUpdate = true
-        val theArticle = uiState.value.theArticle
+        val theArticle = uiState.theArticle
         liveData ?: return; theArticle ?: return
         val existTags = liveData.filter { it.name in theArticle.tags }
         val existTagsName = liveData.map { it.name }
@@ -239,7 +243,7 @@ class EditViewModel : BaseViewModel() {
                     username = currentUser.username
                 )
             }
-        _uiState.value = uiState.value.copy(
+        _uiState.value = uiState.copy(
             tags = existTags + absentTags,
         )
     }
@@ -249,7 +253,7 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun updateUri(uri: Uri) {
-        _uiState.value = uiState.value.copy(
+        _uiState.value = uiState.copy(
             uri = uri,
         )
     }
@@ -262,7 +266,7 @@ class EditViewModel : BaseViewModel() {
                     fileRepository.uploadFile(path, filename)
                 },
                 onSuccess = { data, msg ->
-                    _uiState.value = uiState.value.copy(
+                    _uiState.value = uiState.copy(
                         cover = data?.first() ?: empty,
                     )
                     _uploadCoverState.value = NetworkResult.Success(data = data, msg = msg)
@@ -276,17 +280,14 @@ class EditViewModel : BaseViewModel() {
     }
 
     fun removeAddedTag(tag: Tag) {
-        val oldTags = uiState.value.tags
-        _uiState.value = uiState.value.copy(
+        val oldTags = uiState.tags
+        _uiState.value = uiState.copy(
             tags = oldTags.filter { it.id != tag.id }
         )
     }
 
-    private val _deleteState: MutableStateFlow<NetworkResult<String>> =
-        MutableStateFlow(NetworkResult.None())
-    val deleteState: StateFlow<NetworkResult<String>> get() = _deleteState
     fun deletePublishedArticle() {
-        val article = uiState.value.theArticle ?: return
+        val article = uiState.theArticle ?: return
         fly(FLY_DELETE_ARTICLE) {
             request(
                 block = {
@@ -305,7 +306,7 @@ class EditViewModel : BaseViewModel() {
     }
 
     private fun clear() {
-        _uiState.value = uiState.value.copy(
+        _uiState.value = uiState.copy(
             title = empty,
             body = empty,
             cover = empty,

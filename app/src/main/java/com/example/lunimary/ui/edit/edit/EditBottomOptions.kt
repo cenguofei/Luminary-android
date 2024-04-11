@@ -125,7 +125,7 @@ private fun EditOptions(
                         }
 
                         EditOption.Delete -> {
-                            if (viewModel.uiState.value.canSaveAsDraft) {
+                            if (viewModel.uiState.canSaveAsDraft) {
                                 showDeleteDialog.value = true
                             }
                         }
@@ -136,7 +136,7 @@ private fun EditOptions(
     }
 
     LunimaryDialog(
-        text = when (viewModel.uiState.value.editType) {
+        text = when (viewModel.uiState.editType) {
             EditType.Edit -> {
                 stringResource(id = R.string.confirm_delete_published_article)
             }
@@ -150,7 +150,7 @@ private fun EditOptions(
             }
         },
         onConfirmClick = {
-            when (viewModel.uiState.value.editType) {
+            when (viewModel.uiState.editType) {
                 EditType.Edit -> {
                     viewModel.deletePublishedArticle()
                 }
@@ -185,7 +185,7 @@ private fun EditOptions(
             LaunchedEffect(
                 key1 = deleteState.value,
                 block = {
-                    if (viewModel.uiState.value.editType == EditType.Edit) {
+                    if (viewModel.uiState.editType == EditType.Edit) {
                         deleteState.value.msg?.let { onShowSnackbar(it, null) }
                     } else {
                         onShowSnackbar("É¾³ý³É¹¦£¡", null)

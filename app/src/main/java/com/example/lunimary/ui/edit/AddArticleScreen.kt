@@ -65,7 +65,7 @@ fun NavGraphBuilder.addArticleScreen(
         val onBackAction = {
             when (editType) {
                 EditType.New -> {
-                    if (editViewModel.uiState.value.canSaveAsDraft && editViewModel.shouldSaveAsDraft) {
+                    if (editViewModel.uiState.canSaveAsDraft && editViewModel.shouldSaveAsDraft) {
                         if (editViewModel.saveAsDraftEnabled) {
                             editViewModel.saveAsDraft()
                             coroutineScope.launch {
@@ -77,7 +77,7 @@ fun NavGraphBuilder.addArticleScreen(
                 }
 
                 EditType.Draft -> {
-                    if (editViewModel.uiState.value.theArticleChanged() && editViewModel.shouldUpdateDraft) {
+                    if (editViewModel.uiState.theArticleChanged() && editViewModel.shouldUpdateDraft) {
                         coroutineScope.launch {
                             onShowSnackbar(updateMessage, null)
                         }
@@ -87,7 +87,7 @@ fun NavGraphBuilder.addArticleScreen(
                 }
 
                 EditType.Edit -> {
-                    if (editViewModel.uiState.value.theArticleChanged()) {
+                    if (editViewModel.uiState.theArticleChanged()) {
                         openDialog.value = true
                     } else {
                         appState.popBackStack()
@@ -142,7 +142,6 @@ fun NavGraphBuilder.addArticleScreen(
                 }
             },
             editViewModel = editViewModel,
-            coroutineScope = coroutineScope,
             onFinish = {
                 appState.navToUser(if (theArticle == null) Screens.AddArticle.route else Screens.Drafts.route)
             },
@@ -178,7 +177,6 @@ fun AddArticleScreen(
     onBack: () -> Unit,
     onPublish: () -> Unit,
     editViewModel: EditViewModel,
-    coroutineScope: CoroutineScope,
     onFinish: () -> Unit,
     onNavToWeb: () -> Unit,
     onUpdateSuccess: (updated: Article) -> Unit,
@@ -234,7 +232,6 @@ fun AddArticleScreen(
             BottomSheetContent(
                 reallyPublish = { onPublish() },
                 editViewModel = editViewModel,
-                coroutineScope = coroutineScope,
                 historyTags = historyTags,
                 onUpdateSuccess = onUpdateSuccess,
                 onShowSnackbar = onShowSnackbar

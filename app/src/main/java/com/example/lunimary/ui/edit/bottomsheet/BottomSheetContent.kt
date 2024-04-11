@@ -24,13 +24,11 @@ import com.example.lunimary.models.Article
 import com.example.lunimary.models.source.local.Tag
 import com.example.lunimary.ui.edit.EditType
 import com.example.lunimary.ui.edit.EditViewModel
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun BottomSheetContent(
     reallyPublish: () -> Unit,
     editViewModel: EditViewModel,
-    coroutineScope: CoroutineScope,
     historyTags: State<List<Tag>?>,
     onUpdateSuccess: (updated: Article) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit
@@ -86,7 +84,7 @@ private fun BottomButtons(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        val uiState = editViewModel.uiState.value
+        val uiState = editViewModel.uiState
         when(uiState.editType) {
             EditType.Edit -> {
                 if (uiState.theArticleChanged()) {

@@ -94,7 +94,7 @@ private fun AddTagTextField(editViewModel: EditViewModel) {
 private fun AddedTags(editViewModel: EditViewModel) {
     ManageTags(
         label = stringResource(id = R.string.history_tags),
-        tags = editViewModel.uiState.value.tags,
+        tags = editViewModel.uiState.tags,
         onDelete = editViewModel::removeAddedTag
     )
 }

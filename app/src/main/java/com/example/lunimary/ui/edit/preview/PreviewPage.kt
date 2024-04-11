@@ -21,11 +21,11 @@ fun PreviewPage(viewModel: EditViewModel, onEditClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp)) {
             Text(
-                text = viewModel.uiState.value.title,
+                text = viewModel.uiState.title,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
             )
-            LunimaryMarkdown(markdown = viewModel.uiState.value.body.trimIndent())
+            LunimaryMarkdown(markdown = viewModel.uiState.body.trimIndent())
         }
 
         LinearButton(

@@ -109,7 +109,7 @@ fun ArticleCover(
             shape = RoundedCornerShape(16),
             color = Color.Gray.copy(alpha = 0.1f)
         ) {
-            val uiState = editViewModel.uiState.value
+            val uiState = editViewModel.uiState
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 if (uiState.cover.isNotBlank()) {
                     AsyncImage(
