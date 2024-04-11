@@ -25,10 +25,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -42,7 +40,6 @@ import com.example.lunimary.R
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.components.Tag
-import com.example.lunimary.design.components.tagColors
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.fileBaseUrl
 
@@ -102,14 +99,14 @@ fun ArticleItem(
                                 Modifier.weight(1f)
                             } else Modifier.weight(0.6f)
                         Content(content = article.body, modifier = contentModifier)
+                        Spacer(modifier = Modifier.width(4.dp))
                         if (article.cover.isNotEmpty() && article.cover.startsWith("res/uploads")) {
                             ArticlePicture(pic = article.cover, modifier = Modifier.weight(0.4f))
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(4.dp))
-                val tagWithColor = remember { article.tags.map { it to tagColors.random() } }
-                Labels(tagWithColor = tagWithColor)
+                Labels(tags = article.tags)
                 Spacer(modifier = Modifier.height(4.dp))
                 if (!article.isLunimaryStation) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -180,11 +177,12 @@ private fun ArticleSingleAmount(
 @Composable
 fun Labels(
     modifier: Modifier = Modifier,
-    tagWithColor: List<Pair<String, Color>>
+    tags: Array<String>,
 ) {
-    if (tagWithColor.isEmpty()) return
+    if (tags.isEmpty()) return
+    val tagsWithColor = tags.map { it to TagColors.getColor(it) }
     LazyRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        itemsIndexed(tagWithColor) { _, item ->
+        itemsIndexed(tagsWithColor) { _, item ->
             Tag(
                 tag = com.example.lunimary.model.source.local.Tag(
                     name = item.first,
