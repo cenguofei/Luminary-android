@@ -42,7 +42,7 @@ class LunimaryApplication : Application() {
 class ActivityLifeCycleCallbacks : Application.ActivityLifecycleCallbacks {
     private val activityStack = LinkedList<Activity>()
     private var reported = false
-    private var firstUseTheApp by boolean(key = MMKVKeys.FIRST_USE_APP)
+    private var firstUseTheApp by boolean(key = MMKVKeys.FIRST_USE_APP_KEY)
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
     }

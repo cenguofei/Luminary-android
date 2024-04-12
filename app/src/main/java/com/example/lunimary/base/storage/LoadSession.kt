@@ -13,10 +13,10 @@ fun loadSession(
 fun saveSession(
     username: String,
     session: String
-) { session.encodeString(MMKVKeys.LUMINARY_SESSION, username) }
+) { session.encodeString(MMKVKeys.LUMINARY_SESSION_KEY, username) }
 
 fun removeSession() {
     val mmkv = MMKV.mmkvWithID(currentUser.username)
-    mmkv.remove(MMKVKeys.LUMINARY_SESSION)
+    mmkv.remove(MMKVKeys.LUMINARY_SESSION_KEY)
 }
 

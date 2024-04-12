@@ -19,12 +19,12 @@ fun verifyInput(
                 "The username cannot contain special characters."
     }
 
-    if (!isPasswordValid(password)) {
+    if (!isPasswordValid(password, false)) {
         return false to "$password is not a valid password. " +
                 "Passwords can only be a combination of numbers, letters, and special symbols"
     }
 
-    if (password.length <= PASSWORD_LENGTH) {
+    if (password.length < PASSWORD_LENGTH) {
         return false to "The password length cannot be less than $PASSWORD_LENGTH."
     }
 
@@ -44,8 +44,11 @@ fun isUsernameValid(username: String): Boolean {
 /**
  * 密码只能包含字母、数字或特殊英文符号
  */
-fun isPasswordValid(password: String): Boolean {
-    if (password.length < PASSWORD_LENGTH) {
+fun isPasswordValid(
+    password: String,
+    checkLength: Boolean = true,
+): Boolean {
+    if (checkLength && password.length < PASSWORD_LENGTH) {
         return false
     }
     val pattern = Regex("^[a-zA-Z0-9+\\-*/@!#%&_=.,?;:$~`]+$")

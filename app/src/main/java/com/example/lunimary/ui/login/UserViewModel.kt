@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.UserState
+import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.base.storage.refreshToken
@@ -35,6 +36,9 @@ class UserViewModel : BaseViewModel() {
         isLogin: () -> Unit = {},
         logout: () -> Unit = {}
     ) {
+        if (SettingMMKV.hasLogout) {
+            return
+        }
         if (!LunimaryApplication.applicationContext.isCurrentlyConnected()) {
             return
         }
@@ -72,6 +76,7 @@ class UserViewModel : BaseViewModel() {
             onSuccess = { data, _ ->
                 if (data?.user != null) {
                     _loginState.postValue(NetworkResult.Success(data))
+                    SettingMMKV.hasLogout = false
                     UserState.updateLocalUser(data.user)
                 } else {
                     _loginState.postValue(NetworkResult.Error(unknownErrorMsg))
@@ -94,6 +99,7 @@ class UserViewModel : BaseViewModel() {
                 removeSession()
                 removeToken()
                 UserState.clearUser()
+                SettingMMKV.hasLogout = true
                 _logoutState.postValue(NetworkResult.Success())
             },
             onFailed = {

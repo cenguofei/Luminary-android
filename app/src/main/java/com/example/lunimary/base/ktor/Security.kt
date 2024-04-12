@@ -14,8 +14,8 @@ fun HttpMessageBuilder.setSession() {
     checkUser {
         headers {
             append(
-                name = MMKVKeys.LUMINARY_SESSION,
-                value = loadSession(MMKVKeys.LUMINARY_SESSION).also {
+                name = MMKVKeys.LUMINARY_SESSION_KEY,
+                value = loadSession(MMKVKeys.LUMINARY_SESSION_KEY).also {
                     "session=$it".logd()
                 }
             )

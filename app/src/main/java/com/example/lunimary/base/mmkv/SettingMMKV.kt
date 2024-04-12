@@ -6,13 +6,18 @@ import kotlin.properties.ReadWriteProperty
 
 object SettingMMKV {
     var darkThemeSetting by darkTheme(
-        key = MMKVKeys.DARK_THEME_SETTING,
+        key = MMKVKeys.DARK_THEME_SETTING_KEY,
         mmapID = currentUser.id.toString()
     )
 
     var userHasSetTheme by boolean(
-        key = MMKVKeys.USER_HAS_SET_THEME,
+        key = MMKVKeys.USER_HAS_SET_THEME_KEY,
         mmapID = currentUser.id.toString()
+    )
+
+    var hasLogout by boolean(
+        key = MMKVKeys.USER_HAS_LOGOUT_KEY,
+        defaultValue = true
     )
 }
 

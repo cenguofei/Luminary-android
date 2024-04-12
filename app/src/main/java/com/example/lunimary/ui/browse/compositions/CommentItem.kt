@@ -40,18 +40,19 @@ fun CommentItem(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     modifier = Modifier.weight(1f),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    fontSize = 16.sp
                 )
                 Text(
                     text = comment.niceDate,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.labelMedium,
+                    fontSize = 12.sp
                 )
             }
             Text(
                 text = comment.content,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Normal
             )
         }

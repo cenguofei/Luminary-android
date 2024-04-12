@@ -2,6 +2,7 @@ package com.example.lunimary.base.mmkv
 
 import android.os.Parcelable
 import com.example.lunimary.util.empty
+import com.example.lunimary.util.logi
 import com.tencent.mmkv.MMKV
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -31,8 +32,15 @@ fun boolean(
     key = key,
     defaultValue = defaultValue,
     mmapID = mmapID,
-    getter = { k, v -> decodeBool(k, v) },
-    setter = { k, v -> encode(k, v) }
+    getter = { k, v ->
+        val getBool = decodeBool(k, v)
+        "key:$k mmapID:$mmapID, default=$v get=$getBool".logi("mmkv_bool")
+        getBool
+    },
+    setter = { k, v ->
+        "setter key:$k to set value:$v".logi("mmkv_bool")
+        encode(k, v)
+    }
 )
 
 fun int(

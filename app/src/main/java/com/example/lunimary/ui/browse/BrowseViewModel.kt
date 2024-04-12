@@ -50,6 +50,7 @@ class BrowseViewModel : BaseViewModel() {
         existsLike(article.id)
         fetchStar(article.id)
         whenBroseArticle(article.id)
+        getAllCommentsOfArticle(article.id)
     }
 
     private fun existingArticle(articleId: Long) {
@@ -73,7 +74,7 @@ class BrowseViewModel : BaseViewModel() {
     fun endRecord() {
         "endRecord".logi("begin_record_time")
         val duration = System.currentTimeMillis() - beginTimestamp
-        val tags = uiState.value!!.article.tags.toList()
+        val tags = uiState.value.article.tags.toList()
         if (duration >= 5000) {
             request(
                 block = {
@@ -160,7 +161,7 @@ class BrowseViewModel : BaseViewModel() {
         fly(FLY_ABOUT_LIKE) {
             request(
                 block = {
-                    likeRepository.giveLike(currentUser.id, uiState.value!!.article.id)
+                    likeRepository.giveLike(currentUser.id, uiState.value.article.id)
                 },
                 onSuccess = { _, _ ->
                     _likedTheArticle.value = true
@@ -174,7 +175,7 @@ class BrowseViewModel : BaseViewModel() {
         fly(FLY_ABOUT_LIKE) {
             request(
                 block = {
-                    likeRepository.cancelLike(currentUser.id, uiState.value!!.article.id)
+                    likeRepository.cancelLike(currentUser.id, uiState.value.article.id)
                 },
                 onSuccess = { _, _ ->
                     _likedTheArticle.value = false
@@ -225,7 +226,7 @@ class BrowseViewModel : BaseViewModel() {
         fly(FLY_ABOUT_STAR) {
             request(
                 block = {
-                    collectRepository.giveCollect(currentUser.id, uiState.value!!.article.id)
+                    collectRepository.giveCollect(currentUser.id, uiState.value.article.id)
                 },
                 onSuccess = { _, _ ->
                     _staredTheArticle.value = true
@@ -239,7 +240,7 @@ class BrowseViewModel : BaseViewModel() {
         fly(FLY_ABOUT_STAR) {
             request(
                 block = {
-                    collectRepository.cancelCollect(currentUser.id, uiState.value!!.article.id)
+                    collectRepository.cancelCollect(currentUser.id, uiState.value.article.id)
                 },
                 onSuccess = { _, _ ->
                     _staredTheArticle.value = false
@@ -256,11 +257,11 @@ class BrowseViewModel : BaseViewModel() {
                     commentRepository.createComment(
                         content = comment,
                         userId = currentUser.id,
-                        articleId = uiState.value!!.article.id
+                        articleId = uiState.value.article.id
                     )
                 },
                 onSuccess = { _, _ ->
-                    getAllCommentsOfArticle(uiState.value!!.article.id)
+                    getAllCommentsOfArticle(uiState.value.article.id)
                 },
                 onFailed = { },
                 onFinish = { land(FLY_CREATE_COMMENT) }
@@ -271,7 +272,7 @@ class BrowseViewModel : BaseViewModel() {
     private val _comments: MutableState<NetworkResult<List<CommentsWithUser>>> =
         mutableStateOf(NetworkResult.None())
     val comments: State<NetworkResult<List<CommentsWithUser>>> get() = _comments
-    fun getAllCommentsOfArticle(articleId: Long) {
+    private fun getAllCommentsOfArticle(articleId: Long) {
         fly(FLY_ALL_COMMENTS_OF_ARTICLE) {
             request(
                 block = {
@@ -336,7 +337,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun delete() {
-        val article = uiState.value!!.article
+        val article = uiState.value.article
         fly(FLY_DELETE_ARTICLE) {
             request(
                 block = {

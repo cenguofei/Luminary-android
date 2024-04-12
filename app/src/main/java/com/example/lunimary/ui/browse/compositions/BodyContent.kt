@@ -48,12 +48,6 @@ fun BodyContent(
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-        LaunchedEffect(
-            key1 = Unit,
-            block = {
-                browseViewModel.getAllCommentsOfArticle(article.id)
-            }
-        )
     } else if (article.link.isNotEmpty()) {
         val state = rememberWebViewState(url = article.link)
         LunimaryWebView(
@@ -82,12 +76,6 @@ fun BodyContent(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            LaunchedEffect(
-                key1 = Unit,
-                block = {
-                    browseViewModel.getAllCommentsOfArticle(article.id)
-                }
-            )
         }
     }
 
