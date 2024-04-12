@@ -28,7 +28,10 @@ import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 
 @Composable
-fun AccountInput(password: MutableState<String>, username: MutableState<String>) {
+fun AccountInput(
+    password: MutableState<String>,
+    username: MutableState<String>
+) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = username.value,
@@ -49,6 +52,7 @@ fun AccountInput(password: MutableState<String>, username: MutableState<String>)
             disabledBorderColor = Color.Transparent,
             errorBorderColor = Color.Transparent
         ),
+        isError = !isUsernameValid(username.value)
     )
     Spacer(
         modifier = Modifier
@@ -87,14 +91,15 @@ fun AccountInput(password: MutableState<String>, username: MutableState<String>)
                 )
             }
         },
-        visualTransformation = if (visibilityOff.value) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (visibilityOff.value) PasswordVisualTransformation() else VisualTransformation.None,
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Color.Transparent,
             focusedBorderColor = Color.Transparent,
             disabledBorderColor = Color.Transparent,
             errorBorderColor = Color.Transparent
         ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        isError = !isPasswordValid(password.value)
     )
     Spacer(
         modifier = Modifier

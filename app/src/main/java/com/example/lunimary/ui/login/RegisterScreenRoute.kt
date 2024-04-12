@@ -70,7 +70,12 @@ fun RegisterScreenRoute(
                 type = stringResource(id = R.string.register),
                 buttonText = stringResource(id = R.string.register),
                 done = { username, password ->
-                    userViewModel.register(username, password)
+                    val verify = verifyInput(username, password)
+                    if (verify.first) {
+                        userViewModel.register(username, password)
+                    } else {
+                        onShowSnackbar(verify.second, null)
+                    }
                 },
                 onNavToProtocol = appState::navToPrivacy,
                 onShowSnackbar = onShowSnackbar

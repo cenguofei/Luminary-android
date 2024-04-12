@@ -132,7 +132,12 @@ fun LoginScreen(
                 username = username,
                 password = password,
                 done = { username, password ->
-                    userViewModel.login(username, password)
+                    val verify = verifyInput(username, password)
+                    if (verify.first) {
+                        userViewModel.login(username, password)
+                    } else {
+                        onShowSnackbar(verify.second, null)
+                    }
                 },
                 type = stringResource(id = R.string.password_login),
                 buttonText = stringResource(id = R.string.login),
