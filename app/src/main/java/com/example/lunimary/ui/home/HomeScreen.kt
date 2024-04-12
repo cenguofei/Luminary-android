@@ -3,10 +3,10 @@ package com.example.lunimary.ui.home
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.base.UserState
@@ -14,6 +14,7 @@ import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.User
 import com.example.lunimary.ui.LunimaryAppState
+import com.example.lunimary.util.logi
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -24,11 +25,9 @@ fun HomeScreen(
     onLoginClick: () -> Unit,
     appState: LunimaryAppState,
     onItemClick: (PageItem<Article>) -> Unit,
+    pagerState: PagerState,
+    tabs: List<HomeCategories>,
 ) {
-    val tabs = remember {
-        listOf(HomeCategories.Recommend, HomeCategories.All, HomeCategories.Following)
-    }
-    val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
     val userState = UserState.currentUserState.observeAsState()
     val recommendViewModel: RecommendViewModel = viewModel()
 

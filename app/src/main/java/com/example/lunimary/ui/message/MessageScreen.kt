@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -22,13 +22,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MessageScreen(
-    modifier: Modifier
+    modifier: Modifier,
+    pagerState: PagerState,
+    tabs: List<MessagePageType>
 ) {
-    val tabs = messagePages
     val coroutineScope = rememberCoroutineScope()
     val messageViewModel: MessageViewModel = viewModel()
     Column(modifier = modifier.fillMaxSize()) {
-        val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,

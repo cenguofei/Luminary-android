@@ -76,7 +76,7 @@ fun DraftItem(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 8.dp),
+                    .padding(end = 32.dp, bottom = 12.dp),
                 shape = RoundedCornerShape(25)
             ) {
                 Text(

@@ -1,10 +1,12 @@
 package com.example.lunimary.ui.user
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.pager.pagerFlow
+import com.example.lunimary.base.pager.pagerState
 import com.example.lunimary.model.ext.InteractionData
 import com.example.lunimary.model.source.remote.paging.UserCollectedArticleSource
 import com.example.lunimary.model.source.remote.paging.UserLikedArticleSource
@@ -19,7 +21,16 @@ class UserDetailViewModel : BaseViewModel() {
     private val _uiState: MutableLiveData<InteractionData> = MutableLiveData(InteractionData())
     val uiState: LiveData<InteractionData> get() = _uiState
 
-    fun requestData() { getUserInteractionData() }
+    val tabs = listOf(
+        ArticlesType.Composition, ArticlesType.Privacy,
+        ArticlesType.Collect, ArticlesType.Like
+    )
+    @OptIn(ExperimentalFoundationApi::class)
+    val pagerState = pagerState { tabs.size }
+
+    fun requestData() {
+        getUserInteractionData()
+    }
 
     val publicArticles = pagerFlow { UserPublicArticleSource(currentUser.id) }
 
