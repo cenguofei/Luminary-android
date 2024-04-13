@@ -31,7 +31,7 @@ import com.example.lunimary.model.User
 import com.example.lunimary.model.fileBaseUrl
 
 @Composable
-fun CommentItem(
+fun MessageCommentItem(
     modifier: Modifier = Modifier,
     user: User,
     article: Article,

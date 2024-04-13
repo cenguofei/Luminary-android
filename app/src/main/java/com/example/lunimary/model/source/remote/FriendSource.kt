@@ -26,5 +26,9 @@ interface FriendSource {
         whoId: Long
     ): DataResponse<ExistingFriendship>
 
+    suspend fun invisibleFollow(
+        followerId: Long
+    ): DataResponse<Boolean>
+
     companion object : FriendSource by FriendSourceImpl()
 }

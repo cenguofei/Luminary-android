@@ -27,6 +27,7 @@ import com.example.lunimary.ui.user.UserDetailScreen
 
 fun NavGraphBuilder.topLevelScreens(
     appState: LunimaryAppState,
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
     composable(
         route = TopLevelDestination.Home.route,
@@ -37,7 +38,10 @@ fun NavGraphBuilder.topLevelScreens(
             }
         )
     ) {
-        TopLevelScreens(appState = appState)
+        TopLevelScreens(
+            appState = appState,
+            onShowSnackbar = onShowSnackbar
+        )
     }
 }
 
@@ -45,6 +49,7 @@ fun NavGraphBuilder.topLevelScreens(
 @Composable
 private fun TopLevelScreens(
     appState: LunimaryAppState,
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
     val selectedBottomTab = appState.selectedBottomTab
     val homeTabs = remember {
@@ -100,7 +105,8 @@ private fun TopLevelScreens(
                     MessageScreen(
                         modifier = paddingModifier,
                         pagerState = messagePagerState,
-                        tabs = messageTabs
+                        tabs = messageTabs,
+                        onShowSnackbar = onShowSnackbar
                     )
                 }
             }

@@ -62,7 +62,8 @@ fun <T : Any> LunimaryPagingContent(
         else -> stringResource(id = R.string.load_error_and_retry)
     }
     val showShimmer = if (shimmer) loadState.refresh is LoadState.Loading else false
-    val showEmpty = loadState.refresh is LoadState.NotLoading && items.isEmpty()
+    val isAllItemDeleted = items.itemSnapshotList.all { it?.deleted == true }
+    val showEmpty = (loadState.refresh is LoadState.NotLoading && items.isEmpty()) || isAllItemDeleted
     val hasNetwork = LocalContext.current.isCurrentlyConnected()
     val showNetworkError = !hasNetwork && items.isEmpty()
     val searchEmpty = if (searchEmptyEnabled) showEmpty else false

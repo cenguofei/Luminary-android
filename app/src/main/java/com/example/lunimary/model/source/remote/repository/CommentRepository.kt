@@ -19,4 +19,7 @@ class CommentRepository : Repository by Repository() {
     suspend fun getAllCommentsOfArticle(articleId: Long): DataResponse<List<CommentsWithUser>> {
         return withDispatcher { source.getAllCommentsOfArticle(articleId) }
     }
+
+    suspend fun deleteComment(commentId: Long): DataResponse<Boolean> =
+        withDispatcher { source.deleteComment(commentId) }
 }

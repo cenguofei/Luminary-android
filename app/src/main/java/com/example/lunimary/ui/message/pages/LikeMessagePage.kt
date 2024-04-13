@@ -1,28 +1,36 @@
 package com.example.lunimary.ui.message.pages
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.design.nicepage.LunimaryPagingContent
+import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.model.LikeMessage
 import com.example.lunimary.ui.message.LikeItem
+import com.example.lunimary.ui.message.MessageViewModel
 
 @Composable
-fun LikeMessagePage(likesMessage: LazyPagingItems<PageItem<LikeMessage>>) {
-    LunimaryPagingContent(
+fun LikeMessagePage(
+    likesMessage: LazyPagingItems<PageItem<LikeMessage>>,
+    messageViewModel: MessageViewModel,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
+) {
+    MessagePage(
         items = likesMessage,
-        topItem = { Spacer(modifier = Modifier.height(16.dp)) },
-    ) { _, item ->
-        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-            LikeItem(item.data)
-            Spacer(modifier = Modifier.height(8.dp))
+        menu = cascadeMenu {
+            item("delete", "É¾³ýµãÔÞ") {
+                icon(Icons.Default.Delete)
+            }
+        },
+        onItemSelected = { id, item ->
+            if (id == "delete") {
+                messageViewModel.deleteLike(item) {
+                    onShowSnackbar(it, null)
+                }
+            }
         }
+    ) {
+        LikeItem(it)
     }
 }

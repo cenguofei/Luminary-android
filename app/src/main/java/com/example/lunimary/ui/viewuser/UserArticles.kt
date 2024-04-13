@@ -20,7 +20,7 @@ fun UserArticles(
     LunimaryPagingContent(
         modifier = modifier,
         items = userArticles,
-        key = { userArticles[it]?.data?.id ?: UUID.randomUUID() },
+        key = { userArticles[it]?.data?.id!! },
         viewModel = viewModel,
         pagingKey = "UserArticles_ViewUserViewModel"
     ) { _, item ->

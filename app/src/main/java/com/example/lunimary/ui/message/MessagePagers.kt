@@ -16,6 +16,7 @@ fun MessagePagers(
     pagerState: PagerState,
     tabs: List<MessagePageType>,
     messageViewModel: MessageViewModel,
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
     val commentsMessage = messageViewModel.commentsMessage.collectAsLazyPagingItems()
     val likesMessage = messageViewModel.likesMessage.collectAsLazyPagingItems()
@@ -41,15 +42,29 @@ fun MessagePagers(
         }
     )
     HorizontalPager(state = pagerState) { page ->
-        when(tabs[page]) {
+        when (tabs[page]) {
             MessagePageType.Comment -> {
-                CommentMessagePage(commentsMessage = commentsMessage)
+                CommentMessagePage(
+                    commentsMessage = commentsMessage,
+                    messageViewModel = messageViewModel,
+                    onShowSnackbar = onShowSnackbar
+                )
             }
+
             MessagePageType.Like -> {
-                LikeMessagePage(likesMessage = likesMessage)
+                LikeMessagePage(
+                    likesMessage = likesMessage,
+                    messageViewModel = messageViewModel,
+                    onShowSnackbar = onShowSnackbar
+                )
             }
+
             MessagePageType.Follow -> {
-                FollowMessagePage(followMessage = followMessage)
+                FollowMessagePage(
+                    followMessage = followMessage,
+                    messageViewModel = messageViewModel,
+                    onShowSnackbar = onShowSnackbar
+                )
             }
         }
     }

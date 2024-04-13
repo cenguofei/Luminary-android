@@ -19,4 +19,7 @@ class FriendRepository: Repository by Repository() {
         whoId: Long
     ): DataResponse<ExistingFriendship> =
         withDispatcher { friendSource.existingFriendship(meId, whoId) }
+
+    suspend fun invisibleFollow(followerId: Long): DataResponse<Boolean> =
+        withDispatcher { friendSource.invisibleFollow(followerId) }
 }

@@ -18,4 +18,8 @@ class LikeRepository : Repository by Repository() {
     suspend fun existsLike(userId: Long, articleId: Long): DataResponse<Boolean> {
         return withDispatcher { source.existsLike(userId, articleId) }
     }
+
+    suspend fun invisibleToUser(likeId: Long): DataResponse<Boolean> {
+        return withDispatcher { source.invisibleToUser(likeId) }
+    }
 }

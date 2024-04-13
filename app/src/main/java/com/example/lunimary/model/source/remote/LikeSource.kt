@@ -19,5 +19,9 @@ interface LikeSource {
         articleId: Long
     ): DataResponse<Boolean>
 
+    suspend fun invisibleToUser(
+        likeId: Long
+    ): DataResponse<Boolean>
+
     companion object : LikeSource by LikeSourceImpl()
 }

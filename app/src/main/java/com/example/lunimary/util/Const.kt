@@ -38,9 +38,9 @@ inline val pageRecommendedArticlesPath: String get() = "$articlesRootPath$pageRo
 //Article
 inline val articlesRootPath: String get() = "/articles"
 inline val createArticlePath: String get() = "$articlesRootPath/create"
-inline val getArticleByIdPath: String get() = "$articlesRootPath/{id}"
+inline val getArticleByIdPath: String get() = "$articlesRootPath"
 inline val updateArticleByIdPath: String get() = "$articlesRootPath/update"
-inline val deleteArticleByIdPath: String get() = "$articlesRootPath/{id}"
+inline val deleteArticleByIdPath: String get() = "$articlesRootPath"
 inline val likesOfUserPath: String get() = "$likeRootPath/likes_num"
 inline val publicArticlesOfUserPath: String get() = "$articlesRootPath/user/public"
 inline val privacyArticlesOfUserPath: String get() = "$articlesRootPath/user/privacy"
@@ -57,7 +57,7 @@ inline val likeRootPath: String get() = "/likes"
 inline val createLikePath: String get() = "$likeRootPath/create"
 inline val getAllLikesOfUserPath: String get() = "$likeRootPath/user"
 inline val getAllLikesOfArticlePath: String get() = "$likeRootPath/article"
-inline val deleteLikePath: String get() = "$likeRootPath/{id}"
+inline val deleteLikePath: String get() = "$likeRootPath"
 inline val cancelLikePath: String get() = "${likeRootPath}/cancel"
 inline val existsLikePath: String get() = "${likeRootPath}/exists"
 
@@ -65,8 +65,8 @@ inline val existsLikePath: String get() = "${likeRootPath}/exists"
 inline val collectRootPath: String get() = "/collects"
 inline val createCollectPath: String get() = "$collectRootPath/create"
 
-inline val getAllCollectsOfArticlePath: String get() = "$collectRootPath/article/{id}"
-inline val deleteCollectPath: String get() = "$collectRootPath/{id}"
+inline val getAllCollectsOfArticlePath: String get() = "$collectRootPath/article"
+inline val deleteCollectPath: String get() = "$collectRootPath"
 inline val cancelCollectPath: String get() = "${collectRootPath}/cancel"
 inline val existsCollectPath: String get() = "${collectRootPath}/exists"
 
@@ -74,9 +74,9 @@ inline val existsCollectPath: String get() = "${collectRootPath}/exists"
 //Comment
 inline val commentRootPath: String get() = "/comments"
 inline val createCommentPath: String get() = "$commentRootPath/create"
-inline val getAllCommentsOfUserPath: String get() = "$commentRootPath/user/{id}"
+inline val getAllCommentsOfUserPath: String get() = "$commentRootPath/user"
 inline val getAllCommentsOfArticlePath: String get() = "$commentRootPath/article"
-inline val deleteCommentPath: String get() = "$commentRootPath/{id}"
+inline val deleteCommentPath: String get() = "$commentRootPath"
 //Friend
 inline val friendRootPath: String get() = "/friends"
 inline val followPath: String get() = "$friendRootPath/follow"
@@ -85,6 +85,7 @@ inline val myFollowingsPath: String get() = "$friendRootPath/following"
 inline val myFollowersPath: String get() = "$friendRootPath/followers"
 inline val existingFriendshipPath: String get() = "$friendRootPath/existing_friendship"
 inline val mutualFollowFriendsPath: String get() = "$friendRootPath/mutual"
+inline val invisibleFollowPath: String get() = "$friendRootPath/invisible_follow"
 
 
 //Token

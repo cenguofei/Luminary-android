@@ -24,7 +24,8 @@ import kotlinx.coroutines.launch
 fun MessageScreen(
     modifier: Modifier,
     pagerState: PagerState,
-    tabs: List<MessagePageType>
+    tabs: List<MessagePageType>,
+    onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val messageViewModel: MessageViewModel = viewModel()
@@ -62,6 +63,7 @@ fun MessageScreen(
             pagerState = pagerState,
             tabs = tabs,
             messageViewModel = messageViewModel,
+            onShowSnackbar = onShowSnackbar
         )
     }
 }

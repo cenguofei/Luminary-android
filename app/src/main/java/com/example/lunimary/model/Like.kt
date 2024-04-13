@@ -17,6 +17,11 @@ data class Like(
     val articleId: Long = Long.Default,
 
     /**
+     * Should the like visible to article owner.
+     */
+    val visibleToOwner: Boolean = true,
+
+    /**
      * Like time
      */
     val timestamp: Long = Long.Default

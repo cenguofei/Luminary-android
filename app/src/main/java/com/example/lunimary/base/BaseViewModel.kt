@@ -23,6 +23,8 @@ open class BaseViewModel : ViewModel() {
     private val processingMap = ConcurrentSet<String>()
     fun fly(url: String, action: () -> Unit) {
         if (url !in processingMap) {
+            "fly $url".logd("fly_request")
+            processingMap += url
             action()
         }
     }
@@ -30,6 +32,7 @@ open class BaseViewModel : ViewModel() {
     fun land(url: String) {
         if (url in processingMap) {
             processingMap.remove(url)
+            "land $url".logd("fly_request")
         }
     }
 
@@ -128,6 +131,7 @@ open class BaseViewModel : ViewModel() {
 
     fun <T> request(
         onSuccess: (data: T?, msg: String?) -> Unit = { _, _ -> },
+        emptySuccess: () -> Unit = {},
         onFailed: (msg: String) -> Unit = {},
         onFinish: () -> Unit = {},
         block: suspend () -> BaseResponse<T>
@@ -140,6 +144,7 @@ open class BaseViewModel : ViewModel() {
                 runCatching {
                     if (response.isSuccess()) {
                         onSuccess(response.data, response.msg)
+                        emptySuccess()
                         response.data ?: run {
                             "data is null.".logd()
                         }
