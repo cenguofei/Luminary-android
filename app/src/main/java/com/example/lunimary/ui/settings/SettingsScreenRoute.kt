@@ -52,7 +52,7 @@ fun SettingsScreenRoute(
             LaunchedEffect(
                 key1 = logoutState,
                 block = {
-                    appState.userViewModel.reset()
+                    appState.userViewModel.resetLogoutState()
                     appState.navToHome(Screens.Settings.route)
                 }
             )

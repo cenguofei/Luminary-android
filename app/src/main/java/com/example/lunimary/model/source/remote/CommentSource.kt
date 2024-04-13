@@ -1,6 +1,5 @@
 package com.example.lunimary.model.source.remote
 
-import com.example.lunimary.model.Comment
 import com.example.lunimary.model.ext.CommentsWithUser
 import com.example.lunimary.model.responses.DataResponse
 import com.example.lunimary.model.source.remote.impl.CommentSourceImpl

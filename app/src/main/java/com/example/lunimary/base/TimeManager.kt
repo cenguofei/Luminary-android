@@ -12,26 +12,43 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 object TimeManager {
+    private val daysSinceTimestamp: DaysSinceTimestamp = DaysSinceTimestampImpl()
+    fun getDaysSinceTimestamp(timestamp: Long): String {
+        return daysSinceTimestamp.getDaysSinceTimestamp(timestamp)
+    }
+}
+
+/**
+ * 获取现在距离过去的时间差异，类型包括：
+ *
+ * { 现在，**分钟前，**小时前，**天前，since.niceDateToDay }
+ */
+interface DaysSinceTimestamp {
+
+    fun getDaysSinceTimestamp(since: Long): String
+}
+
+private class DaysSinceTimestampImpl : DaysSinceTimestamp {
     private val nowCalendar = Calendar.getInstance()
     private val pastCalendar = Calendar.getInstance()
 
-    fun getDaysSinceTimestamp(timestamp: Long): String {
+    override fun getDaysSinceTimestamp(since: Long): String {
         nowCalendar.timeInMillis = System.currentTimeMillis()
-        pastCalendar.timeInMillis = timestamp
+        pastCalendar.timeInMillis = since
         return when (isTimeDifferenceGreaterThanOneDay()) {
             true -> {
                 val days = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    getDaysSinceTimestampApi26(timestamp)
+                    getDaysSinceTimestampApi26(since)
                 } else {
                     getDaysSinceTimestampLessApi26()
                 }
                 if (days > 20) {
-                    timestamp.niceDateToDay
+                    since.niceDateToDay
                 } else {
                     "$days 天前"
                 }
             }
-            else -> { getTimeDifference(timestamp) }
+            else -> { getTimeDifference(since) }
         }.also {
             "days=$it".logd("getDaysSinceTimestamp")
         }

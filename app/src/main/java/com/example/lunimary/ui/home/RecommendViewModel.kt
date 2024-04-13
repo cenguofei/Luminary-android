@@ -1,19 +1,27 @@
 package com.example.lunimary.ui.home
 
-import androidx.paging.PagingData
-import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.pager.PageItem
+import com.example.lunimary.base.pager.FlowPagingData
 import com.example.lunimary.base.pager.pagerFlow
+import com.example.lunimary.base.pager.pagerMutableFlow
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.source.remote.paging.FriendsPageArticleSource
 import com.example.lunimary.model.source.remote.paging.PageAllArticleSource
 import com.example.lunimary.model.source.remote.paging.RecommendArticlesPageSource
-import kotlinx.coroutines.flow.Flow
 
 class RecommendViewModel : BaseViewModel() {
-    val allArticles: Flow<PagingData<PageItem<Article>>> = pagerFlow { PageAllArticleSource }
+    private var _allArticles = pagerFlow { PageAllArticleSource }
+    val allArticles: FlowPagingData<Article> get() = _allArticles
 
-    val friendsArticles: Flow<PagingData<PageItem<Article>>> = pagerFlow { FriendsPageArticleSource }
+    private var _friendsArticles = pagerFlow { FriendsPageArticleSource }
+    val friendsArticles: FlowPagingData<Article> get() = _friendsArticles
 
-    val recommendArticles: Flow<PagingData<PageItem<Article>>> = pagerFlow { RecommendArticlesPageSource }
+    private var _recommendArticles = pagerFlow { RecommendArticlesPageSource }
+    val recommendArticles: FlowPagingData<Article> get() = _recommendArticles
+
+    fun resetPagerFlows() {
+        _allArticles = pagerMutableFlow { PageAllArticleSource }
+        _friendsArticles = pagerMutableFlow { FriendsPageArticleSource }
+        _recommendArticles = pagerMutableFlow { RecommendArticlesPageSource }
+    }
 }

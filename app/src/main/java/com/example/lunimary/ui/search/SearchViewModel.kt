@@ -5,9 +5,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.pager.AppPagingSource
 import com.example.lunimary.base.pager.PageItem
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.User
 import com.example.lunimary.model.source.remote.paging.SearchArticleSource

@@ -8,9 +8,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.design.components.tagColors
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.UploadData

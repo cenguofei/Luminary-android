@@ -3,8 +3,8 @@ package com.example.lunimary.ui.privacy
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.viewmodel.BaseViewModel
 
 const val FLY_GET_PRIVACY = "fly_get_privacy"
 

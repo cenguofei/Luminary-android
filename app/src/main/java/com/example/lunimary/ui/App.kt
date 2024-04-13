@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.example.lunimary.R
 import com.example.lunimary.base.UserState
@@ -118,7 +119,6 @@ private fun LunimaryNavHost(
         )
         loginScreen(
             appState = appState,
-            coroutineScope = coroutineScope,
             onShowSnackbar = onShowSnackbar
         )
         settingsScreen(
@@ -158,7 +158,13 @@ private fun ObserveGlobal(appState: LunimaryAppState, snackbarHostState: Snackba
         }
         "online=${online.value}".logd("App_is_off_line")
     }
-    val userState = UserState.currentUserState.observeAsState()
+    val userState = UserState.currentUserState.collectAsStateWithLifecycle()
+    LaunchedEffect(
+        key1 = userState.value,
+        block = {
+            "App ObserveGlobal collected userState: ${userState.value}".logd("currentUserState")
+        }
+    )
     if (userState.value == User.NONE && UserState.updated) {
         LaunchedEffect(
             key1 = Unit,

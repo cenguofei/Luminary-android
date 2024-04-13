@@ -27,12 +27,9 @@ import com.example.lunimary.design.nicepage.LunimaryStateContent
 import com.example.lunimary.ui.LunimaryAppState
 import com.example.lunimary.ui.Screens
 import com.example.lunimary.util.unknownErrorMsg
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.loginScreen(
     appState: LunimaryAppState,
-    coroutineScope: CoroutineScope,
     onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     composable(
@@ -63,7 +60,6 @@ fun NavGraphBuilder.loginScreen(
             onRegisterClick = {
                 appState.navToRegister()
             },
-            coroutineScope = coroutineScope,
             userViewModel = appState.userViewModel,
             appState = appState,
             onShowSnackbar = onShowSnackbar
@@ -72,12 +68,10 @@ fun NavGraphBuilder.loginScreen(
 }
 
 
-
 @Composable
 fun LoginScreen(
     onBack: () -> Unit,
     onRegisterClick: () -> Unit,
-    coroutineScope: CoroutineScope,
     userViewModel: UserViewModel,
     appState: LunimaryAppState,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
@@ -87,24 +81,24 @@ fun LoginScreen(
     LaunchedEffect(
         key1 = loginState,
         block = {
-            when(loginState) {
+            when (loginState) {
                 is NetworkResult.Success -> {
                     appState.navToHome(Screens.Login.route)
                 }
+
                 is NetworkResult.Error -> {
-                    coroutineScope.launch {
-                        loginState.asError()?.msg?.let {
-                            val message = it.ifEmpty {
-                                if (userViewModel.online.value == true) {
-                                    unknownErrorMsg
-                                } else {
-                                    notConnected
-                                }
+                    loginState.asError()?.msg?.let {
+                        val message = it.ifEmpty {
+                            if (userViewModel.online.value == true) {
+                                unknownErrorMsg
+                            } else {
+                                notConnected
                             }
-                            onShowSnackbar(message, null)
                         }
+                        onShowSnackbar(message, null)
                     }
                 }
+
                 else -> {}
             }
         }

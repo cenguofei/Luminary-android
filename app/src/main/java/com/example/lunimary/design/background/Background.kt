@@ -51,6 +51,25 @@ fun LunimaryGradientBackground(
 ) {
     val currentTopColor by rememberUpdatedState(gradientColors.top)
     val currentBottomColor by rememberUpdatedState(gradientColors.bottom)
+    GradientBackground(
+        modifier = modifier,
+        gradientColors = gradientColors,
+        shape = shape,
+        currentBottomColor = currentBottomColor,
+        currentTopColor = currentTopColor,
+        content = content
+    )
+}
+
+@Composable
+private fun GradientBackground(
+    modifier: Modifier = Modifier,
+    gradientColors: GradientColors = LocalGradientColors.current,
+    shape: Shape = RectangleShape,
+    content: @Composable () -> Unit,
+    currentBottomColor: Color,
+    currentTopColor: Color
+) {
     Surface(
         color = if (gradientColors.container == Color.Unspecified) {
             Color.Transparent
@@ -64,7 +83,11 @@ fun LunimaryGradientBackground(
             modifier = Modifier
                 .fillMaxSize()
                 .drawWithCache {
-                    val offset = size.height * tan(Math.toRadians(11.06).toFloat())
+                    val offset = size.height * tan(
+                        Math
+                            .toRadians(11.06)
+                            .toFloat()
+                    )
                     val start = Offset(size.width / 2 + offset / 2, 0f)
                     val end = Offset(size.width / 2 - offset / 2, size.height)
 

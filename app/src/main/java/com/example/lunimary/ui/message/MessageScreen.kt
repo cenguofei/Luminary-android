@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.design.components.LBHorizontalDivider
 import kotlinx.coroutines.launch
 
@@ -25,10 +24,10 @@ fun MessageScreen(
     modifier: Modifier,
     pagerState: PagerState,
     tabs: List<MessagePageType>,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    messageViewModel: MessageViewModel,
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val messageViewModel: MessageViewModel = viewModel()
     Column(modifier = modifier.fillMaxSize()) {
         Row(
             modifier = Modifier.fillMaxWidth(),

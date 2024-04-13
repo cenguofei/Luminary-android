@@ -18,12 +18,6 @@ class AppPagingSource<T : Any>(
             val pageResponse = source.pages(wishPage, DEFAULT_PER_PAGE_COUNT)
             if (pageResponse.isSuccess()) {
                 val data = pageResponse.data
-//                LoadResult.Page(
-//                    data = emptyList(),
-//                    prevKey = null,
-//                    nextKey = null
-//                )
-//                LoadResult.Error(Throwable(message = pageResponse.msg))
                 LoadResult.Page(
                     data = data?.lists?.map {
                         PageItem(it)

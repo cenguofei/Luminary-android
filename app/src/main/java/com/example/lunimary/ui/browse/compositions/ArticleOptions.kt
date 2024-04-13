@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lunimary.R
 import com.example.lunimary.base.DataState
 import com.example.lunimary.design.LunimaryDialog

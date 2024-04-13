@@ -1,10 +1,10 @@
 package com.example.lunimary.ui.relation
 
 import androidx.compose.runtime.MutableState
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.pager.pagerFlow
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.source.remote.paging.MyFollowersSource
 import com.example.lunimary.model.source.remote.paging.MyFollowingsSource
 import com.example.lunimary.model.source.remote.paging.MyFriendsSource

@@ -32,10 +32,10 @@ fun ArticlesTypeList(
         effect = {
             userDetailViewModel.registerOnHaveNetwork(
                 listOf(
-                    "PublicPage" to compositionsState,
-                    "PrivacyPage" to privacyArticlesState,
-                    "CollectPage" to collectsOfUser,
-                    "LikePage" to likesOfUser,
+                    "PublicPage" to { likesOfUser.retry() },
+                    "PrivacyPage" to { collectsOfUser.retry() },
+                    "CollectPage" to { privacyArticlesState.retry() },
+                    "LikePage" to { compositionsState.retry() },
                 )
             )
             onDispose {

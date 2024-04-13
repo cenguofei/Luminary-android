@@ -4,7 +4,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableStateOf
 
-
+/**
+ * 非可组合PagerState，使ViewModel能保存该状态
+ */
 @OptIn(ExperimentalFoundationApi::class)
 fun pagerState(
     initialPage: Int = 0,

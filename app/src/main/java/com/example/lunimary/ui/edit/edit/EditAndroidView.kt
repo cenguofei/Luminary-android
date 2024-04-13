@@ -2,6 +2,7 @@ package com.example.lunimary.ui.edit.edit
 
 import android.view.View
 import android.widget.EditText
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.addTextChangedListener
 import com.example.lunimary.ui.edit.EditViewModel
+import dev.jeziellago.compose.markdowntext.applyFontSize
 
 @Composable
 fun AndroidTitleView(
@@ -19,23 +21,25 @@ fun AndroidTitleView(
     titleEditView: EditText,
     viewModel: EditViewModel
 ) {
-    val titleColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f).toArgb()
-    AndroidView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
-        factory = {
-            titleEditView.apply {
-                setTextColor(titleColor)
-                setHintTextColor(titleColor)
-                requestFocus()
-                addTextChangedListener(
-                    afterTextChanged = { viewModel.afterTitleChanged(it.toString()) }
-                )
+    val titleColor = MaterialTheme.colorScheme.onSurface.toArgb()
+    val textStyle = MaterialTheme.typography.headlineLarge
+    Row(modifier = Modifier.padding(vertical = 16.dp)) {
+        AndroidView(
+            modifier = Modifier.fillMaxWidth(),
+            factory = {
+                titleEditView.apply {
+                    setTextColor(titleColor)
+                    setHintTextColor(titleColor)
+                    requestFocus()
+                    applyFontSize(textStyle)
+                    addTextChangedListener(
+                        afterTextChanged = { viewModel.afterTitleChanged(it.toString()) }
+                    )
+                }
+                titleView
             }
-            titleView
-        }
-    )
+        )
+    }
 }
 
 @Composable

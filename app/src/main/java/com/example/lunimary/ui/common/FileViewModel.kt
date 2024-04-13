@@ -3,8 +3,8 @@ package com.example.lunimary.ui.common
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.UploadData
 import com.example.lunimary.model.source.remote.repository.FileRepository
 import com.example.lunimary.ui.edit.FLY_UPLOAD_FILE

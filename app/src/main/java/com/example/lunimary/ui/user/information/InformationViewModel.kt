@@ -3,10 +3,10 @@ package com.example.lunimary.ui.user.information
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.UserState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.UPLOAD_TYPE_USER_BACKGROUND
 import com.example.lunimary.model.UPLOAD_TYPE_USER_HEAD
 import com.example.lunimary.model.UploadData

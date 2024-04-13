@@ -3,8 +3,8 @@ package com.example.lunimary.ui.viewuser
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.pager.pagerFlow
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.User
 import com.example.lunimary.model.source.remote.paging.UserPublicArticleSource
 import com.example.lunimary.model.source.remote.repository.UserDetailRepository

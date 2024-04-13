@@ -7,7 +7,6 @@ import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.design.nicepage.LunimaryPagingContent
 import com.example.lunimary.model.Article
 import com.example.lunimary.ui.common.ArticleItem
-import java.util.UUID
 
 
 @Composable

@@ -2,8 +2,8 @@ package com.example.lunimary.ui.user.draft
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.source.local.LocalArticleRepository
 import kotlinx.coroutines.launch

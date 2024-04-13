@@ -1,8 +1,9 @@
 package com.example.lunimary.ui.message
 
-import com.example.lunimary.base.BaseViewModel
+import com.example.lunimary.base.pager.FlowPagingData
 import com.example.lunimary.base.pager.PageItem
-import com.example.lunimary.base.pager.pagerFlow
+import com.example.lunimary.base.pager.pagerMutableFlow
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.LikeMessage
 import com.example.lunimary.model.ext.CommentItem
 import com.example.lunimary.model.ext.UserFriend
@@ -21,17 +22,26 @@ class MessageViewModel : BaseViewModel() {
     /**
      * 评论分页数据
      */
-    val commentsMessage = pagerFlow { MessageCommentSource }
+    private var _commentsMessage = pagerMutableFlow { MessageCommentSource }
+    val commentsMessage: FlowPagingData<CommentItem> get() = _commentsMessage
 
     /**
      * 点赞分页数据
      */
-    val likesMessage = pagerFlow { MessageLikeSource }
+    private var _likesMessage = pagerMutableFlow { MessageLikeSource }
+    val likesMessage: FlowPagingData<LikeMessage> get() = _likesMessage
 
     /**
      * 被关注分页数据
      */
-    val followMessage = pagerFlow { MessageFollowSource }
+    private var _followMessage = pagerMutableFlow { MessageFollowSource }
+    val followMessage: FlowPagingData<UserFriend> get() = _followMessage
+
+    fun resetPagerFlows() {
+        _followMessage = pagerMutableFlow { MessageFollowSource }
+        _likesMessage = pagerMutableFlow { MessageLikeSource }
+        _commentsMessage = pagerMutableFlow { MessageCommentSource }
+    }
 
     /**
      * 删除评论
@@ -40,6 +50,7 @@ class MessageViewModel : BaseViewModel() {
         commentItem: PageItem<CommentItem>,
         onFailed: (String) -> Unit
     ) {
+
         fly(FLY_DELETE_COMMENT_MESSAGE) {
             request(
                 block = {

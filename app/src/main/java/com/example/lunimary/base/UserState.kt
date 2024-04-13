@@ -1,16 +1,19 @@
 package com.example.lunimary.base
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lunimary.base.storage.lastLoginUser
 import com.example.lunimary.base.storage.removeLastLoginUser
 import com.example.lunimary.base.storage.saveLastLoginUser
 import com.example.lunimary.model.User
 import com.example.lunimary.util.logd
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 object UserState {
-    private val CURRENT_USER: MutableLiveData<User> = MutableLiveData(lastLoginUser() ?: User.NONE)
-    val currentUserState: LiveData<User> get() = CURRENT_USER
+    private val CURRENT_USER: MutableStateFlow<User> = MutableStateFlow(lastLoginUser() ?: User.NONE)
+    val currentUserState: StateFlow<User> get() = CURRENT_USER
 
     var updated: Boolean = false
         private set
@@ -20,12 +23,12 @@ object UserState {
         "更新用户user:$user".logd()
         updated = true
         saveLastLoginUser(user)
-        CURRENT_USER.postValue(user)
+        CURRENT_USER.value = user
     }
 
     fun clearUser() {
         "清除用户信息 currentUser: $currentUser".logd()
-        CURRENT_USER.postValue(User.NONE)
+        CURRENT_USER.value = User.NONE
         removeLastLoginUser()
         updated = true
     }
@@ -41,7 +44,7 @@ object UserState {
     }
 }
 
-val currentUser: User get() = UserState.currentUserState.value ?: User.NONE
+val currentUser: User get() = UserState.currentUserState.value
 
 fun notLogin(): Boolean = currentUser == User.NONE
 
@@ -50,4 +53,23 @@ fun checkLogin(
     isLogout: () -> Unit = {}
 ) {
     if (notLogin()) isLogout() else isLogin()
+}
+
+@Composable
+fun UserStateEffect(
+    key: String,
+    whenNoLogin: () -> Unit = {},
+    onCollected: (User) -> Unit = {}
+) {
+    val userState = UserState.currentUserState.collectAsStateWithLifecycle()
+    LaunchedEffect(
+        key1 = userState.value,
+        block = {
+            "UserStateEffect $key collected userState:${userState.value}".logd("currentUserState")
+            onCollected(userState.value)
+            if (userState.value == User.NONE) {
+                whenNoLogin()
+            }
+        }
+    )
 }

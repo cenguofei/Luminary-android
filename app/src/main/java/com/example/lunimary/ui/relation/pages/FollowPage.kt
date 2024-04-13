@@ -1,8 +1,11 @@
 package com.example.lunimary.ui.relation.pages
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -35,29 +38,36 @@ fun FollowPage(
         }
     )
     LunimaryPagingContent(
-        items = followings,
-        topItem = { Spacer(modifier = Modifier.height(16.dp)) },
+        items = followings
     ) { _, item ->
-        Column {
-            val state: MutableState<NetworkResult<Unit>> = remember {
-                mutableStateOf(NetworkResult.None())
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, start = 12.dp, end = 12.dp),
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.surface,
+            onClick = {}
+        ) {
+            Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                val state: MutableState<NetworkResult<Unit>> = remember {
+                    mutableStateOf(NetworkResult.None())
+                }
+                FollowItem(
+                    followInfoData = FollowItemData(
+                        followInfo = item.data,
+                        cancelFollow = false
+                    ),
+                    onMoreClick = {},
+                    onFollowClick = {
+                        relationViewModel.onFollowClick(item.data.myFollow.id, state)
+                    },
+                    onCancelFollowClick = {
+                        relationViewModel.onUnfollowClick(item.data.myFollow.id, state)
+                    },
+                    state = state,
+                    onItemClick = onItemClick,
+                )
             }
-            FollowItem(
-                followInfoData = FollowItemData(
-                    followInfo = item.data,
-                    cancelFollow = false
-                ),
-                onMoreClick = {},
-                onFollowClick = {
-                    relationViewModel.onFollowClick(item.data.myFollow.id, state)
-                },
-                onCancelFollowClick = {
-                    relationViewModel.onUnfollowClick(item.data.myFollow.id, state)
-                },
-                state = state,
-                onItemClick = onItemClick,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

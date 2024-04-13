@@ -7,10 +7,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.example.lunimary.LunimaryApplication
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.Comment
 import com.example.lunimary.model.User

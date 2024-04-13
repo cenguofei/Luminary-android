@@ -3,7 +3,6 @@ package com.example.lunimary.model.source.remote.impl
 import com.example.lunimary.base.ktor.addPathParam
 import com.example.lunimary.base.ktor.init
 import com.example.lunimary.base.ktor.securityDelete
-import com.example.lunimary.base.ktor.securityGet
 import com.example.lunimary.base.ktor.securityPost
 import com.example.lunimary.base.ktor.setJsonBody
 import com.example.lunimary.model.Comment

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -49,11 +49,17 @@ fun NavGraphBuilder.informationScreen(
         route = Screens.Information.route
     ) {
         val informationViewModel: InformationViewModel = viewModel()
-        val user = UserState.currentUserState.observeAsState()
+        val userState = UserState.currentUserState.collectAsStateWithLifecycle()
+        LaunchedEffect(
+            key1 = userState.value,
+            block = {
+                "informationScreen collected userState: ${userState.value}".logd("currentUserState")
+            }
+        )
         InformationScreen(
             onBack = appState::popBackStack,
             informationViewModel = informationViewModel,
-            user = user.value!!,
+            user = userState.value,
             onShowSnackbar = onShowSnackbar
         )
     }

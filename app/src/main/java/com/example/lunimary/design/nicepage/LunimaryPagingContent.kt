@@ -29,10 +29,10 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.R
-import com.example.lunimary.base.BaseViewModel
-import com.example.lunimary.base.ScopeViewModel
 import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.base.pager.PageItem
+import com.example.lunimary.base.viewmodel.BaseViewModel
+import com.example.lunimary.base.viewmodel.ScopeViewModel
 import com.example.lunimary.design.components.Footer
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -36,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.lunimary.R
 import com.example.lunimary.base.currentUser
@@ -48,10 +47,10 @@ fun UserDetailScreen(
     appState: LunimaryAppState,
     onOpenMenu: () -> Unit,
     onDraftClick: () -> Unit,
-    onNavToDraft: () -> Unit
+    onNavToDraft: () -> Unit,
+    userDetailViewModel: UserDetailViewModel
 ) {
     val user = currentUser
-    val userDetailViewModel: UserDetailViewModel = viewModel()
     val showLikesDialog = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit, block = { userDetailViewModel.requestData() })
     Box(modifier = Modifier.fillMaxSize()) {

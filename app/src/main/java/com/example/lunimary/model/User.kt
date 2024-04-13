@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Parcelize
 @Serializable
 data class User(
-    val id: Long = Long.Default,
+    val id: Long = -1,
     val username: String,
     val age: Int = Int.Default,
     val sex: Sex = Sex.Sealed,

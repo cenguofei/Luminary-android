@@ -1,41 +1,19 @@
-package com.example.lunimary.base
+package com.example.lunimary.base.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.compose.LazyPagingItems
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.network.NetworkMonitor
 import com.example.lunimary.base.network.NetworkMonitorImpl
 import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.util.logd
-import com.example.lunimary.util.loge
-import com.example.lunimary.util.unknownErrorMsg
-import io.ktor.util.collections.ConcurrentSet
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-open class BaseViewModel : ViewModel() {
-    private val processingMap = ConcurrentSet<String>()
-    fun fly(url: String, action: () -> Unit) {
-        if (url !in processingMap) {
-            "fly $url".logd("fly_request")
-            processingMap += url
-            action()
-        }
-    }
-
-    fun land(url: String) {
-        if (url in processingMap) {
-            processingMap.remove(url)
-            "land $url".logd("fly_request")
-        }
-    }
-
+abstract class NetworkViewModel : ApiViewModel() {
     private val isOnline = networkMonitor.isOnline
         .stateIn(
             scope = viewModelScope,
@@ -46,8 +24,6 @@ open class BaseViewModel : ViewModel() {
     private val _online: MutableLiveData<Boolean> =
         MutableLiveData(LunimaryApplication.applicationContext.isCurrentlyConnected())
     val online: LiveData<Boolean> get() = _online
-
-    init { collectNetState() }
 
     private fun collectNetState() {
         viewModelScope.launch {
@@ -109,67 +85,27 @@ open class BaseViewModel : ViewModel() {
         }
     }
 
-    fun <T : Any> registerOnHaveNetwork(
-        keys: List<Pair<String, LazyPagingItems<T>>>
+    fun unregisterOnHaveNetwork(vararg keys: String) {
+        keys.forEach { unregisterOnHaveNetwork(it) }
+    }
+
+    fun registerOnHaveNetwork(
+        keys: List<Pair<String, () -> Unit>>
     ) {
         keys.forEach {
             val key = it.first
-            val items = it.second
-            registerOnHaveNetwork(key) {
-                items.retry()
-            }
+            val callback = it.second
+            registerOnHaveNetwork(key, callback)
         }
-    }
-
-    fun unregisterOnHaveNetwork(vararg keys: String) {
-        keys.forEach { unregisterOnHaveNetwork(it) }
     }
 
     private fun dispatchOnHaveNetEvent() {
         onSwitchToHaveNetMap.values.forEach { it() }
     }
 
-    fun <T> request(
-        onSuccess: (data: T?, msg: String?) -> Unit = { _, _ -> },
-        emptySuccess: () -> Unit = {},
-        onFailed: (msg: String) -> Unit = {},
-        onFinish: () -> Unit = {},
-        block: suspend () -> BaseResponse<T>
-    ): Job {
-        return viewModelScope.launch {
-            runCatching {
-                block()
-            }.onSuccess { response ->
-                "request success: response=$response".logd()
-                runCatching {
-                    if (response.isSuccess()) {
-                        onSuccess(response.data, response.msg)
-                        emptySuccess()
-                        response.data ?: run {
-                            "data is null.".logd()
-                        }
-                    } else {
-                        onFailed(response.msg)
-                    }
-                }.onFailure {
-                    onFailed(it.errorMsg)
-                }
-                onFinish()
-            }.onFailure {
-                it.message?.loge()
-                it.printStackTrace()
-                onFailed(it.errorMsg)
-                onFinish()
-            }
-        }
-    }
-
     companion object {
         private val networkMonitor: NetworkMonitor =
             NetworkMonitorImpl(LunimaryApplication.applicationContext)
     }
+    init { collectNetState() }
 }
-
-val Throwable.errorMsg: String get() = message ?: unknownErrorMsg
-
-object ScopeViewModel : BaseViewModel()

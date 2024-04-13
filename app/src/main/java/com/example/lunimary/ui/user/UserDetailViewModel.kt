@@ -3,10 +3,12 @@ package com.example.lunimary.ui.user
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.pager.FlowPagingData
 import com.example.lunimary.base.pager.pagerFlow
 import com.example.lunimary.base.pager.pagerState
+import com.example.lunimary.base.viewmodel.BaseViewModel
+import com.example.lunimary.model.Article
 import com.example.lunimary.model.ext.InteractionData
 import com.example.lunimary.model.source.remote.paging.UserCollectedArticleSource
 import com.example.lunimary.model.source.remote.paging.UserLikedArticleSource
@@ -25,6 +27,7 @@ class UserDetailViewModel : BaseViewModel() {
         ArticlesType.Composition, ArticlesType.Privacy,
         ArticlesType.Collect, ArticlesType.Like
     )
+
     @OptIn(ExperimentalFoundationApi::class)
     val pagerState = pagerState { tabs.size }
 
@@ -32,13 +35,24 @@ class UserDetailViewModel : BaseViewModel() {
         getUserInteractionData()
     }
 
-    val publicArticles = pagerFlow { UserPublicArticleSource(currentUser.id) }
+    private var _publicArticles = pagerFlow { UserPublicArticleSource(currentUser.id) }
+    val publicArticles: FlowPagingData<Article> get() = _publicArticles
 
-    val privacyArticles = pagerFlow { UserPrivacyArticleSource }
+    private var _privacyArticles = pagerFlow { UserPrivacyArticleSource }
+    val privacyArticles: FlowPagingData<Article> get() = _privacyArticles
 
-    val collectsOfUser = pagerFlow { UserCollectedArticleSource }
+    private var _collectsOfUser = pagerFlow { UserCollectedArticleSource }
+    val collectsOfUser: FlowPagingData<Article> get() = _collectsOfUser
 
-    val likesOfUser = pagerFlow { UserLikedArticleSource }
+    private var _likesOfUser = pagerFlow { UserLikedArticleSource }
+    val likesOfUser: FlowPagingData<Article> get() = _likesOfUser
+
+    fun resetPagerFlows() {
+        _publicArticles = pagerFlow { UserPublicArticleSource(currentUser.id) }
+        _privacyArticles = pagerFlow { UserPrivacyArticleSource }
+        _collectsOfUser = pagerFlow { UserCollectedArticleSource }
+        _likesOfUser = pagerFlow { UserLikedArticleSource }
+    }
 
     private fun getUserInteractionData() {
         "getUserInteractionData".logi("getUserInteractionData")

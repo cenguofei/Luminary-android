@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lunimary.LunimaryApplication
-import com.example.lunimary.base.BaseViewModel
 import com.example.lunimary.base.UserState
 import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.network.NetworkResult
@@ -12,6 +11,7 @@ import com.example.lunimary.base.network.isCurrentlyConnected
 import com.example.lunimary.base.storage.refreshToken
 import com.example.lunimary.base.storage.removeSession
 import com.example.lunimary.base.storage.removeToken
+import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.model.responses.UserData
 import com.example.lunimary.model.source.remote.repository.UserRepository
 import com.example.lunimary.util.logd
@@ -30,6 +30,10 @@ class UserViewModel : BaseViewModel() {
     private val _logoutState: MutableLiveData<NetworkResult<Unit>> =
         MutableLiveData(NetworkResult.None())
     val logoutState: LiveData<NetworkResult<Unit>> get() = _logoutState
+
+    private val _registerState: MutableLiveData<NetworkResult<UserData>> =
+        MutableLiveData(NetworkResult.None())
+    val registerState: LiveData<NetworkResult<UserData>> get() = _registerState
 
 
     fun checkLogin(
@@ -108,10 +112,6 @@ class UserViewModel : BaseViewModel() {
         )
     }
 
-    private val _registerState: MutableLiveData<NetworkResult<UserData>> =
-        MutableLiveData(NetworkResult.None())
-    val registerState: LiveData<NetworkResult<UserData>> get() = _registerState
-
     fun register(username: String, password: String) {
         request(
             block = {
@@ -133,7 +133,7 @@ class UserViewModel : BaseViewModel() {
         _registerState.postValue(NetworkResult.None())
     }
 
-    fun reset() {
+    fun resetLogoutState() {
         _logoutState.postValue(NetworkResult.None())
     }
 }
