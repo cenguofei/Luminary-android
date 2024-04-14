@@ -20,7 +20,7 @@ fun CommentMessagePage(
     MessagePage(
         items = commentsMessage,
         menu = cascadeMenu {
-            item("delete", "É¾³ıÆÀÂÛ") {
+            item("delete", "É¾³ıÏûÏ¢") {
                 icon(Icons.Default.Delete)
             }
         },

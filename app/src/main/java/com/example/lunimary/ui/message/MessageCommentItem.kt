@@ -74,7 +74,7 @@ fun MessageCommentItem(
             Row(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = article.title,
+                        text = "《${article.title}》",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.W500,
                         maxLines = 1,
@@ -88,6 +88,7 @@ fun MessageCommentItem(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                     )
                 }
+                Spacer(modifier = Modifier.width(4.dp))
                 Surface(
                     modifier = Modifier
                         .height(45.dp)

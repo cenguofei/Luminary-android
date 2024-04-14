@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 /**
  * 处理网络请求
  */
-interface ViewModelApi {
+interface ApiRequest {
     /**
      * 开始请求时调用，前一个调用没返回之前后续调用无效
      */

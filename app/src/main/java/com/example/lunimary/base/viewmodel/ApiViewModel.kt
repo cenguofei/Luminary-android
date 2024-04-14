@@ -9,7 +9,7 @@ import io.ktor.util.collections.ConcurrentSet
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-abstract class ApiViewModel : ViewModel(), ViewModelApi {
+abstract class ApiViewModel : ViewModel(), ApiRequest {
     private val processingMap = ConcurrentSet<String>()
     override fun fly(url: String, action: () -> Unit) {
         if (url !in processingMap) {

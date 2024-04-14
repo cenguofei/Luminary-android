@@ -20,9 +20,7 @@ fun NavGraphBuilder.browseScreen(
     appState: LunimaryAppState,
     onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
-    composable(
-        route = Screens.BrowseArticle.route
-    ) {
+    composable(route = Screens.BrowseArticle.route) {
         NotLoginEffect(appState = appState)
         val articleItem = PageArticleNavArguments[PAGE_ARTICLE_ITEM_KEY]
         ArticleEffect(articleItem = articleItem, appState = appState)

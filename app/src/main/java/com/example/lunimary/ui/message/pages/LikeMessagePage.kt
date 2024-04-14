@@ -19,7 +19,7 @@ fun LikeMessagePage(
     MessagePage(
         items = likesMessage,
         menu = cascadeMenu {
-            item("delete", "É¾³ıµãÔŞ") {
+            item("delete", "É¾³ıÏûÏ¢") {
                 icon(Icons.Default.Delete)
             }
         },

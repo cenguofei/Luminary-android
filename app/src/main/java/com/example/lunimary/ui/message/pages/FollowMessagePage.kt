@@ -19,7 +19,7 @@ fun FollowMessagePage(
     MessagePage(
         items = followMessage,
         menu = cascadeMenu {
-            item("delete", "É¾³ı¹Ø×¢") {
+            item("delete", "É¾³ıÏûÏ¢") {
                 icon(Icons.Default.Delete)
             }
         },
