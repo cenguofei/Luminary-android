@@ -35,7 +35,10 @@ fun BodyContent(
     browseViewModel: BrowseViewModel
 ) {
     if (article.isLunimaryStation) {
-        LunimaryMarkdown(markdown = article.body)
+        LunimaryMarkdown(
+            markdown = article.body,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()

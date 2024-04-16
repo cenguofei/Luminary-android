@@ -13,8 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,7 +29,8 @@ fun BottomSheetContent(
     editViewModel: EditViewModel,
     historyTags: State<List<Tag>?>,
     onUpdateSuccess: (updated: Article) -> Unit,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
+    onDismissSheet: () -> Unit,
 ) {
     Column {
         Row(
@@ -45,10 +44,12 @@ fun BottomSheetContent(
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)
-            .padding(horizontal = 9.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(horizontal = 9.dp)
+        ) {
             item {
                 ArticleTags(editViewModel = editViewModel, historyTags = historyTags)
             }
@@ -63,7 +64,8 @@ fun BottomSheetContent(
             editViewModel = editViewModel,
             reallyPublish = reallyPublish,
             onUpdateSuccess = onUpdateSuccess,
-            onShowSnackbar = onShowSnackbar
+            onShowSnackbar = onShowSnackbar,
+            onDismissSheet = onDismissSheet
         )
     }
 }
@@ -73,29 +75,34 @@ private fun BottomButtons(
     editViewModel: EditViewModel,
     reallyPublish: () -> Unit,
     onUpdateSuccess: (updated: Article) -> Unit,
-    onShowSnackbar: (msg: String, label: String?) -> Unit
+    onShowSnackbar: (msg: String, label: String?) -> Unit,
+    onDismissSheet: () -> Unit,
 ) {
-    val showSnackbar = remember { mutableStateOf(false) }
-    if (showSnackbar.value) {
-        onShowSnackbar(stringResource(id = R.string.auto_save_as_draft), null)
-    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
         val uiState = editViewModel.uiState
-        when(uiState.editType) {
+        when (uiState.editType) {
             EditType.Edit -> {
                 if (uiState.theArticleChanged()) {
                     LinearButton(
                         modifier = Modifier.weight(1f),
-                        onClick = { editViewModel.updateRemoteArticle(onUpdateSuccess) },
+                        onClick = {
+                            editViewModel.updateRemoteArticle(
+                                onUpdateSuccess = {
+                                    onUpdateSuccess(it)
+                                },
+                                notSatisfy = { onDismissSheet() ; onShowSnackbar(it, null) }
+                            )
+                        },
                         text = stringResource(id = R.string.update_content),
                         height = 40.dp
                     )
                 }
             }
+
             EditType.Draft -> {
                 if (uiState.theArticleChanged()) {
                     LinearButton(
@@ -117,6 +124,7 @@ private fun BottomButtons(
                     )
                 }
             }
+
             EditType.New -> {
                 if (uiState.canSaveAsDraft) {
                     LinearButton(

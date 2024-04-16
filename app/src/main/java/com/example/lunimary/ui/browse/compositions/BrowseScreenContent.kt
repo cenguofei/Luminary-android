@@ -27,7 +27,6 @@ fun BrowseScreenContent(
     onUnfollowClick: () -> Unit,
     browseViewModel: BrowseViewModel,
     onEditCommentClick: () -> Unit,
-    onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
     navToEdit: (EditType, Article) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
@@ -84,7 +83,7 @@ fun BrowseScreenContent(
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
-                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     BodyContent(
                         article = article,
                         onBack = onBack,

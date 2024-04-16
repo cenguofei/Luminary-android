@@ -24,8 +24,6 @@ import com.example.lunimary.design.myObserveAsState
 import com.example.lunimary.model.Article
 import com.example.lunimary.ui.edit.bottomsheet.BottomSheetContent
 import com.example.lunimary.util.unknownErrorMsg
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,10 +37,13 @@ fun AddArticleScreenRoute(
     onPublishedArticleDelete: () -> Unit,
     editType: EditType,
     theArticle: PageItem<Article>?,
-    coroutineScope: CoroutineScope,
     onBack: () -> Unit
 ) {
-    FillArticleEffect(article = theArticle?.data, editViewModel = editViewModel, editType = editType)
+    FillArticleEffect(
+        article = theArticle?.data,
+        editViewModel = editViewModel,
+        editType = editType
+    )
     val saveMessage = stringResource(id = R.string.auto_save_as_draft)
     val updateMessage = stringResource(id = R.string.has_updated_draft)
     val openDialog = remember { mutableStateOf(false) }
@@ -52,9 +53,7 @@ fun AddArticleScreenRoute(
                 if (editViewModel.uiState.canSaveAsDraft && editViewModel.shouldSaveAsDraft) {
                     if (editViewModel.saveAsDraftEnabled) {
                         editViewModel.saveAsDraft()
-                        coroutineScope.launch {
-                            onShowSnackbar(saveMessage, null)
-                        }
+                        onShowSnackbar(saveMessage, null)
                     }
                 }
                 onBack()
@@ -62,9 +61,7 @@ fun AddArticleScreenRoute(
 
             EditType.Draft -> {
                 if (editViewModel.uiState.theArticleChanged() && editViewModel.shouldUpdateDraft) {
-                    coroutineScope.launch {
-                        onShowSnackbar(updateMessage, null)
-                    }
+                    onShowSnackbar(updateMessage, null)
                     editViewModel.updateDraft()
                 }
                 onBack()
@@ -82,39 +79,43 @@ fun AddArticleScreenRoute(
     LunimaryDialog(
         text = stringResource(id = R.string.update_of_remote_not_saved),
         openDialog = openDialog,
-        onConfirmClick = { editViewModel.updateRemoteArticle { onUpdateSuccess(it, theArticle) } },
+        onConfirmClick = {
+            editViewModel.updateRemoteArticle(
+                onUpdateSuccess = { onUpdateSuccess(it, theArticle) },
+                notSatisfy = { onShowSnackbar(it, null) }
+            )
+        },
         onCancelClick = onBack
     )
     val updateArticleState = editViewModel.updateArticleState.collectAsStateWithLifecycle()
-    when(updateArticleState.value) {
+    when (updateArticleState.value) {
         is NetworkResult.Loading -> {
             LoadingDialog()
         }
+
         is NetworkResult.Success -> {
             val message = stringResource(id = R.string.update_remote_success)
             LaunchedEffect(
                 key1 = updateArticleState.value,
                 block = {
                     onBack()
-                    coroutineScope.launch {
-                        onShowSnackbar(message, null)
-                    }
+                    onShowSnackbar(message, null)
                 }
             )
         }
+
         is NetworkResult.Error -> {
             val message = updateArticleState.value.msg ?: unknownErrorMsg
             LaunchedEffect(
                 key1 = updateArticleState.value,
                 block = {
                     onBack()
-                    coroutineScope.launch {
-                        onShowSnackbar(message, null)
-                    }
+                    onShowSnackbar(message, null)
                 }
             )
         }
-        else -> { }
+
+        else -> {}
     }
     BackHandler { onBackAction() }
 
@@ -169,7 +170,8 @@ fun AddArticleScreenRoute(
                 editViewModel = editViewModel,
                 historyTags = historyTags,
                 onUpdateSuccess = { onUpdateSuccess(it, theArticle) },
-                onShowSnackbar = onShowSnackbar
+                onShowSnackbar = onShowSnackbar,
+                onDismissSheet = { showBottomDrawer = false }
             )
         }
     }

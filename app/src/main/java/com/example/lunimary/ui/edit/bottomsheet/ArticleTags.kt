@@ -93,7 +93,7 @@ private fun AddTagTextField(editViewModel: EditViewModel) {
 @Composable
 private fun AddedTags(editViewModel: EditViewModel) {
     ManageTags(
-        label = stringResource(id = R.string.history_tags),
+        label = stringResource(id = R.string.selected_tags),
         tags = editViewModel.uiState.tags,
         onDelete = editViewModel::removeAddedTag
     )

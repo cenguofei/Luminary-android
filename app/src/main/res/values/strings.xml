@@ -124,4 +124,5 @@
     <string name="confirm_delete_new_article">⚠️ 确认删除新建的文章吗？</string>
     <string name="confirm_delete_draft">⚠️ 确认删除该草稿吗？</string>
     <string name="delete_article_success">删除成功！</string>
+    <string name="selected_tags">已选标签</string>
 </resources>

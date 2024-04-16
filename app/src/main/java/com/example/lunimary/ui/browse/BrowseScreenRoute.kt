@@ -17,7 +17,6 @@ import com.example.lunimary.util.empty
 internal fun BrowseScreenRoute(
     onBack: () -> Unit,
     browseViewModel: BrowseViewModel,
-    onLinkClick: (String) -> Unit,
     onUserClick: (User) -> Unit,
     navToEdit: (EditType, Article) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
@@ -31,7 +30,6 @@ internal fun BrowseScreenRoute(
             onFollowClick = browseViewModel::onFollowClick,
             onUnfollowClick = browseViewModel::onUnfollowClick,
             onEditCommentClick = { showEditContent.value = true },
-            onLinkClick = onLinkClick,
             onUserClick = onUserClick,
             navToEdit = navToEdit,
             onShowSnackbar = onShowSnackbar,

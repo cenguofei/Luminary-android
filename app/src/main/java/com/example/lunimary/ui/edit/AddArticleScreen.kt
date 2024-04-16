@@ -15,13 +15,11 @@ import com.example.lunimary.ui.common.ArticleNavArguments
 import com.example.lunimary.ui.common.EDIT_ARTICLE_KEY
 import com.example.lunimary.ui.common.EDIT_TYPE_KEY
 import com.example.lunimary.util.logd
-import kotlinx.coroutines.CoroutineScope
 
 @Suppress("UNCHECKED_CAST")
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.addArticleScreen(
     appState: LunimaryAppState,
-    coroutineScope: CoroutineScope,
     onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
     composable(
@@ -55,7 +53,6 @@ fun NavGraphBuilder.addArticleScreen(
                 theArticle?.onDeletedStateChange(true)
                 appState.popBackStack()
             },
-            coroutineScope = coroutineScope,
             onBack = appState::popBackStack
         )
     }

@@ -143,7 +143,16 @@ class EditViewModel : BaseViewModel() {
     }
 
     private var lastUpdateRemoteArticle: Article? = null
-    fun updateRemoteArticle(onUpdateSuccess: (updated: Article) -> Unit) {
+    fun updateRemoteArticle(
+        onUpdateSuccess: (updated: Article) -> Unit,
+        notSatisfy: (String) -> Unit = {}
+    ) {
+        val canUpdateRemotePair = uiState.canUpdateRemoteArticle
+        if (!canUpdateRemotePair.first) {
+            notSatisfy(canUpdateRemotePair.second)
+            "notSatisfy $canUpdateRemotePair".logi("updateRemoteArticle")
+            return
+        }
         val generateArticle = uiState.generateArticle()
         if (lastUpdateRemoteArticle == null || lastUpdateRemoteArticle != generateArticle) {
             lastUpdateRemoteArticle = generateArticle
@@ -157,6 +166,7 @@ class EditViewModel : BaseViewModel() {
                         _updateArticleState.value = NetworkResult.Error(it)
                     },
                     onSuccess = { _, _ ->
+                        "updateRemoteArticle success".logi("updateRemoteArticle")
                         onUpdateSuccess(generateArticle)
                         _updateArticleState.value = NetworkResult.Success()
                     },

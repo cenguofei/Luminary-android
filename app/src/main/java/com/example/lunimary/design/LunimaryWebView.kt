@@ -62,7 +62,8 @@ fun LunimaryWebView(
                     val systemUserAgent = System.getProperty("http.agent")
                     "systemUserAgent=$systemUserAgent".logd("user_agent")
                 }
-            }
+            },
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

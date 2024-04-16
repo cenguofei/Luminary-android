@@ -45,7 +45,6 @@ import com.example.lunimary.ui.user.information.informationScreen
 import com.example.lunimary.ui.viewuser.viewUserScreen
 import com.example.lunimary.ui.webview.webViewScreen
 import com.example.lunimary.util.logd
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -91,7 +90,6 @@ fun LunimaryApp(
                     appState = appState,
                     startScreen = startScreen,
                     onShowSnackbar = showSnackbar,
-                    coroutineScope = coroutineScope
                 )
             }
         }
@@ -105,7 +103,6 @@ private fun LunimaryNavHost(
     appState: LunimaryAppState,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
     startScreen: TopLevelDestination,
-    coroutineScope: CoroutineScope,
 ) {
     val navController = appState.navController
     NavHost(
@@ -131,7 +128,6 @@ private fun LunimaryNavHost(
         )
         addArticleScreen(
             appState = appState,
-            coroutineScope = coroutineScope,
             onShowSnackbar = onShowSnackbar
         )
         draftsScreen(appState = appState)

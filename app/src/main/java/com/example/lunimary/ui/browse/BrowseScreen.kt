@@ -40,7 +40,6 @@ fun NavGraphBuilder.browseScreen(
         BrowseScreenRoute(
             onBack = appState::popBackStack,
             browseViewModel = browseViewModel,
-            onLinkClick = appState::navToWeb,
             onUserClick = { appState.navToViewUser(it, Screens.BrowseArticle.route) },
             navToEdit = { type, _ ->
                 appState.navToEdit(type, articleItem)

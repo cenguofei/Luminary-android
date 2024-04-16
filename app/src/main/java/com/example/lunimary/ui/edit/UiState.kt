@@ -20,7 +20,19 @@ data class UiState(
     val theArticle: Article? = null,
     val isFillByArticle: Boolean = false,
 ) {
-    val canSaveAsDraft: Boolean = title.isNotBlank() && body.isNotBlank()
+    private val titleAndBodyNotEmpty: Boolean get() = title.isNotBlank() && body.isNotBlank()
+
+    val canSaveAsDraft: Boolean get() = titleAndBodyNotEmpty
+
+    val canUpdateRemoteArticle: Pair<Boolean, String>
+        get() {
+            val canUpdateWithLink = title.isNotBlank() && theArticle?.link?.isNotBlank() == true
+            if (canUpdateWithLink || titleAndBodyNotEmpty) return true to empty
+            if (theArticle?.isLunimaryStation == true) {
+                return false to "标题或内容不能为空！"
+            }
+            return false to "标题不能为空！"
+        }
 
     val canPublish: Boolean get() = (title.isNotBlank() && body.isNotBlank()) || theArticle?.link?.isNotBlank() ?: false
 
@@ -58,6 +70,7 @@ data class UiState(
                 tags = tags.map { it.name }.toTypedArray(),
                 cover = cover
             )
+
             EditType.Edit -> theArticle!!.copy(
                 title = title,
                 body = body,
