@@ -50,7 +50,6 @@ class MessageViewModel : BaseViewModel() {
         commentItem: PageItem<CommentItem>,
         onFailed: (String) -> Unit
     ) {
-
         fly(FLY_DELETE_COMMENT_MESSAGE) {
             request(
                 block = {
@@ -91,11 +90,7 @@ class MessageViewModel : BaseViewModel() {
                     friendRepository.invisibleFollow(item.data.user.id)
                 },
                 emptySuccess = {
-
                     item.onDeletedStateChange(true)
-                },
-                onSuccess = { data, msg ->
-                    onFailed("$data, $msg")
                 },
                 onFailed = { onFailed(it) },
                 onFinish = { land(FLY_DELETE_FOLLOWING_MESSAGE) }
