@@ -1,7 +1,5 @@
 package com.example.lunimary.ui.common
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +13,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -23,56 +20,51 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lunimary.design.MarginSurfaceItem
 import com.example.lunimary.design.components.UserHeadImage
 import com.example.lunimary.model.User
 
 @Composable
 fun UserItem(
     user: User,
-    clickEnabled: Boolean = true,
     onMoreClick: () -> Unit = {},
     onItemClick: (User) -> Unit = {}
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = androidx.compose.material.ripple.rememberRipple(),
-                enabled = clickEnabled,
-                onClick = { onItemClick(user) }
-            ),
-        verticalAlignment = Alignment.CenterVertically
+    MarginSurfaceItem(
+        onClick = { onItemClick(user) }
     ) {
-        Spacer(modifier = Modifier.width(16.dp))
-        UserHeadImage(model = user.realHeadUrl(), size = 50.dp)
-        Spacer(modifier = Modifier.width(12.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = user.username,
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W400
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = user.signature,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.W400,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            UserHeadImage(model = user.realHeadUrl(), size = 50.dp)
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = user.username,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.W400
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = user.signature,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.W400,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            IconButton(onClick = onMoreClick) {
+                Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
+            }
         }
-        IconButton(onClick = onMoreClick) {
-            Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
-        }
-        Spacer(modifier = Modifier.width(16.dp))
     }
 }

@@ -39,31 +39,20 @@ fun FollowersPage(
     LunimaryPagingContent(
         items = followers
     ) { _, item ->
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, start = 12.dp, end = 12.dp),
-            shape = RoundedCornerShape(8.dp),
-            color = MaterialTheme.colorScheme.surface,
-            onClick = {}
-        ) {
-            Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                val state: MutableState<NetworkResult<Unit>> = remember {
-                    mutableStateOf(NetworkResult.None())
-                }
-                FollowerItem(
-                    followersInfo = item.data,
-                    onMoreClick = {},
-                    onReturnFollowClick = {
-                        relationViewModel.onFollowClick(item.data.follower.id, state)
-                    },
-                    state = state,
-                    onCancelFollowClick = {
-                        relationViewModel.onUnfollowClick(item.data.follower.id, state = state)
-                    },
-                    onItemClick = onItemClick,
-                )
-            }
+        val state: MutableState<NetworkResult<Unit>> = remember {
+            mutableStateOf(NetworkResult.None())
         }
+        FollowerItem(
+            followersInfo = item.data,
+            onMoreClick = {},
+            onReturnFollowClick = {
+                relationViewModel.onFollowClick(item.data.follower.id, state)
+            },
+            state = state,
+            onCancelFollowClick = {
+                relationViewModel.onUnfollowClick(item.data.follower.id, state = state)
+            },
+            onItemClick = onItemClick,
+        )
     }
 }

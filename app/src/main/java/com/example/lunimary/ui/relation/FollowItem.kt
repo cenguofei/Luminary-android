@@ -1,8 +1,6 @@
 package com.example.lunimary.ui.relation
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.design.MarginSurfaceItem
 import com.example.lunimary.design.cascade.CascadeMenu
 import com.example.lunimary.design.cascade.cascadeMenu
 import com.example.lunimary.design.components.UserHeadImage
@@ -66,135 +65,131 @@ fun FollowItem(
     onFollowClick: () -> Unit,
     onCancelFollowClick: () -> Unit,
     state: MutableState<NetworkResult<Unit>>,
-    clickEnabled: Boolean = true,
     onItemClick: (User) -> Unit = {},
 ) {
     val followInfoState = rememberSaveable(saver = Saver) {
         mutableStateOf(followInfoData)
     }
     val user = followInfoState.value.followInfo.myFollow
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = androidx.compose.material.ripple.rememberRipple(),
-                enabled = clickEnabled,
-                onClick = { onItemClick(user) }
-            ),
-        verticalAlignment = Alignment.CenterVertically
+
+    MarginSurfaceItem(
+        onClick = { onItemClick(user) }
     ) {
-        Spacer(modifier = Modifier.width(16.dp))
-        UserHeadImage(model = user.realHeadUrl(), size = 50.dp)
-        Spacer(modifier = Modifier.width(12.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = user.username,
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W400
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = user.signature,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.W400,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        val followButtonEnabled = remember { mutableStateOf(true) }
-        when (state.value) {
-            is NetworkResult.Loading -> {
-                followButtonEnabled.value = false
-            }
-
-            is NetworkResult.Success -> {
-                followButtonEnabled.value = true
-                LaunchedEffect(
-                    key1 = state.value,
-                    block = {
-                        val newState = !followInfoState.value.cancelFollow
-                        followInfoState.value = followInfoState.value.copy(
-                            cancelFollow = newState
-                        )
-                    }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            UserHeadImage(model = user.realHeadUrl(), size = 50.dp)
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = user.username,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.W400
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = user.signature,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.W400,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
 
-            else -> {
-                followButtonEnabled.value = true
+            val followButtonEnabled = remember { mutableStateOf(true) }
+            when (state.value) {
+                is NetworkResult.Loading -> {
+                    followButtonEnabled.value = false
+                }
+
+                is NetworkResult.Success -> {
+                    followButtonEnabled.value = true
+                    LaunchedEffect(
+                        key1 = state.value,
+                        block = {
+                            val newState = !followInfoState.value.cancelFollow
+                            followInfoState.value = followInfoState.value.copy(
+                                cancelFollow = newState
+                            )
+                        }
+                    )
+                }
+
+                else -> {
+                    followButtonEnabled.value = true
+                }
             }
-        }
-        val (showDropdownMenu, setIsOpen) = remember { mutableStateOf(false) }
-        Box {
-            val cancelFollow = followInfoState.value.cancelFollow
-            Surface(
-                color = if (cancelFollow) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(8),
-                onClick = {
-                    when {
-                        cancelFollow -> {
-                            onFollowClick()
-                        }
+            val (showDropdownMenu, setIsOpen) = remember { mutableStateOf(false) }
+            Box {
+                val cancelFollow = followInfoState.value.cancelFollow
+                Surface(
+                    color = if (cancelFollow) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(8),
+                    onClick = {
+                        when {
+                            cancelFollow -> {
+                                onFollowClick()
+                            }
 
-                        followInfoState.value.followInfo.alsoFollowMe -> {
-                            setIsOpen(true)
-                        }
+                            followInfoState.value.followInfo.alsoFollowMe -> {
+                                setIsOpen(true)
+                            }
 
-                        else -> {
-                            //已关注
+                            else -> {
+                                //已关注
+                                onCancelFollowClick()
+                            }
+                        }
+                    },
+                    enabled = followButtonEnabled.value
+                ) {
+                    var color = MaterialTheme.colorScheme.onSurface
+                    Text(
+                        text = when {
+                            cancelFollow -> {
+                                color = Color.White
+                                stringResource(id = R.string.follow)
+                            }
+
+                            followInfoState.value.followInfo.alsoFollowMe -> stringResource(id = R.string.mutual_follow)
+                            else -> stringResource(id = R.string.already_follow)
+                        },
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontSize = 10.sp,
+                        color = color,
+                        fontWeight = FontWeight.W500
+                    )
+                }
+                CascadeMenu(
+                    isOpen = showDropdownMenu,
+                    menu = cascadeMenu {
+                        item(id = "cancel_follow", title = "取消关注") {
+                            icon(Icons.Default.Close)
+                        }
+                    },
+                    onItemSelected = {
+                        setIsOpen(false)
+                        if (it == "cancel_follow") {
                             onCancelFollowClick()
                         }
-                    }
-                },
-                enabled = followButtonEnabled.value
-            ) {
-                var color = MaterialTheme.colorScheme.onSurface
-                Text(
-                    text = when {
-                        cancelFollow -> {
-                            color = Color.White
-                            stringResource(id = R.string.follow)
-                        }
-                        followInfoState.value.followInfo.alsoFollowMe -> stringResource(id = R.string.mutual_follow)
-                        else -> stringResource(id = R.string.already_follow)
                     },
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    fontSize = 10.sp,
-                    color = color,
-                    fontWeight = FontWeight.W500
+                    onDismiss = { setIsOpen(false) },
+                    width = 150.dp
                 )
             }
-            CascadeMenu(
-                isOpen = showDropdownMenu,
-                menu = cascadeMenu {
-                    item(id = "cancel_follow", title = "取消关注") {
-                        icon(Icons.Default.Close)
-                    }
-                },
-                onItemSelected = {
-                    setIsOpen(false)
-                    if (it == "cancel_follow") {
-                        onCancelFollowClick()
-                    }
-                },
-                onDismiss = { setIsOpen(false) },
-                width = 150.dp
-            )
-        }
 
-        IconButton(onClick = onMoreClick) {
-            Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
+            IconButton(onClick = onMoreClick) {
+                Icon(imageVector = Icons.Default.MoreHoriz, contentDescription = null)
+            }
         }
-        Spacer(modifier = Modifier.width(16.dp))
     }
 }
