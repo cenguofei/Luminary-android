@@ -110,17 +110,17 @@ fun ArticleItem(
                 Spacer(modifier = Modifier.height(4.dp))
                 if (!article.isLunimaryStation) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = if (article.userId == currentUser.id) "你转发" else "${article.username}转发",
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Send,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                             modifier = Modifier.size(10.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "分享人: ${if (article.userId == currentUser.id) "你" else article.username}",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }

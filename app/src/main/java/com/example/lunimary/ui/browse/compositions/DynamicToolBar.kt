@@ -39,7 +39,6 @@ fun DynamicToolBar(
     navToEdit: (EditType, Article) -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
-    val article = uiState.article
     val firstVisibleIndex = remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val alphaAnim = animateFloatAsState(
         targetValue = if (firstVisibleIndex.value >= 2) 1f else 0f,
@@ -51,44 +50,31 @@ fun DynamicToolBar(
             .statusBarsPadding(),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(8.dp))
         BackButton(
             modifier = Modifier,
             onClick = onBack,
             tint = MaterialTheme.colorScheme.onSurface
         )
-        if (article.isLunimaryStation) {
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
-                    .alpha(alphaAnim.value)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    UserHeadImage(
-                        model = browseViewModel.articleOwner.value.realHeadUrl().notNull,
-                        size = 40.dp,
-                        onClick = { onUserClick(browseViewModel.articleOwner.value) }
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    FollowSettingButton(
-                        owner = browseViewModel.articleOwner.value,
-                        hasFetchedFriendship = uiState.hasFetchedFriendship,
-                        isFollowByMe = uiState.isFollowByMe,
-                        onUnfollowClick = onUnfollowClick,
-                        onFollowClick = onFollowClick
-                    )
-                }
-            }
-        } else {
-            Text(
-                text = article.author,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .alpha(if (!uiState.article.isLunimaryStation) 1f else alphaAnim.value),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            UserHeadImage(
+                model = browseViewModel.articleOwner.value.realHeadUrl().notNull,
+                size = 35.dp,
+                onClick = { onUserClick(browseViewModel.articleOwner.value) }
             )
             Spacer(modifier = Modifier.weight(1f))
+            FollowSettingButton(
+                owner = browseViewModel.articleOwner.value,
+                hasFetchedFriendship = uiState.hasFetchedFriendship,
+                isFollowByMe = uiState.isFollowByMe,
+                onUnfollowClick = onUnfollowClick,
+                onFollowClick = onFollowClick
+            )
         }
         ArticleOptions(
             uiState = uiState,

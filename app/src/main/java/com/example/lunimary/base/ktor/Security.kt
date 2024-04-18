@@ -16,7 +16,7 @@ fun HttpMessageBuilder.setSession() {
             append(
                 name = MMKVKeys.LUMINARY_SESSION_KEY,
                 value = loadSession(MMKVKeys.LUMINARY_SESSION_KEY).also {
-                    "session=$it".logd()
+                    "session=$it, username=${currentUser.username}".logd("security")
                 }
             )
         }
@@ -26,7 +26,7 @@ fun HttpMessageBuilder.setSession() {
 fun HttpMessageBuilder.setBearAuth() {
     checkUser {
         loadLocalToken()?.accessToken?.let {
-            "set token: $it".logd("token_debug")
+            "loadLocalToken: $it, username=${currentUser.username}".logd("security")
             bearerAuth(it)
         }
     }

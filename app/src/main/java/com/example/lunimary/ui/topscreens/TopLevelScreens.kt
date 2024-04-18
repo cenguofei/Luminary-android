@@ -60,7 +60,6 @@ private fun TopLevelScreens(
     appState: LunimaryAppState,
     onShowSnackbar: (msg: String, label: String?) -> Unit,
 ) {
-    val userViewModel = appState.userViewModel
     val selectedBottomTab = appState.selectedBottomTab
     val homeTabs = remember {
         listOf(HomeCategories.Recommend, HomeCategories.All, HomeCategories.Following)

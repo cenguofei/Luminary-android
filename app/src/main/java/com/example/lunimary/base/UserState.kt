@@ -3,9 +3,15 @@ package com.example.lunimary.base
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.lunimary.base.storage.MMKVKeys
+import com.example.lunimary.base.storage.TokenInfo
 import com.example.lunimary.base.storage.lastLoginUser
+import com.example.lunimary.base.storage.loadLocalToken
+import com.example.lunimary.base.storage.loadSession
 import com.example.lunimary.base.storage.removeLastLoginUser
 import com.example.lunimary.base.storage.saveLastLoginUser
+import com.example.lunimary.base.storage.saveSession
+import com.example.lunimary.base.storage.saveTokens
 import com.example.lunimary.model.User
 import com.example.lunimary.util.logd
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +25,21 @@ object UserState {
         private set
 
     fun updateLocalUser(user: User) {
+        if (user.username != currentUser.username) {
+            val session = loadSession(MMKVKeys.LUMINARY_SESSION_KEY)
+            val localToken = loadLocalToken()
+            saveSession(user.username, session)
+            localToken?.let {
+                saveTokens(
+                    tokenInfo = TokenInfo(
+                        username = user.username,
+                        accessToken = localToken.accessToken,
+                        refreshToken = localToken.refreshToken
+                    ),
+                    username = user.username
+                )
+            }
+        }
         "currentUser: $currentUser".logd()
         "更新用户user:$user".logd()
         updated = true

@@ -14,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -74,9 +73,7 @@ fun InformationScreen(
     onBack: () -> Unit,
     onShowSnackbar: (msg: String, label: String?) -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val scrollableState = rememberScrollableState(consumeScrollDelta = { it })
-
     val mediaPickerLauncher = rememberLauncherForActivityResult(
         contract = MatisseContract(),
         onResult = { result: List<MediaResource>? ->
@@ -225,7 +222,7 @@ fun InformationScreen(
             showBottomDrawer = showBottomDrawer,
             editItemType = editItemType,
             initialText = initialText,
-            newUser = newUser
+            newUser = newUser,
         )
     }
 }

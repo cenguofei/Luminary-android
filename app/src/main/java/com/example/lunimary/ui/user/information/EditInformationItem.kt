@@ -112,7 +112,7 @@ private fun isError(text: String, editItemType: EditItemType): Boolean {
             !text.isBirth()
         }
         EditItemType.Username -> {
-            false
+            text.isBlank()
         }
         EditItemType.Sex -> {
             !text.isSex()

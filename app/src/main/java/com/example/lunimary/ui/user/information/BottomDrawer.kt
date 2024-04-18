@@ -28,7 +28,7 @@ fun BottomDrawer(
     showBottomDrawer: MutableState<Boolean>,
     editItemType: MutableState<EditItemType>,
     initialText: MutableState<Any>,
-    newUser: MutableState<User>
+    newUser: MutableState<User>,
 ) {
     AnimatedVisibility(
         visible = showBottomDrawer.value,
@@ -70,7 +70,10 @@ fun BottomDrawer(
                             onConfirm = {
                                 showBottomDrawer.value = false
                                 when (editItemType.value) {
-                                    EditItemType.Username -> {}
+                                    EditItemType.Username -> {
+                                        newUser.value = newUser.value.copy(username = it)
+                                    }
+
                                     EditItemType.Sex -> {
                                         newUser.value = newUser.value.copy(sex = byText(it))
                                     }

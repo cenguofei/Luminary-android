@@ -60,7 +60,9 @@ fun ColumnScope.InformationItems(
         itemName = stringResource(id = R.string.username),
         itemContent = newUser.value.username,
         onClick = {
-            onShowSnackbar(modifierUsernameNotAllowed, null)
+            initialText.value = newUser.value.username
+            editItemType.value = EditItemType.Username
+            showBottomDrawer.value = true
         }
     )
 
