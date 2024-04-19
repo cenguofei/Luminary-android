@@ -86,7 +86,10 @@ class InformationViewModel : BaseViewModel() {
                     userRepository.update(newUser)
                 },
                 onSuccess = { _, _ ->
-                    UserState.updateLocalUser(newUser.copy())
+                    UserState.updateLocalUser(
+                        user = newUser.copy(),
+                        usernameChanged = currentUser.username != newUser.username
+                    )
                     _updateUserState.value = NetworkResult.Success()
                 },
                 onFailed = {

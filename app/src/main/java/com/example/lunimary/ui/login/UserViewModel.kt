@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.UserState
+import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.mmkv.SettingMMKV
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.isCurrentlyConnected
@@ -100,7 +101,7 @@ class UserViewModel : BaseViewModel() {
                 userSource.logout()
             },
             onSuccess = { _, _ ->
-                removeSession()
+                removeSession(currentUser.username)
                 removeToken()
                 UserState.clearUser()
                 SettingMMKV.hasLogout = true

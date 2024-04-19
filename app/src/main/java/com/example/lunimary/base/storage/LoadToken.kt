@@ -19,28 +19,43 @@ import io.ktor.client.request.header
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+fun saveTokens(tokenInfo: TokenInfo, username: String) {
+    "saveTokens, username=$username, accessToken=${tokenInfo.accessToken.length}".logd("cgf_security")
+    tokenInfo.encodeParcelable(
+        key = MMKVKeys.TOKEN_INFO_KEY,
+        mmapID = username
+    )
+}
+
 fun loadLocalToken(): BearerTokens? {
     if (currentUser == User.NONE) {
+        "loadLocalToken currentUser = User.NONE".logd("cgf_security")
         return null
     }
+    val username = currentUser.username
     return decodeParcelable<TokenInfo>(
         key = MMKVKeys.TOKEN_INFO_KEY,
-        mmapID = currentUser.username
+        mmapID = username
     ).let {
         if (it == null) null
         else BearerTokens(
             accessToken = it.accessToken,
             refreshToken = it.refreshToken ?: empty
-        ).also { tokens -> tokens.toString().logd() }
+        ).also { tokens ->
+            "loadLocalToken, username=$username, tokens=${tokens.accessToken.length}, ${tokens.refreshToken.length}".logd(
+                "cgf_security"
+            )
+        }
     }
 }
 
 fun removeToken() {
-    "remove token".logd("token_debug")
+    "remove token".logd("cgf_security")
     val mmkv = MMKV.mmkvWithID(currentUser.username)
     mmkv.remove(MMKVKeys.TOKEN_INFO_KEY)
-    "after remove:accessToken=${loadLocalToken()?.accessToken}".logd("token_debug")
+    "after remove:accessToken.length=${loadLocalToken()?.accessToken?.length}".logd("cgf_security")
 }
+
 suspend fun refreshToken(): BearerTokens? {
     return withContext(Dispatchers.IO) {
         val rawResponse = httpClient.get(
@@ -54,7 +69,7 @@ suspend fun refreshToken(): BearerTokens? {
         }
         val response = rawResponse.body<DataResponse<TokenInfo>>()
         response.data?.let {
-            saveTokens(it,it.username)
+            saveTokens(it, it.username)
         }
         val tokenInfo = response.data
         if (tokenInfo == null) null
@@ -63,12 +78,4 @@ suspend fun refreshToken(): BearerTokens? {
             refreshToken = tokenInfo.refreshToken ?: empty
         )
     }
-}
-
-fun saveTokens(tokenInfo: TokenInfo, username: String) {
-    "saveTokens,access=${tokenInfo.accessToken}".logd("token_debug")
-    tokenInfo.encodeParcelable(
-        key = MMKVKeys.TOKEN_INFO_KEY,
-        mmapID = username
-    ).also { tokens -> tokens.toString().logd("token") }
 }

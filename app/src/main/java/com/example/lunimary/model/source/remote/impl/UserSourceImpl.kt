@@ -50,7 +50,7 @@ class UserSourceImpl: BaseSourceImpl by BaseSourceImpl(),  UserSource {
         "session=$session \n accessToken=$accessToken \n refreshToken=$refreshToken".logd("token")
         val loginUsername = response.body<UserResponse>().data?.user?.username
         if (loginUsername != null) {
-            "save token&session".logd()
+            "save token&session loginUsername=$loginUsername".logd()
             saveSession(loginUsername, session)
             saveTokens(TokenInfo(loginUsername, accessToken, refreshToken), loginUsername)
         }

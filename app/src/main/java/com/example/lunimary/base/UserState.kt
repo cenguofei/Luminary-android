@@ -3,12 +3,13 @@ package com.example.lunimary.base
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.lunimary.base.storage.MMKVKeys
 import com.example.lunimary.base.storage.TokenInfo
 import com.example.lunimary.base.storage.lastLoginUser
 import com.example.lunimary.base.storage.loadLocalToken
 import com.example.lunimary.base.storage.loadSession
 import com.example.lunimary.base.storage.removeLastLoginUser
+import com.example.lunimary.base.storage.removeSession
+import com.example.lunimary.base.storage.removeToken
 import com.example.lunimary.base.storage.saveLastLoginUser
 import com.example.lunimary.base.storage.saveSession
 import com.example.lunimary.base.storage.saveTokens
@@ -24,24 +25,11 @@ object UserState {
     var updated: Boolean = false
         private set
 
-    fun updateLocalUser(user: User) {
-        if (user.username != currentUser.username) {
-            val session = loadSession(MMKVKeys.LUMINARY_SESSION_KEY)
-            val localToken = loadLocalToken()
-            saveSession(user.username, session)
-            localToken?.let {
-                saveTokens(
-                    tokenInfo = TokenInfo(
-                        username = user.username,
-                        accessToken = localToken.accessToken,
-                        refreshToken = localToken.refreshToken
-                    ),
-                    username = user.username
-                )
-            }
+    fun updateLocalUser(user: User, usernameChanged: Boolean = false) {
+        if (usernameChanged) {
+            updateSecurityUsername(newUsername = user.username)
         }
-        "currentUser: $currentUser".logd()
-        "更新用户user:$user".logd()
+        "currentUser: $currentUser 新用户user:$user".logd()
         updated = true
         saveLastLoginUser(user)
         CURRENT_USER.value = user
@@ -61,6 +49,24 @@ object UserState {
             if (!isLogin) {
                 clearUser()
             }
+        }
+    }
+
+    private fun updateSecurityUsername(newUsername: String) {
+        val session = loadSession()
+        val localToken = loadLocalToken()
+        removeToken()
+        removeSession(currentUser.username)
+        saveSession(username = newUsername, session = session)
+        localToken?.let {
+            saveTokens(
+                tokenInfo = TokenInfo(
+                    username = newUsername,
+                    accessToken = localToken.accessToken,
+                    refreshToken = localToken.refreshToken
+                ),
+                username = newUsername
+            )
         }
     }
 }
