@@ -11,7 +11,6 @@ import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,14 +25,12 @@ import com.example.lunimary.R
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.design.ShimmerList
 import com.example.lunimary.util.empty
-import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
 fun LunimaryStateContent(
     modifier: Modifier = Modifier,
     stateContentData: StateContentData,
-    coroutine: CoroutineScope = rememberCoroutineScope(),
     content: @Composable ColumnScope.() -> Unit
 ) {
     LunimaryStateContent(

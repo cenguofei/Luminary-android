@@ -39,6 +39,7 @@ import com.example.lunimary.ui.privacy.privacyScreen
 import com.example.lunimary.ui.relation.relationScreen
 import com.example.lunimary.ui.search.searchScreen
 import com.example.lunimary.ui.settings.settingsScreen
+import com.example.lunimary.ui.topicselect.topicSelectScreen
 import com.example.lunimary.ui.topscreens.topLevelScreens
 import com.example.lunimary.ui.user.draft.draftsScreen
 import com.example.lunimary.ui.user.information.informationScreen
@@ -138,6 +139,7 @@ private fun LunimaryNavHost(
         informationScreen(appState = appState, onShowSnackbar = onShowSnackbar)
         viewUserScreen(appState = appState)
         privacyScreen(appState = appState)
+        topicSelectScreen(appState = appState, onShowSnackbar = onShowSnackbar)
     }
 }
 

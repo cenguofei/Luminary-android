@@ -12,7 +12,8 @@ enum class Screens(val route: String) {
     Relation("relation"),
     Information("user/information"),
     ViewUser("view_user"),
-    PrivacyProtocol("privacy")
+    PrivacyProtocol("privacy"),
+    TopicSelect("topic_select")
 }
 
 const val LOGIN_ROOT = "login"

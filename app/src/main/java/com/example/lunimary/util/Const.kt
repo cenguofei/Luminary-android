@@ -109,3 +109,11 @@ inline val messageFollowPath: String get() = "$messageRootPath/follow"
 inline val searchRootPath: String get() = "/search"
 inline val searchArticlePath: String get() = "$searchRootPath/article"
 inline val searchUserPath: String get() = "$searchRootPath/user"
+
+
+//Topic
+inline val topicRootPath: String get() = "/topic"
+inline val userSelectedTopicsPath: String get() = "$topicRootPath/user_selected"
+inline val createOrUpdateTopicsPath: String get() = "$topicRootPath/create_or_update"
+inline val recommendTopicsPath: String get() = "$topicRootPath/recommend"
+

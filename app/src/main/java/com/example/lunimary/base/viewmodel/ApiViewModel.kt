@@ -1,11 +1,11 @@
 package com.example.lunimary.base.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseResponse
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.loge
 import io.ktor.util.collections.ConcurrentSet
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -26,14 +26,15 @@ abstract class ApiViewModel : ViewModel(), ApiRequest {
         }
     }
 
-    override fun <T> request(
+    override fun <T> BaseViewModel.request(
         onSuccess: (data: T?, msg: String?) -> Unit,
         emptySuccess: () -> Unit,
         onFailed: (msg: String) -> Unit,
         onFinish: () -> Unit,
-        block: suspend () -> BaseResponse<T>
+        coroutineScope: CoroutineScope,
+        block: suspend CoroutineScope.() -> BaseResponse<T>
     ): Job {
-        return viewModelScope.launch {
+        return coroutineScope.launch {
             runCatching {
                 block()
             }.onSuccess { response ->

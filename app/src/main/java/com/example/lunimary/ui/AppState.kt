@@ -203,6 +203,10 @@ class LunimaryAppState(
         setNavViewUser(user)
         navigate(Screens.ViewUser.route)
     }
+
+    fun navToTopicSelect() {
+        navController.navigate(Screens.TopicSelect.route)
+    }
 }
 
 private fun NavController.navToHomeWithFrom(from: String) {

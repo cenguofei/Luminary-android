@@ -122,7 +122,14 @@ private fun TopLevelScreens(
                     pagerState = homePagerState,
                     tabs = homeTabs,
                     userState = userState,
-                    recommendViewModel = recommendViewModel
+                    recommendViewModel = recommendViewModel,
+                    onHomeSortClick = {
+                        if (notLogin()) {
+                            appState.navToLogin()
+                        } else {
+                            appState.navToTopicSelect()
+                        }
+                    }
                 )
             }
 

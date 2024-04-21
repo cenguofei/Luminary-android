@@ -32,6 +32,7 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LoadingDialog
 import com.example.lunimary.model.fileBaseUrl
+import com.example.lunimary.ui.common.LabelSelectContainer
 import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.logd
 import github.leavesczy.matisse.CoilImageEngine
@@ -100,7 +101,7 @@ fun ArticleCover(
             }
         }
     )
-    PublishSettingsItem(title = stringResource(id = R.string.article_cover)) {
+    LabelSelectContainer(title = stringResource(id = R.string.article_cover)) {
         Surface(
             modifier = Modifier
                 .height(100.dp)

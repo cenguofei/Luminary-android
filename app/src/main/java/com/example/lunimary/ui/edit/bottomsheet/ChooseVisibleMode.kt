@@ -19,11 +19,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.model.VisibleMode
+import com.example.lunimary.ui.common.LabelSelectContainer
 import com.example.lunimary.ui.edit.EditViewModel
 
 @Composable
 fun ChooseVisibleMode(editViewModel: EditViewModel) {
-    PublishSettingsItem(title = stringResource(id = R.string.choose_visible_mode)) {
+    LabelSelectContainer(title = stringResource(id = R.string.choose_visible_mode)) {
         Row(modifier = Modifier) {
             val radioOptions = listOf(
                 VisibleMode.PUBLIC to stringResource(id = R.string.public_visible_mode),

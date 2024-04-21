@@ -125,4 +125,8 @@
     <string name="confirm_delete_draft">⚠️ 确认删除该草稿吗？</string>
     <string name="delete_article_success">删除成功！</string>
     <string name="selected_tags">已选标签</string>
+    <string name="topic_setting">兴趣设置</string>
+    <string name="selected_topics">已选主题</string>
+    <string name="long_click_delete">长按删除</string>
+    <string name="recommend_topics">推荐主题</string>
 </resources>

@@ -1,18 +1,24 @@
 package com.example.lunimary.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -31,7 +37,8 @@ fun HomeTopBar(
     tabs: List<HomeCategories>,
     pagerState: PagerState,
     onAddClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onHomeSortClick: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     Row(
@@ -47,7 +54,8 @@ fun HomeTopBar(
             modifier = Modifier.weight(1f),
             tabs = tabs,
             pagerState = pagerState,
-            coroutineScope = coroutineScope
+            coroutineScope = coroutineScope,
+            onHomeSortClick = onHomeSortClick
         )
         IconButton(onClick = onSearchClick) {
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
@@ -63,6 +71,7 @@ fun TopTabs(
     tabs: List<HomeCategories>,
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
+    onHomeSortClick: () -> Unit
 ) {
     TabRow(
         selectedTabIndex = pagerState.currentPage,
@@ -78,11 +87,47 @@ fun TopTabs(
                     }
                 }
             ) {
+                val contentColor =
+                    if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 Text(
                     text = tab.tabName,
-                    color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    color = contentColor
                 )
+                if (tab == HomeCategories.Recommend) {
+                    Surface(
+                        onClick = onHomeSortClick,
+                        color = Color.Transparent,
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.size(18.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Spacer(
+                                modifier = Modifier
+                                    .width(16.dp)
+                                    .height(2.dp)
+                                    .background(contentColor)
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Spacer(
+                                modifier = Modifier
+                                    .width(12.dp)
+                                    .height(2.dp)
+                                    .background(contentColor)
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Spacer(
+                                modifier = Modifier
+                                    .width(6.dp)
+                                    .height(2.dp)
+                                    .background(contentColor)
+                            )
+                        }
+                    }
+                }
             }
         }
     }

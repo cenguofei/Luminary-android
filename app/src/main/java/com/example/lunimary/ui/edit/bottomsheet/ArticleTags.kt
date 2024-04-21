@@ -38,12 +38,13 @@ import androidx.compose.ui.unit.dp
 import com.example.lunimary.R
 import com.example.lunimary.design.components.Tag
 import com.example.lunimary.model.source.local.Tag
+import com.example.lunimary.ui.common.LabelSelectContainer
 import com.example.lunimary.ui.edit.EditViewModel
 import com.example.lunimary.util.empty
 
 @Composable
 fun ArticleTags(editViewModel: EditViewModel, historyTags: State<List<Tag>?>) {
-    PublishSettingsItem(
+    LabelSelectContainer(
         title = stringResource(id = R.string.add_label),
         modifier = Modifier.imePadding()
     ) {
@@ -114,7 +115,7 @@ private fun HistoryTags(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ManageTags(
+fun ManageTags(
     label: String,
     tags: List<Tag>,
     onClickTag: (Tag) -> Unit = {},

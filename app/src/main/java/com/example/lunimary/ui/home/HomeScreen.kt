@@ -24,7 +24,8 @@ fun HomeScreen(
     pagerState: PagerState,
     tabs: List<HomeCategories>,
     userState: State<User>,
-    recommendViewModel: RecommendViewModel
+    recommendViewModel: RecommendViewModel,
+    onHomeSortClick: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -33,7 +34,8 @@ fun HomeScreen(
             tabs = tabs,
             pagerState = pagerState,
             onAddClick = onAddClick,
-            onSearchClick = onSearchClick
+            onSearchClick = onSearchClick,
+            onHomeSortClick = onHomeSortClick
         )
 
         if (userState.value == User.NONE) {
