@@ -14,14 +14,11 @@ import kotlinx.coroutines.CoroutineScope
 class TopicSelectViewModel : BaseViewModel() {
     private val topicRepository = TopicRepository()
 
-    private val _createOrUpdateState: MutableState<NetworkResult<Unit>> =
-        mutableStateOf(NetworkResult.None())
-    val createOrUpdateState: State<NetworkResult<Unit>> get() = _createOrUpdateState
-
     private val _uiState: MutableState<NetworkResult<UiState>> = mutableStateOf(NetworkResult.None())
     val uiState: NetworkResult<UiState> get() = _uiState.value
 
-    private fun getData() {
+    fun getData(isRefresh: Boolean = false) {
+        if (isRefresh) { land(FLY_GET_ALL_DATA) }
         fly(FLY_GET_ALL_DATA) {
             _uiState.value = NetworkResult.Loading()
             parallelRequests(
@@ -49,16 +46,9 @@ class TopicSelectViewModel : BaseViewModel() {
         if (newSelectedTopics.isNullOrEmpty()) return
         fly(FLY_CREATE_OR_UPDATE) {
             request(
-                onSuccess = { _, _ ->
-                    _createOrUpdateState.value = NetworkResult.Success()
-                },
-                onFailed = {
-                    _createOrUpdateState.value = NetworkResult.Error(it)
-                },
                 onFinish = { land(FLY_CREATE_OR_UPDATE) },
                 coroutineScope = coroutineScope
             ) {
-                _createOrUpdateState.value = NetworkResult.Loading()
                 topicRepository.createOrUpdate(currentUser.id, newSelectedTopics)
             }
         }

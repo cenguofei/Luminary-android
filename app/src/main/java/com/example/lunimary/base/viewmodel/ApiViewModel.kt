@@ -1,6 +1,7 @@
 package com.example.lunimary.base.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.lunimary.base.BaseResponse
 import com.example.lunimary.util.logd
 import com.example.lunimary.util.loge
@@ -26,7 +27,7 @@ abstract class ApiViewModel : ViewModel(), ApiRequest {
         }
     }
 
-    override fun <T> BaseViewModel.request(
+    override fun <T> ApiViewModel.request(
         onSuccess: (data: T?, msg: String?) -> Unit,
         emptySuccess: () -> Unit,
         onFailed: (msg: String) -> Unit,
@@ -60,5 +61,28 @@ abstract class ApiViewModel : ViewModel(), ApiRequest {
                 onFinish()
             }
         }
+    }
+}
+
+fun <T> ApiViewModel.flyAndLandRequest(
+    url: String,
+    onSuccess: (data: T?, msg: String?) -> Unit = {_, _ -> },
+    emptySuccess: () -> Unit = {},
+    onFailed: (msg: String) -> Unit = {},
+    onFinish: () -> Unit = {},
+    coroutineScope: CoroutineScope = viewModelScope,
+    block: suspend CoroutineScope.() -> BaseResponse<T>
+) {
+    fly(url) {
+        request(
+            onSuccess = onSuccess,
+            emptySuccess = emptySuccess,
+            onFailed = onFailed,
+            onFinish = {
+                land(url); onFinish()
+            },
+            coroutineScope = coroutineScope,
+            block = block
+        )
     }
 }

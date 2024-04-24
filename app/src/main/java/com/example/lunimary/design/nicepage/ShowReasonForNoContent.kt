@@ -30,21 +30,13 @@ fun ShowReasonForNoContent(
     modifier: Modifier = Modifier,
     description: String = empty,
     @DrawableRes id: Int,
-    onClick: () -> Unit = {},
-    enabled: Boolean = false,
     refreshEnabled: Boolean = true,
     onRefreshClick: () -> Unit = {},
     retryEnabled: Boolean = false,
     onRetryClick: () -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .size(height = 300.dp, width = 200.dp)
-            .clickable(
-                role = Role.Button,
-                onClick = onClick,
-                enabled = enabled
-            )
+        modifier = modifier.size(height = 300.dp, width = 200.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

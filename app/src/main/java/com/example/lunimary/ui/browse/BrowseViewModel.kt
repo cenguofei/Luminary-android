@@ -11,6 +11,7 @@ import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.viewmodel.BaseViewModel
+import com.example.lunimary.base.viewmodel.flyAndLandRequest
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.Comment
 import com.example.lunimary.model.User
@@ -96,198 +97,173 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     private fun existingFriendship(whoId: Long) {
-        fly(FLY_EXISTING_FRIENDSHIP) {
-            request(
-                block = {
-                    friendRepository.existingFriendship(currentUser.id, whoId)
-                },
-                onSuccess = { data, _ ->
-                    val newUiState = uiState.value.copy(hasFetchedFriendship = true)
-                    if (data != null) {
-                        _uiState.value = newUiState.copy(isFollowByMe = data.exists)
-                    }
-                },
-                onFinish = { land(FLY_EXISTING_FRIENDSHIP) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_EXISTING_FRIENDSHIP,
+            block = {
+                friendRepository.existingFriendship(currentUser.id, whoId)
+            },
+            onSuccess = { data, _ ->
+                val newUiState = uiState.value.copy(hasFetchedFriendship = true)
+                if (data != null) {
+                    _uiState.value = newUiState.copy(isFollowByMe = data.exists)
+                }
+            },
+        )
     }
 
     private val _articleOwner: MutableState<User> = mutableStateOf(User.NONE)
     val articleOwner: State<User> get() = _articleOwner
 
     private fun fetchUser(userId: Long) {
-        fly(FLY_FETCH_USER) {
-            request(
-                block = { userRepository.queryUser(userId) },
-                onSuccess = { data, _ ->
-                    if (data?.user != null) {
-                        _articleOwner.value = data.user
-                    }
-                },
-                onFinish = { land(FLY_FETCH_USER) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_FETCH_USER,
+            block = { userRepository.queryUser(userId) },
+            onSuccess = { data, _ ->
+                if (data?.user != null) {
+                    _articleOwner.value = data.user
+                }
+            }
+        )
     }
 
     fun onFollowClick() {
-        fly(FLY_FOLLOW_OR_UNFOLLOW) {
-            request(
-                block = {
-                    friendRepository.follow(currentUser.id, articleOwner.value.id)
-                },
-                onSuccess = { _, _ ->
-                    _uiState.value = uiState.value.copy(isFollowByMe = true)
-                },
-                onFinish = { land(FLY_FOLLOW_OR_UNFOLLOW) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_FOLLOW_OR_UNFOLLOW,
+            block = {
+                friendRepository.follow(currentUser.id, articleOwner.value.id)
+            },
+            onSuccess = { _, _ ->
+                _uiState.value = uiState.value.copy(isFollowByMe = true)
+            }
+        )
     }
 
     fun onUnfollowClick() {
-        fly(FLY_FOLLOW_OR_UNFOLLOW) {
-            request(
-                block = {
-                    friendRepository.unfollow(articleOwner.value.id)
-                },
-                onSuccess = { _, _ ->
-                    _uiState.value = uiState.value.copy(isFollowByMe = false)
-                },
-                onFinish = { land(FLY_FOLLOW_OR_UNFOLLOW) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_FOLLOW_OR_UNFOLLOW,
+            block = {
+                friendRepository.unfollow(articleOwner.value.id)
+            },
+            onSuccess = { _, _ ->
+                _uiState.value = uiState.value.copy(isFollowByMe = false)
+            }
+        )
     }
 
     fun onGiveLike() {
-        fly(FLY_ABOUT_LIKE) {
-            request(
-                block = {
-                    likeRepository.giveLike(currentUser.id, uiState.value.article.id)
-                },
-                onSuccess = { _, _ ->
-                    _likedTheArticle.value = true
-                },
-                onFinish = { land(FLY_ABOUT_LIKE) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_ABOUT_LIKE,
+            block = {
+                likeRepository.giveLike(currentUser.id, uiState.value.article.id)
+            },
+            onSuccess = { _, _ ->
+                _likedTheArticle.value = true
+            }
+        )
     }
 
     fun onCancelLike() {
-        fly(FLY_ABOUT_LIKE) {
-            request(
-                block = {
-                    likeRepository.cancelLike(currentUser.id, uiState.value.article.id)
-                },
-                onSuccess = { _, _ ->
-                    _likedTheArticle.value = false
-                },
-                onFinish = { land(FLY_ABOUT_LIKE) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_ABOUT_LIKE,
+            block = {
+                likeRepository.cancelLike(currentUser.id, uiState.value.article.id)
+            },
+            onSuccess = { _, _ ->
+                _likedTheArticle.value = false
+            }
+        )
     }
 
     private val _likedTheArticle: MutableState<Boolean> = mutableStateOf(false)
     val likedTheArticle: State<Boolean> get() = _likedTheArticle
 
     private fun existsLike(articleId: Long) {
-        fly(FLY_ABOUT_LIKE) {
-            request(
-                block = {
-                    likeRepository.existsLike(userId = currentUser.id, articleId = articleId)
-                },
-                onSuccess = { data, _ ->
-                    _likedTheArticle.value = data ?: false
-                },
-                onFinish = { land(FLY_ABOUT_LIKE) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_ABOUT_LIKE,
+            block = {
+                likeRepository.existsLike(userId = currentUser.id, articleId = articleId)
+            },
+            onSuccess = { data, _ ->
+                _likedTheArticle.value = data ?: false
+            }
+        )
     }
 
     private val _staredTheArticle: MutableState<Boolean> = mutableStateOf(false)
     val staredTheArticle: State<Boolean> get() = _staredTheArticle
 
     private fun fetchStar(articleId: Long) {
-        fly(FLY_ABOUT_STAR) {
-            request(
-                block = {
-                    collectRepository.existsCollect(
-                        collectUserId = currentUser.id,
-                        articleId = articleId
-                    )
-                },
-                onSuccess = { data, _ ->
-                    _staredTheArticle.value = data ?: false
-                },
-                onFinish = { land(FLY_ABOUT_STAR) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_ABOUT_STAR,
+            block = {
+                collectRepository.existsCollect(
+                    collectUserId = currentUser.id,
+                    articleId = articleId
+                )
+            },
+            onSuccess = { data, _ ->
+                _staredTheArticle.value = data ?: false
+            }
+        )
     }
 
     fun onGiveStar() {
-        fly(FLY_ABOUT_STAR) {
-            request(
-                block = {
-                    collectRepository.giveCollect(currentUser.id, uiState.value.article.id)
-                },
-                onSuccess = { _, _ ->
-                    _staredTheArticle.value = true
-                },
-                onFinish = { land(FLY_ABOUT_STAR) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_ABOUT_STAR,
+            block = {
+                collectRepository.giveCollect(currentUser.id, uiState.value.article.id)
+            },
+            onSuccess = { _, _ ->
+                _staredTheArticle.value = true
+            }
+        )
     }
 
     fun onCancelStar() {
-        fly(FLY_ABOUT_STAR) {
-            request(
-                block = {
-                    collectRepository.cancelCollect(currentUser.id, uiState.value.article.id)
-                },
-                onSuccess = { _, _ ->
-                    _staredTheArticle.value = false
-                },
-                onFinish = { land(FLY_ABOUT_STAR) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_ABOUT_STAR,
+            block = {
+                collectRepository.cancelCollect(currentUser.id, uiState.value.article.id)
+            },
+            onSuccess = { _, _ ->
+                _staredTheArticle.value = false
+            }
+        )
     }
 
     fun send(comment: String) {
-        fly(FLY_CREATE_COMMENT) {
-            request(
-                block = {
-                    commentRepository.createComment(
-                        content = comment,
-                        userId = currentUser.id,
-                        articleId = uiState.value.article.id
-                    )
-                },
-                onSuccess = { _, _ ->
-                    getAllCommentsOfArticle(uiState.value.article.id)
-                },
-                onFailed = { },
-                onFinish = { land(FLY_CREATE_COMMENT) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_CREATE_COMMENT,
+            block = {
+                commentRepository.createComment(
+                    content = comment,
+                    userId = currentUser.id,
+                    articleId = uiState.value.article.id
+                )
+            },
+            onSuccess = { _, _ ->
+                getAllCommentsOfArticle(uiState.value.article.id)
+            }
+        )
     }
 
     private val _comments: MutableState<NetworkResult<List<CommentsWithUser>>> =
         mutableStateOf(NetworkResult.None())
     val comments: State<NetworkResult<List<CommentsWithUser>>> get() = _comments
     private fun getAllCommentsOfArticle(articleId: Long) {
-        fly(FLY_ALL_COMMENTS_OF_ARTICLE) {
-            request(
-                block = {
-                    _comments.value = NetworkResult.Loading()
-                    commentRepository.getAllCommentsOfArticle(articleId)
-                },
-                onSuccess = { data, _ ->
-                    _comments.value = NetworkResult.Success(data = data)
-                },
-                onFailed = {
-                    _comments.value = NetworkResult.Error(it)
-                },
-                onFinish = { land(FLY_ALL_COMMENTS_OF_ARTICLE) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_ALL_COMMENTS_OF_ARTICLE,
+            block = {
+                _comments.value = NetworkResult.Loading()
+                commentRepository.getAllCommentsOfArticle(articleId)
+            },
+            onSuccess = { data, _ ->
+                _comments.value = NetworkResult.Success(data = data)
+            },
+            onFailed = {
+                _comments.value = NetworkResult.Error(it)
+            }
+        )
     }
 
     fun transform(data: List<CommentsWithUser>): List<Pair<User, Comment>> {
@@ -319,40 +295,36 @@ class BrowseViewModel : BaseViewModel() {
         if (mode == article.visibleMode) {
             return
         }
-        fly(FLY_UPDATE_ARTICLE_VISIBLE_MODE) {
-            request(
-                block = {
-                    articleRepository.updateArticle(
-                        article = article.copy(visibleMode = mode)
-                    )
-                },
-                onSuccess = { _, _ ->
-                    updateArticleModifyState(DataState.Success("已更新可见范围为：${mode.modeName}"))
-                    val newArticle = article.copy(visibleMode = mode)
-                    _uiState.value = uiState.value.copy(article = newArticle)
-                },
-                onFinish = { land(FLY_UPDATE_ARTICLE_VISIBLE_MODE) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_UPDATE_ARTICLE_VISIBLE_MODE,
+            block = {
+                articleRepository.updateArticle(
+                    article = article.copy(visibleMode = mode)
+                )
+            },
+            onSuccess = { _, _ ->
+                updateArticleModifyState(DataState.Success("已更新可见范围为：${mode.modeName}"))
+                val newArticle = article.copy(visibleMode = mode)
+                _uiState.value = uiState.value.copy(article = newArticle)
+            }
+        )
     }
 
     fun delete() {
         val article = uiState.value.article
-        fly(FLY_DELETE_ARTICLE) {
-            request(
-                block = {
-                    articleRepository.deleteArticleById(article.id)
-                },
-                onSuccess = { _, _ ->
-                    updateArticleModifyState(DataState.Success("文章已删除"))
-                    _uiState.value = uiState.value.copy(articleDeleted = true)
-                },
-                onFailed = {
-                    updateArticleModifyState(DataState.Failed(Error(it)))
-                },
-                onFinish = { land(FLY_DELETE_ARTICLE) }
-            )
-        }
+        flyAndLandRequest(
+            url = FLY_DELETE_ARTICLE,
+            block = {
+                articleRepository.deleteArticleById(article.id)
+            },
+            onSuccess = { _, _ ->
+                updateArticleModifyState(DataState.Success("文章已删除"))
+                _uiState.value = uiState.value.copy(articleDeleted = true)
+            },
+            onFailed = {
+                updateArticleModifyState(DataState.Failed(Error(it)))
+            }
+        )
     }
 
     private fun updateArticleModifyState(

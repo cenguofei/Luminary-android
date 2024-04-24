@@ -88,7 +88,6 @@ fun <T : Any> LunimaryPagingContent(
             modifier = modifier,
             error = showError, // 没有数据并且出错才展示空页面
             errorMsg = showErrorMsg,
-            onErrorClick = { items.refresh() },
             empty = showEmpty,
             networkState = if (showNetworkError) NetworkState(
                 msg = stringResource(id = R.string.not_connected),

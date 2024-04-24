@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 data class StateContentData(
     val isError: Boolean = false,
     val errorMsg: String? = null,
-    val onErrorClick: () -> Unit = {},
-
+    val onRefreshClick: () -> Unit = {},
+    val onRetryClick: () -> Unit = {},
     val isEmpty: Boolean = false,
     val emptyMsg: String? = null,
 

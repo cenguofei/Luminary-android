@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunimary.R
 import com.example.lunimary.base.network.NetworkResult
+import com.example.lunimary.base.network.asError
 import com.example.lunimary.design.LunimaryToolbar
 import com.example.lunimary.design.nicepage.LunimaryStateContent
 import com.example.lunimary.design.nicepage.StateContentData
@@ -62,19 +64,24 @@ fun TopicSelectRoute(
         LunimaryStateContent(
             stateContentData = StateContentData(
                 isError = uiState is NetworkResult.Error,
-                showShimmer = uiState is NetworkResult.Loading
-            ),
-            modifier = Modifier.padding(horizontal = 16.dp)
+                errorMsg = uiState.asError()?.msg,
+                showShimmer = uiState is NetworkResult.Loading,
+                onRetryClick = { viewModel.getData(true) }
+            )
         ) {
-            val data = (uiState as? NetworkResult.Success)?.data ?: return@LunimaryStateContent
-            LocalSelected(
-                viewModel = viewModel,
-                userSelectedTopics = data.selectedTopicsState
-            )
-            RecommendTopic(
-                viewModel = viewModel,
-                recommendTopics = data.recommendTopics
-            )
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)) {
+                val data = (uiState as? NetworkResult.Success)?.data ?: return@LunimaryStateContent
+                LocalSelected(
+                    viewModel = viewModel,
+                    userSelectedTopics = data.selectedTopicsState
+                )
+                RecommendTopic(
+                    viewModel = viewModel,
+                    recommendTopics = data.recommendTopics
+                )
+            }
         }
     }
 }

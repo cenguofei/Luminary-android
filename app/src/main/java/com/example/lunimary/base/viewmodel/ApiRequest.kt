@@ -23,7 +23,7 @@ interface ApiRequest {
      */
     fun land(url: String)
 
-    fun <T> BaseViewModel.request(
+    fun <T> ApiViewModel.request(
         onSuccess: (data: T?, msg: String?) -> Unit = { _, _ -> },
         emptySuccess: () -> Unit = {},
         onFailed: (msg: String) -> Unit = {},
