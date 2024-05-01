@@ -17,7 +17,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -31,7 +30,6 @@ import com.example.lunimary.R
 import com.example.lunimary.base.UserState
 import com.example.lunimary.model.User
 import com.example.lunimary.ui.browse.browseScreen
-import com.example.lunimary.ui.common.LocalShowSnackbar
 import com.example.lunimary.ui.edit.addArticleScreen
 import com.example.lunimary.ui.login.loginScreen
 import com.example.lunimary.ui.login.registerScreen
@@ -84,15 +82,11 @@ fun LunimaryApp(
                     ),
                 ),
         ) {
-            CompositionLocalProvider(
-                LocalShowSnackbar provides showSnackbar
-            ) {
-                LunimaryNavHost(
-                    appState = appState,
-                    startScreen = startScreen,
-                    onShowSnackbar = showSnackbar,
-                )
-            }
+            LunimaryNavHost(
+                appState = appState,
+                startScreen = startScreen,
+                onShowSnackbar = showSnackbar,
+            )
         }
     }
 }

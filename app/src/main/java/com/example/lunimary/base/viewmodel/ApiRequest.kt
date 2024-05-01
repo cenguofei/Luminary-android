@@ -34,7 +34,7 @@ interface ApiRequest {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T1, T2> BaseViewModel.parallelRequests(
+fun <T1, T2> ApiViewModel.parallelRequests(
     onSuccess: (T1, T2) -> Unit = {_, _ -> },
     onFailed: (msg: String) -> Unit = {},
     onFinish: () -> Unit = {},

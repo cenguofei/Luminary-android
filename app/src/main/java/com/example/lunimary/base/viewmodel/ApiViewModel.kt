@@ -64,7 +64,7 @@ abstract class ApiViewModel : ViewModel(), ApiRequest {
     }
 }
 
-fun <T> ApiViewModel.flyAndLandRequest(
+fun <T> ApiViewModel.sequenceRequest(
     url: String,
     onSuccess: (data: T?, msg: String?) -> Unit = {_, _ -> },
     emptySuccess: () -> Unit = {},

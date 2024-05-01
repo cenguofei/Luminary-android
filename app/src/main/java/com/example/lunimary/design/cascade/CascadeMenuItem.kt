@@ -2,6 +2,11 @@ package com.example.lunimary.design.cascade
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/**
+ * Menu item
+ *
+ * [T], ID type of the menu item.
+ */
 class CascadeMenuItem<T : Any> {
     lateinit var id: T
 

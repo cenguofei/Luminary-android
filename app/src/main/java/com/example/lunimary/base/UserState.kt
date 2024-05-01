@@ -1,8 +1,5 @@
 package com.example.lunimary.base
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lunimary.base.storage.TokenInfo
 import com.example.lunimary.base.storage.lastLoginUser
 import com.example.lunimary.base.storage.loadLocalToken
@@ -19,8 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 object UserState {
-    private val CURRENT_USER: MutableStateFlow<User> = MutableStateFlow(lastLoginUser() ?: User.NONE)
-    val currentUserState: StateFlow<User> get() = CURRENT_USER
+    private val _currentUserState: MutableStateFlow<User> = MutableStateFlow(lastLoginUser() ?: User.NONE)
+    val currentUserState: StateFlow<User> get() = _currentUserState
 
     var updated: Boolean = false
         private set
@@ -32,12 +29,12 @@ object UserState {
         "currentUser: $currentUser 新用户user:$user".logd()
         updated = true
         saveLastLoginUser(user)
-        CURRENT_USER.value = user
+        _currentUserState.value = user
     }
 
     fun clearUser() {
         "清除用户信息 currentUser: $currentUser".logd()
-        CURRENT_USER.value = User.NONE
+        _currentUserState.value = User.NONE
         removeLastLoginUser()
         updated = true
     }
@@ -80,23 +77,4 @@ fun checkLogin(
     isLogout: () -> Unit = {}
 ) {
     if (notLogin()) isLogout() else isLogin()
-}
-
-@Composable
-fun UserStateEffect(
-    key: String,
-    whenNoLogin: () -> Unit = {},
-    onCollected: (User) -> Unit = {}
-) {
-    val userState = UserState.currentUserState.collectAsStateWithLifecycle()
-    LaunchedEffect(
-        key1 = userState.value,
-        block = {
-            "UserStateEffect $key collected userState:${userState.value}".logd("currentUserState")
-            onCollected(userState.value)
-            if (userState.value == User.NONE) {
-                whenNoLogin()
-            }
-        }
-    )
 }

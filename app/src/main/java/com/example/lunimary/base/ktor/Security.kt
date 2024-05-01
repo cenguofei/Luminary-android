@@ -1,7 +1,6 @@
 package com.example.lunimary.base.ktor
 
 import com.example.lunimary.base.currentUser
-import com.example.lunimary.base.storage.MMKVKeys
 import com.example.lunimary.base.storage.loadLocalToken
 import com.example.lunimary.base.storage.loadSession
 import com.example.lunimary.model.User
@@ -14,7 +13,7 @@ fun HttpMessageBuilder.setSession() {
     checkUser {
         headers {
             append(
-                name = MMKVKeys.LUMINARY_SESSION_KEY,
+                name = "LUMINARY_SESSION",
                 value = loadSession().also {
                     "session=$it, username=${currentUser.username}".logd("security")
                 }

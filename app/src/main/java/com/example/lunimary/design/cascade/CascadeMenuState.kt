@@ -4,6 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
+/**
+ * Compose state item of [CascadeMenuItem]
+ */
 class CascadeMenuState<T : Any>(currentMenuItem: CascadeMenuItem<T>) {
     private var _currentMenu by mutableStateOf(currentMenuItem)
 

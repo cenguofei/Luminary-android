@@ -1,7 +1,6 @@
 package com.example.lunimary.ui.topicselect
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult

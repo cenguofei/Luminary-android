@@ -11,7 +11,7 @@ import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.viewmodel.BaseViewModel
-import com.example.lunimary.base.viewmodel.flyAndLandRequest
+import com.example.lunimary.base.viewmodel.sequenceRequest
 import com.example.lunimary.model.Article
 import com.example.lunimary.model.Comment
 import com.example.lunimary.model.User
@@ -97,7 +97,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     private fun existingFriendship(whoId: Long) {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_EXISTING_FRIENDSHIP,
             block = {
                 friendRepository.existingFriendship(currentUser.id, whoId)
@@ -115,7 +115,7 @@ class BrowseViewModel : BaseViewModel() {
     val articleOwner: State<User> get() = _articleOwner
 
     private fun fetchUser(userId: Long) {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_FETCH_USER,
             block = { userRepository.queryUser(userId) },
             onSuccess = { data, _ ->
@@ -127,7 +127,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun onFollowClick() {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_FOLLOW_OR_UNFOLLOW,
             block = {
                 friendRepository.follow(currentUser.id, articleOwner.value.id)
@@ -139,7 +139,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun onUnfollowClick() {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_FOLLOW_OR_UNFOLLOW,
             block = {
                 friendRepository.unfollow(articleOwner.value.id)
@@ -151,7 +151,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun onGiveLike() {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_ABOUT_LIKE,
             block = {
                 likeRepository.giveLike(currentUser.id, uiState.value.article.id)
@@ -163,7 +163,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun onCancelLike() {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_ABOUT_LIKE,
             block = {
                 likeRepository.cancelLike(currentUser.id, uiState.value.article.id)
@@ -178,7 +178,7 @@ class BrowseViewModel : BaseViewModel() {
     val likedTheArticle: State<Boolean> get() = _likedTheArticle
 
     private fun existsLike(articleId: Long) {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_ABOUT_LIKE,
             block = {
                 likeRepository.existsLike(userId = currentUser.id, articleId = articleId)
@@ -193,7 +193,7 @@ class BrowseViewModel : BaseViewModel() {
     val staredTheArticle: State<Boolean> get() = _staredTheArticle
 
     private fun fetchStar(articleId: Long) {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_ABOUT_STAR,
             block = {
                 collectRepository.existsCollect(
@@ -208,7 +208,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun onGiveStar() {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_ABOUT_STAR,
             block = {
                 collectRepository.giveCollect(currentUser.id, uiState.value.article.id)
@@ -220,7 +220,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun onCancelStar() {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_ABOUT_STAR,
             block = {
                 collectRepository.cancelCollect(currentUser.id, uiState.value.article.id)
@@ -232,7 +232,7 @@ class BrowseViewModel : BaseViewModel() {
     }
 
     fun send(comment: String) {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_CREATE_COMMENT,
             block = {
                 commentRepository.createComment(
@@ -251,7 +251,7 @@ class BrowseViewModel : BaseViewModel() {
         mutableStateOf(NetworkResult.None())
     val comments: State<NetworkResult<List<CommentsWithUser>>> get() = _comments
     private fun getAllCommentsOfArticle(articleId: Long) {
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_ALL_COMMENTS_OF_ARTICLE,
             block = {
                 _comments.value = NetworkResult.Loading()
@@ -295,7 +295,7 @@ class BrowseViewModel : BaseViewModel() {
         if (mode == article.visibleMode) {
             return
         }
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_UPDATE_ARTICLE_VISIBLE_MODE,
             block = {
                 articleRepository.updateArticle(
@@ -312,7 +312,7 @@ class BrowseViewModel : BaseViewModel() {
 
     fun delete() {
         val article = uiState.value.article
-        flyAndLandRequest(
+        sequenceRequest(
             url = FLY_DELETE_ARTICLE,
             block = {
                 articleRepository.deleteArticleById(article.id)

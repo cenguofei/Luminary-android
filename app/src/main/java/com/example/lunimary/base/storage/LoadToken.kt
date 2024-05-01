@@ -53,7 +53,6 @@ fun removeToken() {
     "remove token".logd("cgf_security")
     val mmkv = MMKV.mmkvWithID(currentUser.username)
     mmkv.remove(MMKVKeys.TOKEN_INFO_KEY)
-    "after remove:accessToken.length=${loadLocalToken()?.accessToken?.length}".logd("cgf_security")
 }
 
 suspend fun refreshToken(): BearerTokens? {

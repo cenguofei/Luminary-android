@@ -96,7 +96,7 @@ val httpClient = HttpClient(OkHttp) {
         val originalCall = execute(request)
         if (!originalCall.response.status.isSuccess()) {
             """
-                Response Error:
+                Lunimary Response Error:
                 ${originalCall.request.url}, ${originalCall.response.status}
             """.trimIndent().loge()
         }

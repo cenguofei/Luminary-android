@@ -33,7 +33,7 @@ class NetworkInterceptor : Interceptor {
 const val LUNIMARY_NO_NETWORK_CODE = 13141024
 const val NO_NET_HEADER_KEY = "no_network"
 
-fun buildNetworkErrorResponse(request: Request): Response {
+private fun buildNetworkErrorResponse(request: Request): Response {
     return Response.Builder()
         .request(request)
         .code(LUNIMARY_NO_NETWORK_CODE)

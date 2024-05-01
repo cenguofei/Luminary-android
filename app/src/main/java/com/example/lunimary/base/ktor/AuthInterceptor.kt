@@ -17,19 +17,23 @@ import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 
-class AuthInterceptor: Interceptor {
+class AuthInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val response = chain.proceed(request)
-        "request headers:${request.headers}".logd()
         return if (response.code == HttpStatusCode.Unauthorized.value) {
             "intercept Unauthorized: response=$response".logd("token")
             runBlocking(context = Dispatchers.IO) {
                 val deffer = async { refreshToken() }
                 val tokens = deffer.await()
-                "refresh token newTokens={access:${tokens?.accessToken}, refresh:${tokens?.refreshToken}}".logd("token")
+                """
+                    refresh token newTokens={
+                        access:${tokens?.accessToken?.length}, 
+                        refresh:${tokens?.refreshToken?.length}
+                    }
+                """.trimIndent().logd("token")
                 if (tokens == null) {
-                    "tokens == null, 返回原来的".logd("token")
+                    "refresh tokens == null".logd("token")
                     UserState.updateLoginState(false, "clientConfig")
                     return@runBlocking response.newBuilder()
                         .apply {

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.example.lunimary.util.empty
 import com.example.lunimary.util.logd
@@ -25,7 +26,8 @@ fun LunimaryWebView(
     url: String = empty,
     onExit: () -> Unit = {},
     state: WebViewState = rememberWebViewState(url),
-    showToolbar: Boolean = true
+    showToolbar: Boolean = true,
+    onLoaded: () -> Unit = {}
 ) {
     val navigator = rememberWebViewNavigator()
 
@@ -45,13 +47,14 @@ fun LunimaryWebView(
                 modifier = Modifier.statusBarsPadding()
             )
         }
-//        if (state.isLoading) {
-//            val indicatorModifier = if (showToolbar) Modifier else Modifier.statusBarsPadding()
-//            LinearProgressIndicator(
-//                modifier = indicatorModifier.fillMaxWidth(),
-//                color = MaterialTheme.colorScheme.primary
-//            )
-//        }
+        if (!state.isLoading) {
+            LaunchedEffect(
+                key1 = Unit,
+                block = {
+                    onLoaded()
+                }
+            )
+        }
         WebView(
             state = state,
             navigator = navigator,

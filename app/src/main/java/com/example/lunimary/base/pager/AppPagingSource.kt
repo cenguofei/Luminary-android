@@ -5,6 +5,12 @@ import androidx.paging.PagingState
 import com.example.lunimary.model.responses.DEFAULT_PER_PAGE_COUNT
 import com.example.lunimary.model.source.remote.paging.PageSource
 
+/**
+ * 分页请求后台数据
+ * @param source 分页数据来源
+ * @see  [PageSource]
+ * @see  [PageItem]
+ */
 class AppPagingSource<T : Any>(
     private val source: PageSource<T>
 ) : PagingSource<Int, PageItem<T>>() {

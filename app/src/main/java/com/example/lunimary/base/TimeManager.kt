@@ -37,18 +37,19 @@ private class DaysSinceTimestampImpl : DaysSinceTimestamp {
         pastCalendar.timeInMillis = since
         return when (isTimeDifferenceGreaterThanOneDay()) {
             true -> {
-                val days = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    getDaysSinceTimestampApi26(since)
-                } else {
-                    getDaysSinceTimestampLessApi26()
+                val days = when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> getDaysSinceTimestampApi26(
+                        since
+                    )
+                    else -> getDaysSinceTimestampLessApi26()
                 }
-                if (days > 20) {
-                    since.niceDateToDay
-                } else {
-                    "$days 天前"
+                when {
+                    days > 20 -> since.niceDateToDay
+                    else ->  "$days 天前"
                 }
             }
-            else -> { getTimeDifference(since) }
+
+            else -> getTimeDifference(since)
         }.also {
             "days=$it".logd("getDaysSinceTimestamp")
         }
@@ -92,15 +93,19 @@ private class DaysSinceTimestampImpl : DaysSinceTimestamp {
         val dateFromTimestamp = pastCalendar
 
         // 将日期设置为该天的开始时间，以忽略时间部分的差异
-        currentDate.set(Calendar.HOUR_OF_DAY, 0)
-        currentDate.set(Calendar.MINUTE, 0)
-        currentDate.set(Calendar.SECOND, 0)
-        currentDate.set(Calendar.MILLISECOND, 0)
+        currentDate.apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
 
-        dateFromTimestamp.set(Calendar.HOUR_OF_DAY, 0)
-        dateFromTimestamp.set(Calendar.MINUTE, 0)
-        dateFromTimestamp.set(Calendar.SECOND, 0)
-        dateFromTimestamp.set(Calendar.MILLISECOND, 0)
+        dateFromTimestamp.apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
 
         val diffInMillis = currentDate.timeInMillis - dateFromTimestamp.timeInMillis
 
