@@ -16,8 +16,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 object UserState {
-    private val _currentUserState: MutableStateFlow<User> = MutableStateFlow(lastLoginUser() ?: User.NONE)
-    val currentUserState: StateFlow<User> get() = _currentUserState
+    private val userState: MutableStateFlow<User> =
+        MutableStateFlow(lastLoginUser() ?: User.NONE)
+    val currentUserState: StateFlow<User> get() = userState
 
     var updated: Boolean = false
         private set
@@ -29,12 +30,12 @@ object UserState {
         "currentUser: $currentUser 新用户user:$user".logd()
         updated = true
         saveLastLoginUser(user)
-        _currentUserState.value = user
+        userState.value = user
     }
 
     fun clearUser() {
         "清除用户信息 currentUser: $currentUser".logd()
-        _currentUserState.value = User.NONE
+        userState.value = User.NONE
         removeLastLoginUser()
         updated = true
     }
