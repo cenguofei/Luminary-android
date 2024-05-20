@@ -15,7 +15,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,6 +30,7 @@ import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.design.LunimaryMarkdown
 import com.example.lunimary.design.LunimaryWebView
 import com.example.lunimary.model.Article
+import com.example.lunimary.model.ext.CommentsWithUser
 import com.example.lunimary.ui.browse.BrowseViewModel
 import com.kevinnzou.web.rememberWebViewState
 
@@ -88,18 +91,23 @@ fun BodyContent(
             }
         }
     }
-
-    if (onLoadedState) {
+    val comments = browseViewModel.comments.observeAsState()
+    if (article.isLunimaryStation || onLoadedState) {
         CommentsContent(
             browseViewModel = browseViewModel,
-            commentsSize = commentsSize
+            commentsSize = commentsSize,
+            comments = comments
         )
     }
 }
 
 @Composable
-private fun CommentsContent(browseViewModel: BrowseViewModel, commentsSize: MutableState<Int>) {
-    when (browseViewModel.comments.value) {
+private fun CommentsContent(
+    browseViewModel: BrowseViewModel,
+    commentsSize: MutableState<Int>,
+    comments: State<NetworkResult<List<CommentsWithUser>>?>
+) {
+    when (comments.value) {
         is NetworkResult.Loading -> {
             Row(
                 modifier = Modifier
@@ -114,8 +122,7 @@ private fun CommentsContent(browseViewModel: BrowseViewModel, commentsSize: Muta
         }
 
         is NetworkResult.Success -> {
-            browseViewModel.comments.value as NetworkResult.Success
-            val data = browseViewModel.comments.value.data ?: return
+            val data = (comments.value as NetworkResult.Success<List<CommentsWithUser>>).data ?: return
             val flatComments = browseViewModel.transform(data)
             commentsSize.value = flatComments.size
             flatComments.forEach {

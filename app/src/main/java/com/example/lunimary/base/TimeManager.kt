@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 object TimeManager {
-    private val daysSinceTimestamp: DaysSinceTimestamp = DaysSinceTimestampImpl()
+    private val niceTimeSinceTimestamp: NiceTimeSinceTimestamp = NiceTimeSinceTimestampImpl()
     fun getDaysSinceTimestamp(timestamp: Long): String {
-        return daysSinceTimestamp.getDaysSinceTimestamp(timestamp)
+        return niceTimeSinceTimestamp.getNiceTimeSinceTimestamp(timestamp)
     }
 }
 
@@ -23,16 +23,16 @@ object TimeManager {
  *
  * { 现在，**分钟前，**小时前，**天前，since.niceDateToDay }
  */
-interface DaysSinceTimestamp {
+interface NiceTimeSinceTimestamp {
 
-    fun getDaysSinceTimestamp(since: Long): String
+    fun getNiceTimeSinceTimestamp(since: Long): String
 }
 
-private class DaysSinceTimestampImpl : DaysSinceTimestamp {
+private class NiceTimeSinceTimestampImpl : NiceTimeSinceTimestamp {
     private val nowCalendar = Calendar.getInstance()
     private val pastCalendar = Calendar.getInstance()
 
-    override fun getDaysSinceTimestamp(since: Long): String {
+    override fun getNiceTimeSinceTimestamp(since: Long): String {
         nowCalendar.timeInMillis = System.currentTimeMillis()
         pastCalendar.timeInMillis = since
         return when (isTimeDifferenceGreaterThanOneDay()) {

@@ -6,6 +6,8 @@ import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
@@ -247,21 +249,21 @@ class BrowseViewModel : BaseViewModel() {
         )
     }
 
-    private val _comments: MutableState<NetworkResult<List<CommentsWithUser>>> =
-        mutableStateOf(NetworkResult.None())
-    val comments: State<NetworkResult<List<CommentsWithUser>>> get() = _comments
+    private val _comments: MutableLiveData<NetworkResult<List<CommentsWithUser>>> =
+        MutableLiveData(NetworkResult.None())
+    val comments: LiveData<NetworkResult<List<CommentsWithUser>>> get() = _comments
     private fun getAllCommentsOfArticle(articleId: Long) {
         sequenceRequest(
             url = FLY_ALL_COMMENTS_OF_ARTICLE,
             block = {
-                _comments.value = NetworkResult.Loading()
+                _comments.postValue(NetworkResult.Loading())
                 commentRepository.getAllCommentsOfArticle(articleId)
             },
             onSuccess = { data, _ ->
-                _comments.value = NetworkResult.Success(data = data)
+                _comments.postValue(NetworkResult.Success(data = data))
             },
             onFailed = {
-                _comments.value = NetworkResult.Error(it)
+                _comments.postValue(NetworkResult.Error(it))
             }
         )
     }

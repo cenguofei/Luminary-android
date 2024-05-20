@@ -14,6 +14,7 @@ class PageResponse<T>: BaseResponse<Page<T>>()
 data class Page<T>(
     /**
      * prevPage = curPage - 1
+     *
      * nextPage = curPage + 1
      */
     val curPage: Int = 0,
