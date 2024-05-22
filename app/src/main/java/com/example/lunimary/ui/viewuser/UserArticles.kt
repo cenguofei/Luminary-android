@@ -15,7 +15,7 @@ fun UserArticles(
     onItemClick: (PageItem<Article>) -> Unit,
     modifier: Modifier
 ) {
-    val userArticles = viewModel.userArticles.collectAsLazyPagingItems()
+    val userArticles = viewModel.userArticles?.collectAsLazyPagingItems() ?: return
     LunimaryPagingContent(
         modifier = modifier,
         items = userArticles,

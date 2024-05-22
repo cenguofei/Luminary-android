@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ fun ViewUserDetailContent(
     viewModel: ViewUserViewModel,
     appState: LunimaryAppState,
 ) {
+    val uiState = viewModel.uiState.observeAsState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -39,7 +41,8 @@ fun ViewUserDetailContent(
         ) {
             ViewUserRoundedCornerContent(
                 viewModel = viewModel,
-                onItemClick = { appState.navToBrowse(it) }
+                onItemClick = { appState.navToBrowse(it) },
+                uiState = uiState
             )
         }
     }

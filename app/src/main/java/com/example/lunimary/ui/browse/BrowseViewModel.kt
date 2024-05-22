@@ -11,6 +11,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.DataState
 import com.example.lunimary.base.currentUser
+import com.example.lunimary.base.ktor.BASE_URL
+import com.example.lunimary.base.ktor.HOST
 import com.example.lunimary.base.network.NetworkResult
 import com.example.lunimary.base.viewmodel.BaseViewModel
 import com.example.lunimary.base.viewmodel.sequenceRequest
@@ -289,7 +291,9 @@ class BrowseViewModel : BaseViewModel() {
         ClipData.newPlainText(null, uiState.value.article.link).let {
             clipboard.setPrimaryClip(it)
         }
-        updateArticleModifyState(DataState.Success("已复制:${uiState.value.article.link}"))
+        updateArticleModifyState(
+            DataState.Success("已复制:${BASE_URL}/article/${uiState.value.article.id}")
+        )
     }
 
     fun updateVisibility(mode: VisibleMode) {

@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,17 +21,17 @@ import androidx.compose.ui.unit.sp
 import com.example.lunimary.R
 import com.example.lunimary.base.pager.PageItem
 import com.example.lunimary.model.Article
-import com.example.lunimary.util.notNull
 
 @Composable
 fun ViewUserRoundedCornerContent(
     viewModel: ViewUserViewModel,
     onItemClick: (PageItem<Article>) -> Unit,
+    uiState: State<UiState?>,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(8.dp))
         ViewUserData(
-            uiState = viewModel.uiState.value.notNull
+            uiState = uiState.value!!
         )
         UserArticles(
             viewModel = viewModel,

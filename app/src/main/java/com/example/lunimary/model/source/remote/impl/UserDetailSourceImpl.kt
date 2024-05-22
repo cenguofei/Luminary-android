@@ -32,9 +32,13 @@ class UserDetailSourceImpl : BaseSourceImpl by BaseSourceImpl(), UserDetailSourc
     override suspend fun mutualFollowUsers(): RelationResponse<UserFriend> =
         delegate.mutualFollowUsers()
 
-    override suspend fun interactionData(): DataResponse<InteractionData> {
+    override suspend fun interactionData(id: Long): DataResponse<InteractionData> {
         return client.get(urlString = interactionDataPath){
-            addPathParam(currentUser.id)
+            if (id != 0L) {
+                addPathParam(id)
+            } else {
+                addPathParam(currentUser.id)
+            }
         }.init()
     }
 }

@@ -17,7 +17,7 @@ interface UserDetailSource {
 
     suspend fun mutualFollowUsers(): RelationResponse<UserFriend>
 
-    suspend fun interactionData(): DataResponse<InteractionData>
+    suspend fun interactionData(id: Long = 0L): DataResponse<InteractionData>
 
     companion object : UserDetailSource by UserDetailSourceImpl()
 }

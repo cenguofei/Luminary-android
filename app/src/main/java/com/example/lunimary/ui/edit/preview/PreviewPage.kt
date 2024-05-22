@@ -2,7 +2,9 @@ package com.example.lunimary.ui.edit.preview
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +29,7 @@ fun PreviewPage(viewModel: EditViewModel, onEditClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
+            Spacer(modifier = Modifier.height(18.dp))
             LunimaryMarkdown(markdown = viewModel.uiState.body.trimIndent())
         }
 
