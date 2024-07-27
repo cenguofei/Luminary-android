@@ -50,6 +50,7 @@ inline val whenBrowseArticlePath: String get() = "$articlesRootPath/when_browse_
 inline val interactionDataPath: String get() = "/users/interaction_data"
 inline val viewArticleDurationPath: String get() = "$articlesRootPath/view/duration"
 inline val isArticleDeletedPath: String get() = "$articlesRootPath/is_deleted"
+inline val approveArticlePath: String get() = "$articlesRootPath/approve"
 
 
 //Like

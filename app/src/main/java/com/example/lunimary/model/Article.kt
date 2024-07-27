@@ -112,3 +112,11 @@ enum class VisibleMode(val modeName: String) {
     PUBLIC("公开可见"),
     FRIEND("互关朋友可见")
 }
+
+enum class PublishState(val message: String) {
+    Auditing("审核中"), // 审核中
+
+    Approved("审核通过"), // 审核通过
+
+    Reject("打回"), // 打回
+}
