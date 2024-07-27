@@ -11,7 +11,7 @@ Lunimary Blog Android App
 ## The Light Mode Screens
 ![The other screens](docs/images/light.png)
 
-## More Screenshots see directory 'docs/images'
+## More Screenshots see directory <a href ="https://github.com/cenguofei/Luminary-android/tree/main/docs/images">
 
 # Architecture
 
@@ -25,3 +25,19 @@ The app has two themes:
 
 - Dark Theme -  uses predefined dark colors.
 - Light theme - uses predefined light colors.
+
+# How to run this app?
+- run the background system: [Ktor Lunimary](https://github.com/cenguofei/Luminary-background-system)
+- configure the java/com/example/lunimary/base/ktor/ClientConfig.kt
+```kotlin
+/**
+ * [查看电脑ip地址](https://baijiahao.baidu.com/s?id=1794155473080003356&wfr=spider&for=pc)
+ */
+const val HOST = "10.129.72.21" // change yo your own host.
+const val PORT = 8080
+const val BASE_URL = "http://$HOST:$PORT"
+```
+- Sync Project
+  ![How to sync project](docs/images/sync_project.png)
+- Run Project
+  ![How to run project](docs/images/run_project.png)
