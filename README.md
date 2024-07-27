@@ -27,6 +27,7 @@ The app has two themes:
 - Light theme - uses predefined light colors.
 
 # How to run this app?
+- clone the project use [Android Studio](https://developer.android.com/studio)
 - run the background system: [Ktor Lunimary](https://github.com/cenguofei/Luminary-background-system)
 - configure the java/com/example/lunimary/base/ktor/ClientConfig.kt
 ```kotlin
