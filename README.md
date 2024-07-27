@@ -38,6 +38,9 @@ const val PORT = 8080
 const val BASE_URL = "http://$HOST:$PORT"
 ```
 - Sync Project
+
   ![How to sync project](docs/images/sync_project.png)
+
 - Run Project
+
   ![How to run project](docs/images/run_project.png)
