@@ -1,7 +1,7 @@
 Lunimary Blog Android App
 ==================
 
-**Lunimary BlogÊÇÊ¹ÓÃJetpack Compose´òÔìµÄÒ»¸öÏÖ´ú»¯AndroidÏîÄ¿¡£ÍøÂçÇëÇóÍ¨¹ıKtorÊµÏÖ£¨[KtorºóÌ¨ÏîÄ¿](https://github.com/cenguofei/Luminary-background-system)£©**
+**Lunimary Blogæ˜¯ä½¿ç”¨Jetpack Composeæ‰“é€ çš„ä¸€ä¸ªç°ä»£åŒ–Androidé¡¹ç›®ã€‚ç½‘ç»œè¯·æ±‚é€šè¿‡Ktorå®ç°ï¼ˆ[Ktoråå°é¡¹ç›®](https://github.com/cenguofei/Luminary-background-system)ï¼‰**
 
 # Screenshots
 
@@ -32,7 +32,7 @@ The app has two themes:
 - configure the java/com/example/lunimary/base/ktor/ClientConfig.kt
 ```kotlin
 /**
- * [²é¿´µçÄÔipµØÖ·](https://baijiahao.baidu.com/s?id=1794155473080003356&wfr=spider&for=pc)
+ * [æŸ¥çœ‹ç”µè„‘ipåœ°å€](https://baijiahao.baidu.com/s?id=1794155473080003356&wfr=spider&for=pc)
  */
 const val HOST = "10.129.72.21" // change yo your own host.
 const val PORT = 8080
@@ -45,3 +45,7 @@ const val BASE_URL = "http://$HOST:$PORT"
 - Run Project
 
   ![How to run project](docs/images/run_project.png)
+
+- Use
+  
+  Ensure that your phone and computer are connected to **the same WiFi network**
