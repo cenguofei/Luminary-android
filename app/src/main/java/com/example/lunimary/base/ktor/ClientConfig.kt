@@ -23,7 +23,7 @@ import io.ktor.serialization.kotlinx.json.json
 import java.util.concurrent.TimeUnit
 
 // change yo your own host.
-const val HOST = "10.129.72.21"
+const val HOST = "192.168.31.238"
 const val PORT = 8080
 
 const val BASE_URL = "http://$HOST:$PORT"

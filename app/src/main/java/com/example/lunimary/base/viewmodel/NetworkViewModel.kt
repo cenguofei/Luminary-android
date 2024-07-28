@@ -7,14 +7,19 @@ import com.example.lunimary.LunimaryApplication
 import com.example.lunimary.base.network.NetworkMonitor
 import com.example.lunimary.base.network.NetworkMonitorImpl
 import com.example.lunimary.base.network.isCurrentlyConnected
+import com.example.lunimary.ui.login.UserViewModel
 import com.example.lunimary.util.logd
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 abstract class NetworkViewModel : ApiViewModel() {
+    @OptIn(FlowPreview::class)
     private val isOnline = networkMonitor.isOnline
+        .debounce(1000)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -29,19 +34,27 @@ abstract class NetworkViewModel : ApiViewModel() {
         viewModelScope.launch {
             isOnline.collectLatest { nowIsOnline ->
                 val preOnline = online.value!!
-                "nowIsOnline=$nowIsOnline, preOnline=$preOnline".logd("App_is_off_line")
+                "nowIsOnline=$nowIsOnline, preOnline=$preOnline".log()
                 if (preOnline) {
                     if (!nowIsOnline) { // 有网 -> 无网
-                        _online.postValue(false)
+                        "_online.value = false".log()
+                        _online.value = false
                     }
                 } else {
                     if (nowIsOnline) { // 无网 -> 有网
-                        _online.postValue(true)
+                        "_online.value = true".log()
+                        _online.value = true
                         onHaveNetwork()
                         dispatchOnHaveNetEvent()
                     }
                 }
             }
+        }
+    }
+
+    private fun String.log() {
+        if(this@NetworkViewModel::class.java.simpleName == UserViewModel::class.java.simpleName) {
+            this.logd("App_is_off_line")
         }
     }
 
